@@ -57,3 +57,10 @@ ion-menu {
         }
     }
 }
+
+button.button-md {
+    box-shadow: none !important;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    height: 4rem;
+}
