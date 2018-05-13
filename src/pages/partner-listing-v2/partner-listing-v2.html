@@ -1,0 +1,43 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Places Nearbuy</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <h5 text-center class="mb-1">8 places nearbuy</h5>
+  <ion-list class="listing" no-lines>
+    <ion-item *ngFor="let partner of partners" (click)="loadMenu()">
+      <div class="image">
+        <img src="{{partner.images.large}}">
+      </div>
+      <div class="desc">
+        <div class="logo align-items-center">
+          <img src="{{partner.images.logo}}" class="m-auto">
+        </div>
+        <ion-grid>
+          <ion-row>
+            <ion-col col col-7>
+              <h2 text-bold>{{ partner.name }}</h2>
+              <div class="cuisines">
+                {{ partner.cuisine }}
+              </div>
+            </ion-col>
+            <ion-col col col-5 class="align-self-end" text-right>
+              <div class="price">
+                <strong>&#x20B9; {{ partner.avgpp }}</strong> per person
+              </div>
+              <div class="avg">
+                <!-- <span>Avg Time: </span> -->
+                {{ partner.avgtime }} mins
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </div>
+    </ion-item>
+  </ion-list>
+</ion-content>

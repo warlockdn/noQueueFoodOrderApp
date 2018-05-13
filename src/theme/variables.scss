@@ -23,7 +23,7 @@ $app-direction: ltr;
 // http://ionicframework.com/docs/theming/overriding-ionic-variables/
 
 $font-family-base: 'Nunito', sans-serif;
-
+$toolbar-background: #fff;
 
 // Named Color Variables
 // --------------------------------------------------
@@ -35,7 +35,7 @@ $font-family-base: 'Nunito', sans-serif;
 
 $colors: (
   primary:    #41a2e3,
-  secondary:  #3ddf82,
+  secondary:  #2ec36d,
   danger:     #e74c3c,
   light:      #f4f4f4,
   dark:       #222
@@ -49,6 +49,7 @@ $appColors: (
   grey: #c2c2c2,
   light-grey: #f3f3f3,
   blue: #41a2e3,
+  btgreen: #68e082,
   green: #3ddf82,
   red: #e74c3c
 );
@@ -59,14 +60,16 @@ $appColors: (
 // iOS only Sass variables can go here
 
 $font-family-ios-base: 'Nunito', sans-serif;
-
+$toolbar-ios-title-text-color: #000;
+$toolbar-ios-title-font-size: 1.8rem;	
 
 // App Material Design Variables
 // --------------------------------------------------
 // Material Design only Sass variables can go here
 
 $font-family-md-base: 'Nunito', sans-serif;
-
+$toolbar-md-title-text-color: #000;
+$toolbar-md-title-font-size: 1.8rem;
 
 // App Windows Variables
 // --------------------------------------------------

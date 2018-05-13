@@ -1,33 +1,45 @@
 page-login {
 
-    .hero-image {
+    .hero-header {
+        background: #f3f3f3;
         height: 40vh;
-        overflow: hidden;
-        background-image: url('http://placehold.it/500x500');
-        background-repeat: no-repeat;
-        background-size: cover;
-        background-position: center center;
+        img {
+            height: 128px;
+            width: 128px;
+        }
     }
+
     .content {
-        padding: 5px 25px 0;
+        padding: 1rem 3rem 0;
         h3 {
-            font-size: 2rem;
+            font-size: 1.8rem;
             line-height: 2.8rem;
             font-weight: 700;
             margin: 2rem 0 3rem;
         }
         .input-header {
+            margin: 1.5rem 0 0.5rem;
             .title {
-                font-size: 2rem;
+                font-size: 1.8rem;
+                margin-bottom: 0.5rem;
                 font-weight: 700;
             }
             .subtitle {
+                font-size: 1.2rem;
             }
         }
-        ion-input {
-            input {
-                margin: 13px 0;
+        .item-block {
+            font-size: 1.4rem;
+            ion-input {
+                input {
+                    margin: 13px 0;
+                }
             }
+        }
+        .message {
+            font-size: 1.1rem;
+            text-align: center;
+            color: #5a5a5a;
         }
     }
 

@@ -1,17 +1,17 @@
 import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform } from 'ionic-angular';
+import { Nav, Platform, Menu } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { LoginPage } from '../pages/login/login';
+import { RegisterPage } from '../pages/register/register';
 import { HomePage } from '../pages/home/home';
-
-import { ListPage } from '../pages/list/list';
+import { OrderStatusPage } from '../pages/order-status/order-status';
 
 @Component({
   templateUrl: 'app.html'
 })
-export class MyApp {
+export class ClientApp {
   @ViewChild(Nav) nav: Nav;
 
   rootPage: any = LoginPage;
@@ -24,10 +24,10 @@ export class MyApp {
     // used for an example of ngFor and navigation
     this.pages = [
       { title: 'Home', subtitle: '', component: HomePage },
-      { title: 'List', subtitle: 'History, Payments, etc.', component: ListPage },
-      { title: 'Coupons', subtitle: '', component: ListPage },
-      { title: 'Points', subtitle: '', component: ListPage },
-      { title: 'Settings', subtitle: 'Accounts, Reviews, Referrals, etc.', component: ListPage }
+      { title: 'List', subtitle: 'History, Payments, etc.', component: HomePage },
+      { title: 'Coupons', subtitle: '', component: HomePage },
+      { title: 'Points', subtitle: '', component: HomePage },
+      { title: 'Settings', subtitle: 'Accounts, Reviews, Referrals, etc.', component: HomePage }
     ];
 
   }

@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, forwardRef } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { HomePage } from '../home/home';
 
 /**
  * Generated class for the LoginPage page.
@@ -20,6 +21,13 @@ export class LoginPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad LoginPage');
+  }
+
+  authenticate() {
+    this.navCtrl.setRoot(HomePage, {}, {
+      animate: true,
+      direction: 'forward'      
+    });
   }
 
 }

@@ -1,22 +1,26 @@
 <ion-content>
-  
-  <div class="hero-image"></div>
-  
-  <div class="content">
 
-    <h3>Experience the next generation food experience hands-on</h3>
-    
-    <div class="input-header">
-      <div class="title">Phone Number</div>
-      <div class="subtitle">Enter your phone number to continue</div>
+    <div class="d-flex align-items-center hero-header">
+        <img src="../../assets/assets/logo.png" alt="" srcset="" class="m-auto display-block">
     </div>
-    
-    <ion-item no-padding>
-      <ion-label floating>Username</ion-label>
-      <ion-input type="text"></ion-input>
-    </ion-item>
 
-    <button margin-top ion-button block color="primary">REGISTER</button>
+    <div class="content">
 
-  </div>
+        <h3>Experience the next generation food experience hands-on</h3>
+
+        <div class="input-header">
+            <div class="title">Phone Number</div>
+            <div class="subtitle">Enter your phone number to continue</div>
+        </div>
+
+        <ion-item no-padding>
+            <ion-input type="number" placeholder="Enter Phone Number"></ion-input>
+        </ion-item>
+
+        <button margin-top ion-button block color="primary" class="mt-3" (click)="authenticate()">LOGIN</button>
+        <div class="message pt-1">
+            Note: Entering phone number will register your account.
+        </div>
+
+    </div>
 </ion-content>

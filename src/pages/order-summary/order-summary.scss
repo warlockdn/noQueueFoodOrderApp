@@ -1,0 +1,93 @@
+page-order-summary {
+
+    .detail {
+        padding: 15px 10px;
+        ion-avatar {
+            border-radius: 50%;
+            height: 50px;
+            width: 50px;
+            margin-right: 10px;
+        }
+        .name {
+            font-weight: 700;
+            font-size: 16px;
+        }
+    }
+
+    .summary {
+        padding: 15px 18px 5px;
+        h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #505050;
+        }
+
+        .item-list {
+            .type {
+                flex: 0 0 15px;
+            }
+            ion-item {
+                .item-inner {
+                    padding-bottom: 1rem;
+                }
+                ion-grid {
+                    padding: 0;
+                    ion-col {
+                        white-space: normal;
+                        padding: 0;
+                        .price {
+                            font-size: 1.4rem;
+                            font-weight: 600;
+                            margin-left: 0;
+                            text-align: right;
+                        }
+                    }
+                }
+            }
+        }
+
+        .bill {
+            ion-item {
+                margin-bottom: 0;
+                min-height: 4rem;
+                .item-inner {
+                    padding-bottom: 0;
+                }
+            }
+            ion-col {
+                color: #505050;
+            }
+            ion-row.total {
+                font-size: 1.6rem;
+                font-weight: 700;
+                ion-col {
+                    color: #000;
+                }
+            }
+        }
+
+    }
+
+    .notes {
+        padding: 0 18px 15px;
+        ion-list {
+            ion-item.item {
+                padding-left: 0;
+                border-bottom: 0 !important;
+                .item-inner {
+                    padding-right: 0 !important;
+                }
+                ion-label.label {
+                    font-weight: 700;
+                    margin-bottom: 1rem;
+                }
+                ion-textarea {
+                    border: 1px solid #dedede;
+                    padding: 0 8px;
+                    font-size: 1.2rem;
+                }
+            }
+        }
+    }
+
+}

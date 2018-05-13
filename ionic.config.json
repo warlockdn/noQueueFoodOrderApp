@@ -1,6 +1,6 @@
 {
   "name": "resClient",
-  "app_id": "",
+  "app_id": "b6376704",
   "type": "ionic-angular",
   "integrations": {
     "cordova": {}

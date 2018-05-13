@@ -1,0 +1,176 @@
+<ion-header [attr.transparent]="isTransparent ? true : null" no-border>
+  <ion-navbar [attr.transparent]="isTransparent ? true : null">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Taco Bell</ion-title>
+    <ion-buttons end>
+      <button ion-button end>
+        <ion-icon name="search"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content>
+
+  <div class="hero-header" style="background-image: url(../../assets/temp/1.jpg)">
+    <div class="details">
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <div class="logo align-items-center">
+              <img src="https://www.seeklogo.net/wp-content/uploads/2016/11/taco-bell-logo-preview.png" class="m-auto">
+            </div>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col col-8>
+            <div class="cuisines">
+              Mexican, Fast Food, American
+            </div>
+          </ion-col>
+          <ion-col class="align-self-end" col-4>
+            <div class="avgtime" text-right>
+              15 mins
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+  </div>
+
+  <div class="menu-list">
+    <div class="category">
+      <div class="section-header">Indian</div>
+      <accordion-list *ngFor="let item of items; let index = index" [title]="item.name" [items]="item.items" hasMargin="false">
+        <ion-list class="item-list" no-lines>
+          <ion-item>
+            <div class="display-inline-block">
+              <div class="name">
+                <div class="type"></div>
+                Chicken Khurana
+              </div>
+              <div class="price">
+                &#x20B9; 295
+              </div>
+              <div class="desc">
+                Some small description here.
+              </div>
+            </div>
+            <button float-right ion-button color="secondary" outline>ADD</button>
+          </ion-item>
+          <ion-item>
+            <div class="display-inline-block w80">
+              <div class="name">
+                <div class="type nonveg"></div>
+                Chicken Biryani Combo [Serves 1]
+              </div>
+              <div class="price">
+                &#x20B9; 295
+              </div>
+              <div class="desc">
+                Some small description here.
+              </div>
+            </div>
+            <button float-right ion-button color="secondary" outline>ADD</button>
+          </ion-item>
+        </ion-list>
+      </accordion-list>
+    </div>
+    <div class="category">
+      <div class="section-header">Indian</div>
+      <ion-list class="item-list" no-lines>
+        <ion-item>
+          <div class="display-inline-block">
+            <div class="name">
+              <div class="type"></div>
+              Chicken Khurana
+            </div>
+            <div class="price">
+              &#x20B9; 295
+            </div>
+            <div class="desc">
+              Some small description here.
+            </div>
+          </div>
+          <button float-right ion-button color="secondary" outline>ADD</button>
+        </ion-item>
+        <ion-item>
+          <div class="display-inline-block w80">
+            <div class="name">
+              <div class="type nonveg"></div>
+              Chicken Biryani Combo [Serves 1]
+            </div>
+            <div class="price">
+              &#x20B9; 295
+            </div>
+            <div class="desc">
+              Some small description here.
+            </div>
+          </div>
+          <div class="counter d-flex align-items-center" float-right>
+            <div class="flex-fill left">
+                <button ion-button clear (click)="updateCounter(false)">-</button>
+              </div>
+            <div class="flex-fill center">{{ counter }}</div>
+            <div class="flex-fill right">
+                <button ion-button clear (click)="updateCounter(true)">+</button>
+            </div>
+          </div>
+        </ion-item>
+      </ion-list>
+    </div>
+    <div class="category">
+      <div class="section-header">Indian</div>
+      <ion-list class="item-list" no-lines>
+        <ion-item>
+          <div class="display-inline-block">
+            <div class="name">
+              <div class="type"></div>
+              Chicken Khurana
+            </div>
+            <div class="price">
+              &#x20B9; 295
+            </div>
+            <div class="desc">
+              Some small description here.
+            </div>
+          </div>
+          <button float-right ion-button color="secondary" outline>ADD</button>
+        </ion-item>
+        <ion-item>
+          <div class="display-inline-block w80">
+            <div class="name">
+              <div class="type nonveg"></div>
+              Chicken Biryani Combo [Serves 1]
+            </div>
+            <div class="price">
+              &#x20B9; 295
+            </div>
+            <div class="desc">
+              Some small description here.
+            </div>
+          </div>
+          <button float-right ion-button color="secondary" outline>ADD</button>          
+        </ion-item>
+      </ion-list>
+    </div>
+  </div>
+
+</ion-content>
+
+<ion-footer no-border>
+  <button ion-button block color="secondary" [ngClass]="showCart ? 'show' : 'hide'" (click)="loadSummary()">
+    <ion-grid class="p0">
+      <ion-row align-items-center>
+        <ion-col class="p0" text-left col-7>4 Items - &#x20B9; 620</ion-col>
+        <ion-col class="p0" text-right col-5 style="position: relative; top: -2px;">
+          View Cart
+          <ion-icon style="position: relative; top: 2px" name="ios-arrow-dropright-circle"></ion-icon>
+        </ion-col>        
+      </ion-row>
+    </ion-grid>
+  </button>
+</ion-footer>

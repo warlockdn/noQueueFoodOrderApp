@@ -1,0 +1,39 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Order Status</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+
+  <div class="details" text-center>
+    <img src="../../assets/temp/1.jpg">
+    <!-- <div class="placeholder"></div> -->
+    <h3>Order No: <strong>#20000000</strong></h3>
+  </div>
+
+  <div class="status">
+    <ion-list>
+      <ion-item>
+        <ion-avatar item-left>
+          <img src="../../assets/temp/1.jpg">
+        </ion-avatar>
+        Order Placed
+        <h5>Order placed and restaurant notified</h5>
+      </ion-item>
+      <ion-item [ngClass]="statusCodes.accepted ? '' : 'faded'">
+        <ion-avatar item-left>
+          <img src="../../assets/temp/1.jpg">
+        </ion-avatar>
+        Order Accepted
+        <h5>Order accepted by the restaurant. Sit tight.</h5>
+      </ion-item>
+      <ion-item text-center [ngClass]="statusCodes.ready ? '' : 'faded'">
+          <span>Order Ready</span>
+          <h5>Order hot &amp; ready.</h5>
+      </ion-item>
+    </ion-list>
+  </div>
+
+</ion-content>
