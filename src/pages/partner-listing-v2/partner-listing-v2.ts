@@ -24,7 +24,7 @@ export class PartnerListingPageV2 {
         name: 'Taco Bell',
         images: {
           logo: 'https://www.seeklogo.net/wp-content/uploads/2016/11/taco-bell-logo-preview.png',
-          large: '../../assets/temp/1.jpg'
+          large: 'https://res.cloudinary.com/ddiiq3bzl/image/upload/v1526242275/clientApp/1.jpg'
         },
         cuisine: 'Mexican, Fast Food, American',
         avgtime: '15',
@@ -33,7 +33,7 @@ export class PartnerListingPageV2 {
         name: 'Dominos',
         images: {
           logo: 'https://seeklogo.com/images/D/domino-s-logo-5A72DDBD09-seeklogo.com.png',
-          large: '../../assets/temp/2.jpg'
+          large: 'https://res.cloudinary.com/ddiiq3bzl/image/upload/v1526242275/clientApp/2.jpg'
         },
         cuisine: 'Pizza, Fast Food, American',
         avgtime: '20',
@@ -51,7 +51,7 @@ export class PartnerListingPageV2 {
         name: 'Wat A Burger',
         images: {
           logo: 'https://seeklogo.com/images/B/Burger_King-logo-487821F628-seeklogo.com.png',
-          large: '../../assets/temp/4.jpg'
+          large: 'https://res.cloudinary.com/ddiiq3bzl/image/upload/v1526242275/clientApp/4.jpg'
         },
         cuisine: 'Burgers, Fast Food, American, Indian',
         avgtime: '10',
