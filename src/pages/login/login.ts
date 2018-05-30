@@ -26,7 +26,7 @@ export class LoginPage {
   authenticate() {
     this.navCtrl.setRoot(HomePage, {}, {
       animate: true,
-      direction: 'forward'      
+      direction: 'switch'
     });
   }
 
