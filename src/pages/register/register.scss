@@ -1,39 +1,3 @@
 page-register {
 
-    .hero-header {
-        background: #f3f3f3;
-        height: 40vh;
-        img {
-            height: 128px;
-            width: 128px;
-        }
-    }
-
-    .content {
-        padding: 2rem 3rem 0;
-        h3 {
-            font-size: 1.8rem;
-            line-height: 2.8rem;
-            font-weight: 700;
-            margin: 2rem 0 3rem;
-        }
-        .input-header {
-            margin: 1.5rem 0 0.5rem;
-            .title {
-                font-size: 2rem;
-                font-weight: 700;
-            }
-            .subtitle {
-            }
-        }
-        .item-block {
-            font-size: 1.4rem;
-            ion-input {
-                input {
-                    margin: 13px 0;
-                }
-            }
-        }
-    }
-
 }
