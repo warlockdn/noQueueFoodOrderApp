@@ -1,8 +1,14 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 
 import { ClientApp } from './app.component';
+
+import { StatusBar } from '@ionic-native/status-bar';
+import { SplashScreen } from '@ionic-native/splash-screen';
+import { IonicStorageModule } from '@ionic/storage';
 
 import { LoginPage } from './../pages/login/login';
 import { RegisterPage } from '../pages/register/register';
@@ -15,8 +21,9 @@ import { OrderStatusPage } from '../pages/order-status/order-status';
 
 import { AccordionListComponent } from '../components/accordion-list/accordion-list';
 
-import { StatusBar } from '@ionic-native/status-bar';
-import { SplashScreen } from '@ionic-native/splash-screen';
+import { ConstantsProvider } from '../providers/constants/constants';
+import { AuthProvider } from '../providers/auth/auth';
+import { InterceptorProvider } from '../providers/interceptor/interceptor';
 
 @NgModule({
   declarations: [
@@ -37,6 +44,9 @@ import { SplashScreen } from '@ionic-native/splash-screen';
       scrollPadding: false,
       scrollAssist: false
     }),
+    IonicStorageModule.forRoot(),
+    ReactiveFormsModule,
+    HttpClientModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -49,12 +59,15 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     MenuPage,
     OrderSummaryPage,
     OrderStatusPage,
-    AccordionListComponent
+    AccordionListComponent,
   ],
   providers: [
     StatusBar,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    ConstantsProvider,
+    AuthProvider,
+    InterceptorProvider
   ]
 })
 export class AppModule {}

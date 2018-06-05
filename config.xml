@@ -84,4 +84,7 @@
     <plugin name="sentry-cordova" spec="^0.10.0" />
     <engine name="android" spec="7.0.0" />
     <allow-navigation href="http://192.168.31.190:8100" />
+    <plugin name="cordova-plugin-nativestorage" spec="^2.3.1" />
+    <engine name="browser" spec="~5.0.3" />
+    <plugin name="cordova-sqlite-storage" spec="^2.3.2" />
 </widget>

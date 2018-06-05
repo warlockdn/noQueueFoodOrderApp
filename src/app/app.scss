@@ -486,8 +486,8 @@ ion-header {
 
 ion-header[transparent] {
     .toolbar-title {
-        color: #fff;
-        font-weight: 600;
+        // color: #fff;
+        font-weight: 500;
     }
     .bar-button {
         color: #fff;
@@ -510,6 +510,15 @@ button.button-md, button.button-ios {
 
 .item-md.item-block .item-inner, .item-ios.item-block .item-inner {
     border-color: #efeff0;
+}
+
+.item-label-stacked .text-input-md, .item-label-floating .text-input-md {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.label-md {
+    margin-top: 10px;
 }
 
 

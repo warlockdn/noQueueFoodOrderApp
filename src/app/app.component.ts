@@ -14,7 +14,7 @@ import { OrderStatusPage } from '../pages/order-status/order-status';
 export class ClientApp {
   @ViewChild(Nav) nav: Nav;
 
-  rootPage: any = LoginPage;
+  rootPage: any = RegisterPage;
 
   pages: Array<{title: string, subtitle: string, component: any}>;
 

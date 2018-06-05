@@ -46,7 +46,7 @@ export class MenuPage {
 
   ngAfterViewInit() {
     this.content.ionScroll.subscribe((event) => {
-      if (parseInt(event.scrollTop) > 120) {
+      if (parseInt(event.scrollTop) > 50) {
         this.changeStatus(false);
       } else {
         this.changeStatus(true);
