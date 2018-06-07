@@ -9,7 +9,9 @@ import { ClientApp } from './app.component';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { IonicStorageModule } from '@ionic/storage';
+import { Geolocation } from '@ionic-native/geolocation';
 
+import { WalkthroughPage } from '../pages/walkthrough/walkthrough';
 import { LoginPage } from './../pages/login/login';
 import { RegisterPage } from '../pages/register/register';
 import { HomePage } from '../pages/home/home';
@@ -21,9 +23,9 @@ import { OrderStatusPage } from '../pages/order-status/order-status';
 
 import { AccordionListComponent } from '../components/accordion-list/accordion-list';
 
+import { InterceptorProvider } from '../providers/interceptor/interceptor';
 import { ConstantsProvider } from '../providers/constants/constants';
 import { AuthProvider } from '../providers/auth/auth';
-import { InterceptorProvider } from '../providers/interceptor/interceptor';
 
 @NgModule({
   declarations: [
@@ -31,6 +33,7 @@ import { InterceptorProvider } from '../providers/interceptor/interceptor';
     LoginPage,
     RegisterPage,
     HomePage,
+    WalkthroughPage,
     PartnerListingPage,
     PartnerListingPageV2,
     MenuPage,
@@ -51,6 +54,7 @@ import { InterceptorProvider } from '../providers/interceptor/interceptor';
   bootstrap: [IonicApp],
   entryComponents: [
     ClientApp,
+    WalkthroughPage,
     LoginPage,
     RegisterPage,
     HomePage,
@@ -64,10 +68,11 @@ import { InterceptorProvider } from '../providers/interceptor/interceptor';
   providers: [
     StatusBar,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    Geolocation,
     ConstantsProvider,
     AuthProvider,
-    InterceptorProvider
+    { provide: ErrorHandler, useClass: IonicErrorHandler },
+    // { provide: HTTP_INTERCEPTORS, useClass: InterceptorProvider, multi: true },
   ]
 })
 export class AppModule {}

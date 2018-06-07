@@ -4,20 +4,28 @@
     <!-- Profile Info -->
     <div class="profile">
       <div class="avatar"></div>
-      <h3 class="name">John Doe</h3>
-      <h5 class="phone">+91 981 812 0583</h5>
+      <h3 class="name" *ngIf="isLoggedIn">John Doe</h3>
+      <h5 class="phone" *ngIf="isLoggedIn">+91 981 812 0583</h5>
     </div>
     
-    <ion-list margin-top no-lines class="menu-list">
-      <ion-item menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">
+    <ion-list margin-top no-lines class="menu-list" *ngIf="isLoggedIn">
+      <ion-item menuClose ion-item *ngFor="let p of loggedInMenu" (click)="openPage(p)">
         {{p.title}}
         <div class="subtitle">{{ p.subtitle }}</div>
       </ion-item>
     </ion-list>
 
+    <ion-list margin-top no-lines class="menu-list" *ngIf="!isLoggedIn">
+        <ion-item menuClose ion-item *ngFor="let p of notLoggedInMenu" (click)="openPage(p)" [ngClass]="p.disabled ? 'disabled': ''">
+          {{p.title}}
+          <div class="subtitle">{{ p.subtitle }}</div>
+        </ion-item>
+      </ion-list>
+
     <ion-footer no-border>
       <ion-toolbar>
-        <button ion-button block color="danger">Logout</button>
+        <button ion-button block color="danger" *ngIf="isLoggedIn">Logout</button>
+        <button ion-button block (click)="goToLogin()" *ngIf="!isLoggedIn">Login</button>
       </ion-toolbar>
     </ion-footer>
 

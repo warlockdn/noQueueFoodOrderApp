@@ -87,4 +87,7 @@
     <plugin name="cordova-plugin-nativestorage" spec="^2.3.1" />
     <engine name="browser" spec="~5.0.3" />
     <plugin name="cordova-sqlite-storage" spec="^2.3.2" />
+    <plugin name="cordova-plugin-geolocation" spec="^4.0.1">
+        <variable name="GEOLOCATION_USAGE_DESCRIPTION" value="To locate you" />
+    </plugin>
 </widget>
