@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
+import { Observable } from 'rxjs/Observable';
 
 /*
   Generated class for the ConstantsProvider provider.
@@ -11,19 +12,36 @@ import { Storage } from '@ionic/storage';
 @Injectable()
 export class ConstantsProvider {
 
+  public static razorPayKey = "rzp_test_8ZuXe81gFihhsI";
   public static api = "http://localhost:3003/v1/";
-
+ 
   // Auth
-  public static register = "http://localhost:3003/v1/auth/registration";
-  public static authByPhonePass = "http://localhost:3003/v1/auth/login";
-  public static authByOTP = "http://localhost:3003/v1/auth/loginByOtp";
+  public static findCustomer = "http://192.168.31.190:3003/v1/auth/findCustomer";
+  public static register = "http://192.168.31.190:3003/v1/auth/registration";
+  public static authByPhonePass = "http://192.168.31.190:3003/v1/auth/login";
+  public static authByOTP = "http://192.168.31.190:3003/v1/auth/loginByOtp";
+
+  // Places
+  public static getPlaces = "http://192.168.31.190:3003/v1/places/listPlaces";
+  public static getMenu = "http://192.168.31.190:3003/v1/places/menu/";
+
+  // Cart
+  public static cart = "http://192.168.31.190:3003/v1/cart/manage";
+  public static notifyStatus = "http://192.168.31.190:3003/v1/cart/notify";
+
+  public token = null;
 
   constructor(public http: HttpClient, private storage: Storage) {
     console.log('Hello ConstantsProvider Provider');
+    this.getToken().then((token) => {
+      if (token) {
+        this.token = token;
+      }
+    })
   }
 
   getToken() {
-    this.storage.get("token").then((token) => {
+    return this.storage.get("token").then((token) => {
       return token;
     }).catch((err) => {
       return err;
@@ -31,7 +49,9 @@ export class ConstantsProvider {
   }
 
   setToken(token) {
+    console.log('Setting Token ', token);
     this.storage.set("token", token);
+    this.token = token;
   }
 
 }

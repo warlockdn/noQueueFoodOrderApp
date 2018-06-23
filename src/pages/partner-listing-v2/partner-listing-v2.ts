@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { MenuPage } from '../menu/menu';
 
+import { PartnerProvider, Place } from '../../providers/partner/partner';
+
 /**
  * Generated class for the PartnerListingPage page.
  *
@@ -16,58 +18,53 @@ import { MenuPage } from '../menu/menu';
 })
 export class PartnerListingPageV2 {
 
-  partners: any;
+  partners: Array<any>;
+  fakePlaces: Array<any> = new Array(3);
+  notfound: boolean = false;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
-    this.partners = [
-      {
-        name: 'Taco Bell',
-        images: {
-          logo: 'https://www.seeklogo.net/wp-content/uploads/2016/11/taco-bell-logo-preview.png',
-          large: 'https://res.cloudinary.com/ddiiq3bzl/image/upload/v1526242275/clientApp/1.jpg'
-        },
-        cuisine: 'Mexican, Fast Food, American',
-        avgtime: '15',
-        avgpp: '250'
-      }, {
-        name: 'Dominos',
-        images: {
-          logo: 'https://seeklogo.com/images/D/domino-s-logo-5A72DDBD09-seeklogo.com.png',
-          large: 'https://res.cloudinary.com/ddiiq3bzl/image/upload/v1526242275/clientApp/2.jpg'
-        },
-        cuisine: 'Pizza, Fast Food, American',
-        avgtime: '20',
-        avgpp: '350'
-      }, {
-        name: 'Burger King',
-        images: {
-          logo: 'https://seeklogo.com/images/B/Burger_King-logo-487821F628-seeklogo.com.png',
-          large: 'https://f.roocdn.com/images/menus/37868/header-image.jpg'
-        },
-        cuisine: 'Burgers, Fast Food, American',
-        avgtime: '20',
-        avgpp: '350'
-      }, {
-        name: 'Wat A Burger',
-        images: {
-          logo: 'https://seeklogo.com/images/B/Burger_King-logo-487821F628-seeklogo.com.png',
-          large: 'https://res.cloudinary.com/ddiiq3bzl/image/upload/v1526242275/clientApp/4.jpg'
-        },
-        cuisine: 'Burgers, Fast Food, American, Indian',
-        avgtime: '10',
-        avgpp: '150'
+  constructor(public navCtrl: NavController, public navParams: NavParams, public partnerService: PartnerProvider) {
+
+    const coordinates = this.navParams.data["data"];
+    this.loadPlaces(coordinates);
+
+    // Removing Old Partner
+    this.partnerService.removePartner();
+
+  }
+
+  ionViewDidLoad() {}
+
+  loadPlaces(coordinates) {
+    this.partnerService.listPlaces(coordinates).subscribe(
+      (data) => {
+
+        this.partners = data.places;
+        this.fakePlaces = null;
+        this.notfound = false;
+
+      }, (err) => {
+        
+        this.partners = null;
+        this.fakePlaces = null;
+        this.notfound = true;
+
       }
-    ]
+    )
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad PartnerListingPageV2');
-  }
+  loadMenu(partner: Place) {
 
-  loadMenu() {
-    this.navCtrl.push(MenuPage, {}, {
+    // Save Partner to Storage for Ref Purposes.
+    this.partnerService.setPartner(partner);
+
+    this.navCtrl.push(MenuPage, {
+      data: {
+        partnerID: partner.partnerID,
+        data: partner
+      }
+    }, {
       animate: true,
-      direction: 'forward'
+      direction: 'forward',
     });
   }
 

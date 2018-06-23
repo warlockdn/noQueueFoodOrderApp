@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams, Content, ToastController } from 'i
 import { FormArray, FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 
 import { AuthProvider } from '../../providers/auth/auth';
+import { HomePage } from '../home/home';
 
 /**
  * Generated class for the RegisterPage page.
@@ -27,6 +28,7 @@ export class RegisterPage {
   phone: number;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public toast: ToastController, private ref: ChangeDetectorRef, private fb: FormBuilder, public auth: AuthProvider) {
+    this.phone = this.navParams.data.phone;    
     this.createRegisterForm();
   }
 
@@ -51,7 +53,7 @@ export class RegisterPage {
 
   createRegisterForm() {
     this.registerForm = this.fb.group({
-      phone: new FormControl(this.phone, [Validators.required, Validators.min(7000000000)]),
+      phone: new FormControl(this.phone, [Validators.required, Validators.pattern("^[0-9]{10}$")]),
       email: new FormControl(null, [Validators.email]),
       name: new FormControl(null, Validators.required),
       password: new FormControl(null, [Validators.required, Validators.minLength(6)])
@@ -62,7 +64,15 @@ export class RegisterPage {
     if (this.registerForm.valid) {
       this.auth.registration(this.registerForm.value)
         .then((response) => {
-          this.auth.user = response.user;
+          this.auth.user = response.customer;
+          this.auth.setUser(response.customer);
+
+          this.navCtrl.setRoot(HomePage, {}, {
+            animate: true,
+            direction: "forward",
+            keyboardClose: true
+          })
+
         })
         .catch((err) => {
           const toast = this.toast.create({

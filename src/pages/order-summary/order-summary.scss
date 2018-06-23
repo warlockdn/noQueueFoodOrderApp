@@ -27,14 +27,28 @@ page-order-summary {
                 flex: 0 0 15px;
             }
             ion-item {
+                margin-bottom: 0.5rem;
                 .item-inner {
-                    padding-bottom: 1rem;
+                    padding-bottom: 0.5rem;
                 }
                 ion-grid {
                     padding: 0;
                     ion-col {
                         white-space: normal;
                         padding: 0;
+                        .type {
+                            position: relative;
+                            top: 2px;
+                        }
+                        .name {
+                            font-size: 1.4rem;
+                        }
+                        .counter {
+                            height: 24px;
+                            .center {
+                                line-height: 1.6;
+                            }
+                        }
                         .price {
                             font-size: 1.4rem;
                             font-weight: 600;
@@ -87,6 +101,25 @@ page-order-summary {
                     font-size: 1.2rem;
                 }
             }
+        }
+    }
+
+    .login {
+        width: 90%;
+        margin: auto;
+        h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1.2rem;
+            font-weight: 700;
+        }
+        h5 {
+            font-size: 1rem;
+            margin-top: 1.2rem;
+            color: #3a3a3a;
+            font-weight: 600;
+        }
+        button.button-md {
+            width: 100%;
         }
     }
 

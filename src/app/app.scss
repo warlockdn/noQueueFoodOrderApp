@@ -489,6 +489,11 @@ ion-header {
 }
 
 ion-header[transparent] {
+    &.with-bg {
+        .toolbar-title {
+            color: #fff;
+        }    
+    }
     .toolbar-title {
         // color: #fff;
         font-weight: 500;
@@ -553,6 +558,7 @@ button.button-md, button.button-ios {
         }
         .name {
             font-weight: 600;
+            display: flex;
         }
         .price {
             font-size: 1.2rem;
@@ -594,11 +600,11 @@ button.button-md, button.button-ios {
                 }
             }
         }
-        button.item-button {
+        button {
             font-weight: 700;
             font-size: 1.2rem;
             height: 26px;
-            border-color: #a0a0a0;
+            border-color: #448e1a;
             border-radius: 0;
             color: #448e1a;
             margin: 0;
@@ -613,11 +619,35 @@ button.button-md, button.button-ios {
         width: 15px;
         display: inline-block;
         position: relative;
-        top: 3px;
+        top: 2px;
         margin-right: 5px;
+        flex: 0 0 15px;
     }
     .type.nonveg {
         background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjcxMDYgNDU5IDEwIDEwIj48ZGVmcz48c3R5bGU+LmF7ZmlsbDpyZ2IoMjU1LCAyNTUsIDI1NSk7c3Ryb2tlOiNjMmMyYzI7c3Ryb2tlLXdpZHRoOjAuNXB4O30uYntmaWxsOnJnYigyMzEsIDcxLCA1NSk7fS5je3N0cm9rZTpub25lO30uZHtmaWxsOm5vbmU7fTwvc3R5bGU+PC9kZWZzPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDY3MzEgMTUwKSI+PGcgY2xhc3M9ImEiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDM3NSAzMDkpIj48cmVjdCBjbGFzcz0iYyIgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIi8+PHJlY3QgY2xhc3M9ImQiIHg9IjAuMjUiIHk9IjAuMjUiIHdpZHRoPSI5LjUiIGhlaWdodD0iOS41Ii8+PC9nPjxwYXRoIGNsYXNzPSJiIiBkPSJNMywwQTMsMywwLDEsMSwwLDMsMywzLDAsMCwxLDMsMFoiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDM3NyAzMTEpIi8+PC9nPjwvc3ZnPg==);
+    }
+}
+
+// Addons
+
+ion-modal.addons {
+    background-color: rgba(0,0,0,.5)!important;
+    -webkit-transition: opacity .25s ease-in-out;
+    transition: opacity .25s ease-in-out;
+    padding: 20vh 8vw;
+}
+
+ion-modal.addons-notification {
+    background-color: rgba(0,0,0,.5)!important;
+    -webkit-transition: opacity .25s ease-in-out;
+    transition: opacity .25s ease-in-out;
+    .modal-wrapper {
+        width: 100%;
+        height: 23%;
+        margin: 0;
+        position: absolute;
+        bottom: 0;
+        left: 0;
     }
 }
 

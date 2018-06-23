@@ -1,6 +1,12 @@
 import { Component, ViewChild, ChangeDetectorRef } from '@angular/core';
-import { IonicPage, NavController, NavParams, Content } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Content, ModalController } from 'ionic-angular';
 import { OrderSummaryPage } from '../order-summary/order-summary';
+
+import { MenuAddonsPage } from './menu-addons/menu-addons';
+import { MenuAddonNotificationPage } from './menu-addon-notification/menu-addon-notification';
+import { PartnerProvider, Place } from '../../providers/partner/partner';
+import { CartProvider } from '../../providers/cart/cart';
+import { JSONP_ERR_WRONG_RESPONSE_TYPE } from '@angular/common/http/src/jsonp';
 
 /**
  * Generated class for the MenuPage page.
@@ -8,6 +14,23 @@ import { OrderSummaryPage } from '../order-summary/order-summary';
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
  */
+
+export interface Item {
+  description?: string
+  hasAddons: boolean
+  id: number
+  isEnabled: boolean
+  isNonVeg: boolean
+  name: string
+  partnerID: number
+  price: number
+}
+
+export interface Collection {
+  name: string,
+  items?: [Item],
+  subcollection?: [Item]
+}
 
 @IonicPage()
 @Component({
@@ -18,27 +41,31 @@ export class MenuPage {
 
   @ViewChild(Content)
   content:Content;
-
+  
   showCart: Boolean = false;
   isTransparent = true;
   counter: number = 1;
+  partnerDetails: Place;
+  
+  // Is menu loaded
+  success: boolean = false;;
+  
+  // If not loaded
+  isError: boolean = false;
 
-  items = [
-    {
-      name: 'Veg Starters',
-      items: ['Deep Fried Paneer', 'Crispy Corn', 'and 9 more'],
-      description: 'Brazil’s visa waiver during the Olympics was a success for one big reason: it encouraged travel beyond the big cities. The tourism board hopes to bring back the waiver, and if you’re planning to take advantage, save time to visit Angra dos Reis, between Rio and São Paulo. This popular Brazilian vacation area is where cariocas go to escape the crowds. “It’s where many of the country’s elite have their beach villas,” says Martin Frankenberg of Matuete, who has access to several of these glamorous rentals. Big changes are coming to the region. In May, Brazilian chain Fasano will open a long-awaited 54-suite hotel in a complex that includes a marina, golf course, restaurants, and a spa. The design is striking, with elevated wooden buildings that look like they’re floating, all with open-air terraces and views of the forest and sea. And the government recently pledged $8 million to improve the infrastructure on Ilha Grande—an island that’s so popular that they’ve had to impose a daily limit on visitors. —Stephanie Wu',
-      imageUrl: 'https://cdn-image.travelandleisure.com/sites/default/files/styles/964x524/public/1479915553/angra-dos-reis-brazil-WTG2017.jpg?itok=damBsB9G',
-    },
-    {
-      name: 'Non-Veg Starters',
-      items: ['Deep Fried Paneer', 'Crispy Corn', 'and 9 more'],
-      description: 'With a growing array of open-air bars, arts venues, and restaurants, Belfast is quickly becoming an attractive destination for travelers. Stay at the design-forward Bullitt Hotel (inspired by the Steve McQueen film), which opened in October with casual, well-appointed rooms and complimentary grab-and-go breakfast granola. Check out arts organization Seedhead, which runs street-art tours and hosts pop-up cabarets around the city. The Michelin-starred OX and EIPIC lead the fine-dining pack, but also visit Permit Room, with its internationally inspired breakfast and locally roasted coffee. Noteworthy new nightlife spots include the Muddlers Club, a stylish restaurant and cocktail bar in the trendy Cathedral Quarter, and Vandal, a graffiti-adorned pizza place that turns into a late-night club, on the top floor of a 17th-century pub.—Nell McShane Wulfhart',
-      imageUrl: 'https://cdn-image.travelandleisure.com/sites/default/files/styles/964x524/public/1480711606/belfast-city-hall-northern-ireland-WTG2017.jpg?itok=mCqumH31',
-    }    
-  ]
+  menu: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private ref: ChangeDetectorRef) {}
+  constructor(public navCtrl: NavController, public navParams: NavParams, private ref: ChangeDetectorRef, private partnerService: PartnerProvider, public cartProvider: CartProvider, public modalCtrl: ModalController) {
+
+    const partner: Place = this.navParams.data["data"].data;
+    this.partnerDetails = partner;
+    this.partnerDetails.characteristics["cuisine"] = this.partnerDetails.characteristics["cuisine"].join(', ')
+    this.loadMenu(partner);
+
+    // demo
+    this.cartProvider.clearCartData();
+
+  }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad MenuPage');
@@ -55,16 +82,446 @@ export class MenuPage {
     })
   }
 
+  loadMenu(partner: Place) {
+    this.partnerService.getMenu(partner.partnerID).subscribe(
+      (data) => {
+        this.createMenuList(data);
+      }, (err) => {
+        this.isError = true
+      }
+    )
+  }
+
+  createMenuList(data) {
+    
+    try {
+
+      let menu = JSON.parse(JSON.stringify(data.collection));
+
+      menu.forEach(collection => {
+
+        // Has subcollection
+        if (collection["subcollection"].length > 0) {
+
+          collection["subcollection"].forEach(collection => {
+            
+            let items = [];
+            collection.items.forEach(item => {
+              items.push(data["items"][item.id])
+            });
+
+            collection.items = items;
+
+          });
+
+          delete collection["items"];
+
+        } else { // has items
+
+          let items = [];
+          collection["items"].forEach(item => {
+            items.push(data["items"][item.id])
+          });
+          collection.items = items;
+          delete collection["subcollection"];
+
+        }
+      });
+
+      console.log(menu);
+
+      this.menu = menu;
+      this.success = true;
+
+    } catch(err) {
+
+      this.success = false;
+      this.menu = null;
+
+    }
+  }
+
+  extractDesc(items) {
+
+    try {
+
+      let itemsDesc = "";
+      if (items.length > 2) {
+        for (var i = 0; i < 2; i++) {
+          if (typeof items[i] !== 'undefined') {
+            itemsDesc += `${items[i].name}, `;
+          } else {
+            throw new Error('Error');
+          }
+        }
+        itemsDesc = `${itemsDesc.slice(0, -2)} and ${items.length - 2} more`;
+      } else {
+        items.forEach(item => {
+          if (typeof item !== 'undefined') {
+            itemsDesc += `${item.name}, `;
+          } else {
+            throw new Error('Error');
+          }
+        });
+        itemsDesc = itemsDesc.slice(0, -2);
+      }
+
+      return itemsDesc;
+
+    } catch(err) {
+
+      console.log(err);
+      this.success = false;
+      this.menu = null;
+
+    }
+  }
+
   changeStatus(status) {
     this.isTransparent = status;
   }
 
-  updateCounter(status: Boolean) {
-    if (status) {
-      ++this.counter;
+  updateCounter(item, status: Boolean) {
+
+    if (!item.hasAddons) {
+      this.cartProvider.getCartData().then(response => {
+        
+        if (status) {
+          item.selected = true;
+          item.quantity += 1;
+          response.cart[item.id][0].quantity += 1;
+
+          this.cartProvider.totalItems += 1;
+      
+          // Update Total Price
+          response.total += item.price * 100;
+          this.cartProvider.total = response.total;
+
+          // Update Total Items
+          response.totalItems += 1;
+          this.cartProvider.totalItems + response.totalItems;
+
+          // Save to Storage
+          this.cartProvider.setCartData(response);
+        } else {
+
+          // Update Total Price
+          response.total -= item.price * 100;
+          this.cartProvider.total = response.total;
+
+          // Update Quantity
+          item.quantity -= 1;
+          response.totalItems -= 1;
+          this.cartProvider.totalItems -= 1;
+
+          if (item.quantity === 0) {
+            delete item.selected;
+            delete response.cart[item.id];
+            this.cartProvider.setCartData(response);
+          } else {
+            response.cart[item.id][0] = item;
+            this.cartProvider.setCartData(response);
+          }
+
+        }
+
+        /* if (status) {
+        } else {
+          item.selected = true;
+  
+          // Update Total Price
+          response.total -= item.price * 100;
+          this.cartProvider.total = response.total;
+  
+          item.counter -= 1;
+          this.cartProvider.totalItems -= 1;
+          
+          if (item.counter === 0) {
+            item.selected = false;
+            delete response.items[item.id];
+            this.cartProvider.setCartData(response);
+          } else {
+            // Save to Storage
+            response.items[item.id] = item;
+            this.cartProvider.setCartData(response);
+          }
+        } */
+  
+        // Check Balance
+        this.checkTotal();
+  
+      })
+    } else {
+
+      if (status) { // Add More
+
+        const addonNotificationModal = this.modalCtrl.create(MenuAddonNotificationPage, {}, {
+          showBackdrop: true,
+          enableBackdropDismiss: true,
+          cssClass: 'addons-notification'
+        });
+  
+        addonNotificationModal.onDidDismiss(data => {
+          
+          if (!!data) {
+  
+            if (data === 'repeat') { // if repeat yes
+  
+              this.cartProvider.getCartData().then(response => {
+
+                console.log(item);
+                
+                let lastIndex = response.cart[item.id].length -1
+                let lastItem = response.cart[item.id][lastIndex];
+  
+                lastItem.selected = true;
+  
+                // Update Total Price (Single Item = Total Item Price / quantity)
+                response.total += (lastItem.price / lastItem.quantity) * 100;
+                this.cartProvider.total = response.total;
+                
+                // Update Item Total Price
+                lastItem.price += (lastItem.price / lastItem.quantity);
+
+                // Increment Counter
+                item.quantity += 1;
+                response.totalItems += 1;
+                this.cartProvider.totalItems += 1;
+                lastItem.quantity += 1;
+                
+                this.cartProvider.setCartData(response);
+                console.log(response.cart[item.id]);
+  
+              })
+  
+            } else { // if repeat no
+  
+              // Open Addons Modal
+              this.addToCart(item, true);
+  
+            }
+  
+          }
+  
+        })
+  
+        addonNotificationModal.present();
+
+      } else { // Remove Last
+
+        this.cartProvider.getCartData().then(response => {
+
+          let lastIndex = response.cart[item.id].length - 1;
+          let lastItem = response.cart[item.id][lastIndex];
+
+          // Update Total Price - Value of One Item = (lastItem / totalItem Quantity)
+          response.total -= (lastItem.price  * 100) / lastItem.quantity;
+          lastItem.price -= lastItem.price / lastItem.quantity;
+          this.cartProvider.total = response.total;
+
+          // Update Quantity
+          item.quantity -= 1;
+          lastItem.quantity -= 1;
+          response.totalItems -= 1;
+          this.cartProvider.totalItems -= 1;
+
+          if (lastItem.quantity === 0) {
+            if (item.quantity === 0) { delete item.selected }
+            response.cart[item.id].splice(lastIndex, 1);
+            this.cartProvider.setCartData(response);
+          } else {
+            
+            // Update Item Price (Total Item Price - Singe Price)
+            this.cartProvider.setCartData(response);
+
+          }
+
+          // Check Balance  
+          this.checkTotal();
+
+        });
+
+      }
+
+    }
+    
+  }
+
+  addToCart(item, isNew) {
+    
+    if (!item.hasAddons) {
+
+      this.cartProvider.getCartData().then(response => {
+        
+        if (response !== null) { // updating old
+          
+          // Set Properties
+          item.selected = true;
+
+          // Add new Quantity
+          if (!item.quantity) {
+            item.quantity = 0;
+          }
+          
+          // Update Quantity
+          item.quantity += 1;
+
+          // Update Total Items
+          this.cartProvider.totalItems += 1;
+          response.totalItems = this.cartProvider.totalItems;
+          
+          response.total += item.price * 100;
+          this.cartProvider.total = response.total;
+
+          // Save to Storage
+          response.cart[item.id] = new Array(item);
+          this.cartProvider.setCartData(response);
+
+        } else { // Adding new
+
+          item.selected = true;
+          item.quantity = 1;
+          
+          // Update total price
+          this.cartProvider.total = item.price * 100;
+          
+          // Update total Items
+          this.cartProvider.totalItems += 1;
+
+          let newCart = new Object();
+          newCart[item.id] = new Array(item);
+
+          this.cartProvider.setCartData({
+            partnerID: this.partnerDetails.partnerID,
+            cart: newCart,
+            total: this.cartProvider.total,
+            totalItems: this.cartProvider.totalItems
+          })
+
+        }
+
+        // Check Balance  
+        this.checkTotal();
+        console.log('Selected Item: ', item);
+
+      }).catch(err => {
+        console.log(err);
+      });
+      
+    } else {
+      const addonModal = this.modalCtrl.create(MenuAddonsPage, { 
+        data: {
+          item: item,
+          new: true
+        } 
+      }, {
+        showBackdrop: true,
+        enableBackdropDismiss: true,
+        cssClass: 'addons'
+      });
+
+      addonModal.onDidDismiss(data => {
+
+        if (!!data) {
+
+          this.cartProvider.getCartData().then(response => {
+          
+            if (response !== null) { // updating old
+              
+              console.log('Select Data: ', data);
+
+              // Set Properties
+              data.selected = true;
+              item.selected = true;
+    
+              if (!item.quantity) {
+                item.quantity = 0;
+              }
+              
+              // Update Quantity
+              item.quantity += 1;
+
+              if (Array.isArray(response.cart[item.id])) {
+                data.quantity = 1;
+              } else {
+                data.quantity = item.quantity;
+              }
+              
+              // Update Price
+              response.total += data.price * 100;
+              this.cartProvider.total = response.total;
+              
+              // Update Total Items
+              this.cartProvider.totalItems += 1;
+              response.totalItems = this.cartProvider.totalItems;
+    
+              // Save to Storage
+              if (typeof response.cart[item.id] === 'undefined') {
+                
+                let newItem = new Array(data);
+                response.cart[item.id] = newItem;
+
+              } else {
+
+                if (response.cart[item.id].length > 0) {
+                  response.cart[item.id].push(data);
+                } else {
+                  response.cart[item.id] = new Array(data);
+                }
+                
+              }
+          
+              // response.cart[data.id] = new Array(data);
+              this.cartProvider.setCartData(response);
+    
+            } else { // Adding new
+    
+              item.selected = true;
+              data.selected = true;
+
+              // Add Quantity
+              item.quantity = 1;
+              data.quantity = item.quantity;
+              
+              // Update total price
+              this.cartProvider.total = data.price * 100;
+              
+              // Update total Items
+              this.cartProvider.totalItems += 1;
+
+              let newCart = new Object();
+              newCart[item.id] = new Array(data);
+
+              this.cartProvider.setCartData({
+                partnerID: this.partnerDetails.partnerID,
+                cart: newCart,
+                total: this.cartProvider.total,
+                totalItems: this.cartProvider.totalItems
+              })
+    
+            }
+    
+            // Check Balance  
+            this.checkTotal();
+            console.log('Selected Item: ', item);
+    
+          }).catch(err => {
+            console.log(err);
+          });
+
+        }
+
+      })
+  
+      addonModal.present();
+    }
+
+  }
+
+  checkTotal() {
+    if (this.cartProvider.total >= 100) {
       this.showCart = true;
     } else {
-      --this.counter;
       this.showCart = false;
     }
   }

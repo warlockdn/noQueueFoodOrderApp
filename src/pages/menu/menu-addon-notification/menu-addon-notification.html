@@ -1,0 +1,30 @@
+<ion-header no-border>
+  <ion-toolbar>
+    <ion-title>Repeat Last?</ion-title>
+    <ion-buttons start>
+        <button ion-button (click)="dismiss()">
+        <ion-icon name="close"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+
+  <ion-grid>
+    <ion-row>
+      <!-- <ion-col>
+        Show Items
+      </ion-col> -->
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <button ion-button outline block (click)="repeat('choose')">Choose</button>
+      </ion-col>
+      <ion-col>
+        <button ion-button block color="secondary" (click)="repeat('repeat')">Repeat</button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>

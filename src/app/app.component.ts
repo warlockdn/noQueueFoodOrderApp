@@ -100,4 +100,27 @@ export class ClientApp {
     
     this.nav.setRoot(page.component);
   }
+
+  goToLogin() {
+    this.menu.close();
+    this.nav.push(LoginPage, {}, {
+      animate: true,
+      direction: "forward"
+    });
+  }
+
+  logout() {
+
+    this.menu.close();
+    this.auth.logout();
+    setTimeout(() => {
+      this.events.publish("user:logout");
+      this.nav.setRoot(HomePage, {}, {
+        animate: true,
+        direction: "switch"
+      });
+    }, 200);
+    
+  }
+
 }

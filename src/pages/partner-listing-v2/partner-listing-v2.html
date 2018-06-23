@@ -8,36 +8,72 @@
 </ion-header>
 
 <ion-content padding>
-  <h5 text-center class="mb-1">8 places nearbuy</h5>
-  <ion-list class="listing" no-lines>
-    <ion-item *ngFor="let partner of partners" (click)="loadMenu()">
-      <div class="image">
-        <img src="{{partner.images.large}}">
-      </div>
-      <div class="desc">
-        <div class="logo align-items-center">
-          <img src="{{partner.images.logo}}" class="m-auto">
+
+  <!-- If Partners -->
+  <div *ngIf="partners">
+    <h5 text-center class="mb-1">{{ partners.length }} places nearbuy</h5>
+    <ion-list class="listing" no-lines>
+      <ion-item *ngFor="let partner of partners" (click)="loadMenu(partner)">
+        <div class="image">
+          <img src="https://res.cloudinary.com/ddiiq3bzl/image/upload/v1526242275/clientApp/1.jpg">
         </div>
-        <ion-grid>
-          <ion-row>
-            <ion-col col col-7>
-              <h2 text-bold>{{ partner.name }}</h2>
-              <div class="cuisines">
-                {{ partner.cuisine }}
-              </div>
-            </ion-col>
-            <ion-col col col-5 class="align-self-end" text-right>
-              <div class="price">
-                <strong>&#x20B9; {{ partner.avgpp }}</strong> per person
-              </div>
-              <div class="avg">
-                <!-- <span>Avg Time: </span> -->
-                {{ partner.avgtime }} mins
-              </div>
-            </ion-col>
-          </ion-row>
-        </ion-grid>
-      </div>
-    </ion-item>
-  </ion-list>
+        <div class="desc">
+          <div class="logo align-items-center" *ngIf="partner.logo">
+            <img src="partner.logo" class="m-auto">
+          </div>
+          <ion-grid>
+            <ion-row>
+              <ion-col col col-7>
+                <h2 text-bold>{{ partner.name }}</h2>
+                <div class="cuisines">
+                  {{ partner.characteristics.cuisine }}
+                </div>
+              </ion-col>
+              <ion-col col col-5 class="align-self-end" text-right>
+                <div class="price">
+                  <strong>&#x20B9; {{ partner.avgpp || 300 }}</strong> per person
+                </div>
+                <div class="avg">
+                  {{ partner.avgtime || 15 }} mins
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>
+      </ion-item>
+    </ion-list>
+  </div>
+
+  <div *ngIf="fakePlaces">
+    <ion-list class="fake-listing" no-lines>
+      <ion-item *ngFor="let fake of fakePlaces">
+        <div class="image"></div>
+        <div class="desc">
+          <div class="logo align-items-center"></div>
+          <ion-grid>
+            <ion-row>
+              <ion-col col col-7>
+                <h2 text-bold>DDD</h2>
+                <div class="cuisines">
+                  DDDDD, DDDDD
+                </div>
+              </ion-col>
+              <ion-col col col-5 class="align-self-end" text-right>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>
+      </ion-item>
+    </ion-list>
+  </div>
+
+  <!-- If !Partners -->
+  <div text-center *ngIf="notfound" class="notfound">
+    <img src="http://placehold.it/250x250" />
+    <h3>Oops!</h3>
+    <p>
+      No places nearby. We are working on it.
+    </p>
+  </div>
+  
 </ion-content>

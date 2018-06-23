@@ -4,8 +4,8 @@
     <!-- Profile Info -->
     <div class="profile">
       <div class="avatar"></div>
-      <h3 class="name" *ngIf="isLoggedIn">John Doe</h3>
-      <h5 class="phone" *ngIf="isLoggedIn">+91 981 812 0583</h5>
+      <h3 class="name" *ngIf="isLoggedIn">{{ auth.user.name }}</h3>
+      <h5 class="phone" *ngIf="isLoggedIn">+91 {{ auth.user.phone }}</h5>
     </div>
     
     <ion-list margin-top no-lines class="menu-list" *ngIf="isLoggedIn">
@@ -24,7 +24,7 @@
 
     <ion-footer no-border>
       <ion-toolbar>
-        <button ion-button block color="danger" *ngIf="isLoggedIn">Logout</button>
+        <button ion-button block color="danger" *ngIf="isLoggedIn" (click)="logout()">Logout</button>
         <button ion-button block (click)="goToLogin()" *ngIf="!isLoggedIn">Login</button>
       </ion-toolbar>
     </ion-footer>

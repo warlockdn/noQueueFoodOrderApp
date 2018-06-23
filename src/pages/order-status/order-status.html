@@ -15,21 +15,21 @@
 
   <div class="status">
     <ion-list>
-      <ion-item>
+      <ion-item [ngClass]="currentOrder.stage.placed ? '' : 'faded'">
         <ion-avatar item-left>
           <img src="https://res.cloudinary.com/ddiiq3bzl/image/upload/v1526242275/clientApp/1.jpg">
         </ion-avatar>
         Order Placed
         <h5>Order placed and restaurant notified</h5>
       </ion-item>
-      <ion-item [ngClass]="statusCodes.accepted ? '' : 'faded'">
+      <ion-item [ngClass]="currentOrder.stage.accepted ? '' : 'faded'">
         <ion-avatar item-left>
           <img src="../../assets/temp/1.jpg">
         </ion-avatar>
         Order Accepted
         <h5>Order accepted by the restaurant. Sit tight.</h5>
       </ion-item>
-      <ion-item text-center [ngClass]="statusCodes.ready ? '' : 'faded'">
+      <ion-item text-center [ngClass]="currentOrder.stage.ready ? '' : 'faded'">
           <span>Order Ready</span>
           <h5>Order hot &amp; ready.</h5>
       </ion-item>

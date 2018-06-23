@@ -10,14 +10,30 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { IonicStorageModule } from '@ionic/storage';
 import { Geolocation } from '@ionic-native/geolocation';
+import { InAppBrowser } from '@ionic-native/in-app-browser';
+
+import { Firebase } from '@ionic-native/firebase';
+import { AngularFireModule } from 'angularfire2';
+import { AngularFirestoreModule } from 'angularfire2/firestore';
+
+const firebase = {
+  apiKey: "AIzaSyA2BVvIim73UWQj5z5lFRwMIGCShSk27Ho",
+  authDomain: "resapp-1523718961807.firebaseapp.com",
+  databaseURL: "https://resapp-1523718961807.firebaseio.com",
+  projectId: "resapp-1523718961807",
+  messagingSenderId: "872990739786"
+}  
 
 import { WalkthroughPage } from '../pages/walkthrough/walkthrough';
 import { LoginPage } from './../pages/login/login';
+import { LoginWithpassPage } from '../pages/login/login-withpass/login-withpass';
 import { RegisterPage } from '../pages/register/register';
 import { HomePage } from '../pages/home/home';
 import { PartnerListingPage } from '../pages/partner-listing/partner-listing';
 import { PartnerListingPageV2 } from '../pages/partner-listing-v2/partner-listing-v2';
 import { MenuPage } from '../pages/menu/menu';
+import { MenuAddonsPage } from '../pages/menu/menu-addons/menu-addons';
+import { MenuAddonNotificationPage } from '../pages/menu/menu-addon-notification/menu-addon-notification';
 import { OrderSummaryPage } from '../pages/order-summary/order-summary';
 import { OrderStatusPage } from '../pages/order-status/order-status';
 
@@ -26,17 +42,24 @@ import { AccordionListComponent } from '../components/accordion-list/accordion-l
 import { InterceptorProvider } from '../providers/interceptor/interceptor';
 import { ConstantsProvider } from '../providers/constants/constants';
 import { AuthProvider } from '../providers/auth/auth';
+import { PartnerProvider } from '../providers/partner/partner';
+import { CartProvider } from '../providers/cart/cart';
+import { FirebaseProvider } from '../providers/firebase/firebase';
+import { OrderProvider } from '../providers/order/order';
 
 @NgModule({
   declarations: [
     ClientApp,
     LoginPage,
+    LoginWithpassPage,
     RegisterPage,
     HomePage,
     WalkthroughPage,
     PartnerListingPage,
     PartnerListingPageV2,
     MenuPage,
+    MenuAddonsPage,
+    MenuAddonNotificationPage,
     OrderSummaryPage,
     OrderStatusPage,
     AccordionListComponent,
@@ -49,18 +72,23 @@ import { AuthProvider } from '../providers/auth/auth';
     }),
     IonicStorageModule.forRoot(),
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    AngularFireModule.initializeApp(firebase), 
+    AngularFirestoreModule,
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     ClientApp,
     WalkthroughPage,
     LoginPage,
+    LoginWithpassPage,
     RegisterPage,
     HomePage,
     PartnerListingPage,
     PartnerListingPageV2,
     MenuPage,
+    MenuAddonsPage,
+    MenuAddonNotificationPage,
     OrderSummaryPage,
     OrderStatusPage,
     AccordionListComponent,
@@ -69,10 +97,16 @@ import { AuthProvider } from '../providers/auth/auth';
     StatusBar,
     SplashScreen,
     Geolocation,
+    InAppBrowser,
     ConstantsProvider,
     AuthProvider,
+    Firebase,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
-    // { provide: HTTP_INTERCEPTORS, useClass: InterceptorProvider, multi: true },
+    PartnerProvider,
+    CartProvider,
+    { provide: HTTP_INTERCEPTORS, useClass: InterceptorProvider, multi: true },
+    FirebaseProvider,
+    OrderProvider,
   ]
 })
 export class AppModule {}

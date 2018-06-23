@@ -1,0 +1,45 @@
+page-login-withpass {
+
+    ion-header[transparent] .bar-button {
+        color: #000 !important;
+    }
+
+    .hero-header {
+        background: #f3f3f3;
+        height: 30vh;
+        img {
+            height: 80px;
+            width: 80px;
+        }
+    }
+
+    ion-content{
+        .fixed-content {
+            margin-top: 0 !important;
+        }
+        .scroll-content {
+            margin-top: 0 !important;
+        }
+        form {
+            ion-list {
+                ion-item.item-md {
+                    padding-left: 0;
+                }
+            }
+        }
+        .terms {
+            font-size: 1rem;
+            color: map-get($map: $appColors, $key: med-grey);
+            a {
+                
+            }
+        }
+    }
+
+    ion-footer {
+        button.button-md {
+
+        }
+    }
+
+}

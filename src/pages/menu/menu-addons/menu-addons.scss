@@ -1,0 +1,36 @@
+page-menu-addons {
+
+    .list-header-md {
+        margin-bottom: 0;
+    }
+
+    .item.item-md {
+        .checkbox-md {
+            margin: 3px 10px 5px 0;
+        }
+        .item-inner {
+            min-height: 4rem;
+            ion-label {
+                margin: 0;
+                font-size: 1.4rem;
+                color: inherit;
+                span.price {
+                    color: #656565;
+                    font-size: 1.3rem;
+                    margin-left: 5px;
+                }
+            }
+        }
+        &.reverse {
+            .item-inner {
+                flex-direction: row-reverse;
+            }
+        }
+    }
+
+    .item-radio-checked.item-md ion-label {
+        color: inherit;
+        font-weight: 600;
+    }
+
+}

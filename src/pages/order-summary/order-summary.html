@@ -15,102 +15,37 @@
 
 <ion-content>
 
-  <!-- <div class="detail d-flex align-items-center">
-    <ion-avatar>
-      <img src="https://www.seeklogo.net/wp-content/uploads/2016/11/taco-bell-logo-preview.png">
-    </ion-avatar>
-    <div class="name">
-      Taco Bell
-    </div>
-  </div> -->
-
   <div class="summary">
     <!-- <h3>Order Summary</h3> -->
     <ion-list class="item-list">
-      <ion-item>
+      <ion-item *ngFor="let item of cartItems">
         <ion-grid>
           <ion-row class="align-items-center">
-            <ion-col col-7 class="d-flex">
-              <div class="type nonveg"></div>
+            <ion-col col-6 class="d-flex">
+              <div class="type" [ngClass]="item.isNonVeg ? 'nonveg' : ''"></div>
               <div class="name">
-                Chicken Biryani Combo [Server 1]
+                {{ item.name }}
               </div>
             </ion-col>
             <ion-col col-3>
               <div class="counter d-flex align-items-center m-auto">
                 <div class="flex-fill left">
-                    <button ion-button clear>-</button>
-                  </div>
-                <div class="flex-fill center">1</div>
+                  <button ion-button clear>-</button>
+                </div>
+                <div class="flex-fill center">{{ item.quantity }}</div>
                 <div class="flex-fill right">
-                    <button ion-button clear>+</button>
+                  <button ion-button clear>+</button>
                 </div>
               </div>
             </ion-col>
-            <ion-col col-2>
+            <ion-col col-3>
               <div class="price">
-                &#x20B9; 295
+                &#x20B9; {{ item.price / item.quantity }}
               </div>
             </ion-col>
           </ion-row>
         </ion-grid>
       </ion-item>
-      <ion-item>
-        <ion-grid>
-          <ion-row class="align-items-center">
-            <ion-col col-7 class="d-flex">
-              <div class="type"></div>
-              <div class="name">
-                Chicken Burger Combo
-              </div>
-            </ion-col>
-            <ion-col col-3>
-              <div class="counter d-flex align-items-center m-auto">
-                <div class="flex-fill left">
-                    <button ion-button clear>-</button>
-                  </div>
-                <div class="flex-fill center">1</div>
-                <div class="flex-fill right">
-                    <button ion-button clear>+</button>
-                </div>
-              </div>
-            </ion-col>
-            <ion-col col-2>
-              <div class="price">
-                &#x20B9; 295
-              </div>
-            </ion-col>
-          </ion-row>
-        </ion-grid>
-      </ion-item>
-      <ion-item>
-        <ion-grid>
-          <ion-row class="align-items-center">
-            <ion-col col-7 class="d-flex">
-              <div class="type"></div>
-              <div class="name">
-                Chicken Burger Combo
-              </div>
-            </ion-col>
-            <ion-col col-3>
-              <div class="counter d-flex align-items-center m-auto">
-                <div class="flex-fill left">
-                    <button ion-button clear>-</button>
-                  </div>
-                <div class="flex-fill center">1</div>
-                <div class="flex-fill right">
-                    <button ion-button clear>+</button>
-                </div>
-              </div>
-            </ion-col>
-            <ion-col col-2>
-              <div class="price">
-                &#x20B9; 295
-              </div>
-            </ion-col>
-          </ion-row>
-        </ion-grid>
-      </ion-item>      
     </ion-list>
 
     <ion-list class="item-list bill">
@@ -118,7 +53,7 @@
         <ion-grid>
           <ion-row>
             <ion-col col-6>Subtotal</ion-col>
-            <ion-col col-6 text-right>&#x20B9; 560</ion-col>
+            <ion-col col-6 text-right>&#x20B9; {{ subTotal / 100 }}</ion-col>
           </ion-row>
         </ion-grid>
       </ion-item>
@@ -126,7 +61,7 @@
         <ion-grid>
           <ion-row>
             <ion-col col-6>Tax</ion-col>
-            <ion-col col-6 text-right>&#x20B9; 20</ion-col>
+            <ion-col col-6 text-right>&#x20B9; {{ tax }}</ion-col>
           </ion-row>
         </ion-grid>
       </ion-item>
@@ -134,7 +69,7 @@
         <ion-grid>
           <ion-row class="total">
             <ion-col col-6>Total</ion-col>
-            <ion-col col-6 text-right>&#x20B9; 600</ion-col>
+            <ion-col col-6 text-right>&#x20B9; {{ (subTotal + total + tax) / 100 }}</ion-col>
           </ion-row>
         </ion-grid>
       </ion-item>
@@ -146,15 +81,26 @@
     <ion-list>
       <ion-item>
         <ion-label stacked font-weight-bold>Notes (If any)</ion-label>
-        <ion-textarea rows="3" placeholder="Any instructions ? Spicy or not spicy, we'll pass them on."></ion-textarea>
+        <ion-textarea rows="3" [(ngModel)]="notes" placeholder="Any instructions ? Spicy or not spicy, we'll pass them on."></ion-textarea>
       </ion-item>
     </ion-list>
   </div>
 
+  {{ notes }}
+
 </ion-content>
 
 <ion-footer no-border>
-  <button ion-button block color="secondary" class="general" (click)="loadStatus()">
-    Place Order    
+  <div class="login" *ngIf="!auth.isLoggedIn">
+    <div>
+      <h3>This last step</h3>
+      <h5>Login or Signup to place your order</h5>
+    </div>
+    <button ion-button block color="primary" class="general" (click)="login()">
+      Login
+    </button>
+  </div>
+  <button ion-button block color="secondary" class="general" (click)="pay()" *ngIf="auth.isLoggedIn">
+    Place Order
   </button>
 </ion-footer>

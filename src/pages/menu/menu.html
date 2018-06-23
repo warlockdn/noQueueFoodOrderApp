@@ -1,9 +1,9 @@
-<ion-header [attr.transparent]="isTransparent ? true : null" no-border>
+<ion-header [attr.transparent]="isTransparent ? true : null" no-border class="with-bg">
   <ion-navbar [attr.transparent]="isTransparent ? true : null">
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>Taco Bell</ion-title>
+    <ion-title>{{ partnerDetails.name }}</ion-title>
     <ion-buttons end>
       <button ion-button end>
         <ion-icon name="search"></ion-icon>
@@ -21,19 +21,19 @@
         <ion-row>
           <ion-col>
             <div class="logo align-items-center">
-              <img src="https://www.seeklogo.net/wp-content/uploads/2016/11/taco-bell-logo-preview.png" class="m-auto">
+              <img src="{{ partnerDetails.poster || 'https://www.seeklogo.net/wp-content/uploads/2016/11/taco-bell-logo-preview.png' }}" class="m-auto">
             </div>
           </ion-col>
         </ion-row>
         <ion-row>
           <ion-col col-8>
             <div class="cuisines">
-              Mexican, Fast Food, American
+              {{ partnerDetails.characteristics.cuisine }}
             </div>
           </ion-col>
           <ion-col class="align-self-end" col-4>
             <div class="avgtime" text-right>
-              15 mins
+              {{ partnerDetails.avgtime || 15 }} mins
             </div>
           </ion-col>
         </ion-row>
@@ -41,123 +41,123 @@
     </div>
   </div>
 
-  <div class="menu-list">
-    <div class="category">
-      <div class="section-header">Indian</div>
-      <accordion-list *ngFor="let item of items; let index = index" [title]="item.name" [items]="item.items" hasMargin="false">
-        <ion-list class="item-list" no-lines>
-          <ion-item>
-            <div class="display-inline-block">
-              <div class="name">
-                <div class="type"></div>
-                Chicken Khurana
-              </div>
-              <div class="price">
-                &#x20B9; 295
-              </div>
-              <div class="desc">
-                Some small description here.
-              </div>
-            </div>
-            <button float-right ion-button color="secondary" outline>ADD</button>
-          </ion-item>
-          <ion-item>
-            <div class="display-inline-block w80">
-              <div class="name">
-                <div class="type nonveg"></div>
-                Chicken Biryani Combo [Serves 1]
-              </div>
-              <div class="price">
-                &#x20B9; 295
-              </div>
-              <div class="desc">
-                Some small description here.
-              </div>
-            </div>
-            <button float-right ion-button color="secondary" outline>ADD</button>
-          </ion-item>
-        </ion-list>
-      </accordion-list>
-    </div>
-    <div class="category">
-      <div class="section-header">Indian</div>
-      <ion-list class="item-list" no-lines>
-        <ion-item>
-          <div class="display-inline-block">
+  <div class="menu-list" *ngIf="success && menu !== null">
+    <div class="category" *ngFor="let category of menu">
+      <div class="section-header">{{ category.name }}</div>
+
+      <!-- Load SubCollections -->
+      <div *ngIf="category.subcollection">
+        <accordion-list *ngFor="let collection of category.subcollection; let index = index" [title]="collection.name" [items]="extractDesc(collection.items)" hasMargin="false">
+          <ion-list class="item-list" no-lines>
+            <ion-item *ngFor="let item of collection.items">
+              <ion-grid no-padding>
+                <ion-row align-items-center>
+                  <ion-col no-padding col-9 text-wrap>
+                    <div class="display-inline-block">
+                      <div class="name">
+                        <div class="type" [ngClass]="item.isNonVeg ? 'nonveg' : ''"></div>
+                        {{ item.name }}
+                      </div>
+                      <div class="price">
+                        &#x20B9; {{ item.price }}
+                      </div>
+                      <div class="desc" *ngIf="item.description">
+                        {{ item.description }}
+                      </div>
+                    </div>
+                  </ion-col>
+                  <ion-col no-padding col-3>
+                    <!-- <button float-right ion-button color="secondary" class="item-button" (click)="addToCart(item)" outline>
+                      ADD <span *ngIf="item.hasAddons">*</span>
+                    </button> -->
+                    <button float-right ion-button color="secondary" outline (click)="addToCart(item)" *ngIf="!item.selected || item.selected === null">
+                      ADD <span *ngIf="item.hasAddons">*</span>
+                    </button>
+                    <div class="counter d-flex align-items-center" float-right *ngIf="item.selected">
+                      <div class="flex-fill left">
+                          <button ion-button clear (click)="updateCounter(item, false)">-</button>
+                        </div>
+                      <div class="flex-fill center">{{ item.quantity }}</div>
+                      <div class="flex-fill right">
+                        <button ion-button clear (click)="updateCounter(item, true)">+</button>
+                      </div>
+                    </div>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ion-item>
+          </ion-list>
+        </accordion-list>
+      </div>
+
+      <!-- Load Items -->
+      <ion-list class="item-list" *ngIf="category.items" no-lines>
+        <ion-item *ngFor="let item of category.items">
+          <ion-grid no-padding>
+            <ion-row align-items-center>
+              <ion-col no-padding col-9 text-wrap>
+                <div class="display-inline-block">
+                  <div class="name">
+                    <div class="type" [ngClass]="item.isNonVeg ? 'nonveg' : ''"></div>
+                    {{ item.name }}
+                  </div>
+                  <div class="price">
+                    &#x20B9; {{ item.price }}
+                  </div>
+                  <div class="desc" *ngIf="item.description">
+                    {{ item.description }}
+                  </div>
+                </div>
+              </ion-col>
+              <ion-col no-padding col-3>
+                <!-- <button float-right ion-button color="secondary" class="item-button" (click)="addToCart(item)" outline>
+                  ADD <span *ngIf="item.hasAddons">*</span>
+                </button> -->
+                <button float-right ion-button color="secondary" outline (click)="addToCart(item, true)" *ngIf="!item.selected || item.selected === null">
+                  ADD <span *ngIf="item.hasAddons">*</span>
+                </button>
+                <div class="counter d-flex align-items-center" float-right *ngIf="item.selected">
+                  <div class="flex-fill left">
+                      <button ion-button clear (click)="updateCounter(item, false)">-</button>
+                    </div>
+                  <div class="flex-fill center">{{ item.quantity }}</div>
+                  <div class="flex-fill right">
+                    <button ion-button clear (click)="updateCounter(item, true)">+</button>
+                  </div>
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+          <!-- <div class="display-inline-block">
             <div class="name">
               <div class="type"></div>
-              Chicken Khurana
+              {{ item.name }}
             </div>
             <div class="price">
-              &#x20B9; 295
+              &#x20B9; {{ item.price }}
             </div>
-            <div class="desc">
-              Some small description here.
-            </div>
-          </div>
-          <button float-right ion-button color="secondary" outline>ADD</button>
-        </ion-item>
-        <ion-item>
-          <div class="display-inline-block w80">
-            <div class="name">
-              <div class="type nonveg"></div>
-              Chicken Biryani Combo [Serves 1]
-            </div>
-            <div class="price">
-              &#x20B9; 295
-            </div>
-            <div class="desc">
-              Some small description here.
+            <div class="desc" *ngIf="item.description">
+              {{ item.description }}
             </div>
           </div>
-          <div class="counter d-flex align-items-center" float-right>
+          <button float-right ion-button color="secondary" outline (click)="addToCart(item)" *ngIf="!item.selected || item.selected === null">
+            ADD <span *ngIf="item.hasAddons">*</span>
+          </button>
+          <div class="counter d-flex align-items-center" float-right *ngIf="item.selected">
             <div class="flex-fill left">
-                <button ion-button clear (click)="updateCounter(false)">-</button>
+                <button ion-button clear (click)="updateCounter(item, false)">-</button>
               </div>
-            <div class="flex-fill center">{{ counter }}</div>
+            <div class="flex-fill center">{{ item.quantity }}</div>
             <div class="flex-fill right">
-                <button ion-button clear (click)="updateCounter(true)">+</button>
+              <button ion-button clear (click)="updateCounter(item, true)">+</button>
             </div>
-          </div>
-        </ion-item>
-      </ion-list>
-    </div>
-    <div class="category">
-      <div class="section-header">Indian</div>
-      <ion-list class="item-list" no-lines>
-        <ion-item>
-          <div class="display-inline-block">
-            <div class="name">
-              <div class="type"></div>
-              Chicken Khurana
-            </div>
-            <div class="price">
-              &#x20B9; 295
-            </div>
-            <div class="desc">
-              Some small description here.
-            </div>
-          </div>
-          <button float-right ion-button color="secondary" outline>ADD</button>
-        </ion-item>
-        <ion-item>
-          <div class="display-inline-block w80">
-            <div class="name">
-              <div class="type nonveg"></div>
-              Chicken Biryani Combo [Serves 1]
-            </div>
-            <div class="price">
-              &#x20B9; 295
-            </div>
-            <div class="desc">
-              Some small description here.
-            </div>
-          </div>
-          <button float-right ion-button color="secondary" outline>ADD</button>          
+          </div> -->
         </ion-item>
       </ion-list>
     </div>
   </div>
+
+  <div class="error" *ngIf="!success"></div>
 
 </ion-content>
 
@@ -165,7 +165,7 @@
   <button ion-button block color="secondary" [ngClass]="showCart ? 'show' : 'hide'" (click)="loadSummary()">
     <ion-grid class="p0">
       <ion-row align-items-center>
-        <ion-col class="p0" text-left col-7>4 Items - &#x20B9; 620</ion-col>
+        <ion-col class="p0" text-left col-7>{{ cartProvider.totalItems }} Items - &#x20B9; {{ cartProvider.total / 100 }}</ion-col>
         <ion-col class="p0" text-right col-5 style="position: relative; top: -2px;">
           View Cart
           <ion-icon style="position: relative; top: 2px" name="ios-arrow-dropright-circle"></ion-icon>
