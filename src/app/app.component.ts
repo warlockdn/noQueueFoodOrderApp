@@ -1,16 +1,16 @@
 import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform, Menu, Events, MenuController } from 'ionic-angular';
+import { Nav, Platform, Menu, Events, MenuController, ToastController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Storage } from '@ionic/storage';
 
 import { WalkthroughPage } from '../pages/walkthrough/walkthrough';
 import { LoginPage } from '../pages/login/login';
-import { RegisterPage } from '../pages/register/register';
 import { HomePage } from '../pages/home/home';
-import { OrderStatusPage } from '../pages/order-status/order-status';
+import { OrderHistoryPage } from '../pages/account/order-history/order-history';
 
 import { AuthProvider } from '../providers/auth/auth';
+import { FirebaseProvider } from '../providers/firebase/firebase';
 
 @Component({
   templateUrl: 'app.html'
@@ -22,12 +22,12 @@ export class ClientApp {
   isLoggedIn: boolean = false;
 
   // used for an example of ngFor and navigation
-  loggedInMenu: Array<{title: string, subtitle: string, component: any}> = [
-    { title: 'Home', subtitle: '', component: HomePage },
-    { title: 'List', subtitle: 'History, Payments, etc.', component: HomePage },
-    { title: 'Coupons', subtitle: '', component: HomePage },
-    { title: 'Points', subtitle: '', component: HomePage },
-    { title: 'Settings', subtitle: 'Accounts, Reviews, Referrals, etc.', component: HomePage }
+  loggedInMenu: Array<{title: string, subtitle: string, component: any, disabled?: boolean }> = [
+    { title: 'Home', subtitle: '', component: HomePage, disabled: false },
+    { title: 'List', subtitle: 'History, Payments, etc.', component: OrderHistoryPage, disabled: false },
+    { title: 'Coupons', subtitle: '', component: HomePage, disabled: true },
+    { title: 'Points', subtitle: '', component: HomePage, disabled: true },
+    { title: 'Settings', subtitle: 'Accounts, Reviews, Referrals, etc.', component: HomePage, disabled: true }
   ];
 
   notLoggedInMenu: Array<{title: string, subtitle: string, component?: any, disabled: boolean }> = [
@@ -45,7 +45,9 @@ export class ClientApp {
     private storage: Storage, 
     private auth: AuthProvider,
     public menu: MenuController,
-    public events: Events
+    public events: Events,
+    public firebase: FirebaseProvider,
+    public toastCtrl: ToastController
   ) {
     
     this.storage.get('tutorialSeen')
@@ -60,7 +62,8 @@ export class ClientApp {
 
     this.auth.loggedInStatus().then((status) => {
       if (status) {
-        this.isLoggedIn = true;
+        this.isLoggedIn = true
+        // this.firebase.getToken();
       } else {
         this.isLoggedIn = false;
       }

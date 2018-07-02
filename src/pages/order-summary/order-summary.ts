@@ -7,7 +7,6 @@ import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { AuthProvider } from '../../providers/auth/auth';
 import { CartProvider } from '../../providers/cart/cart';
 import { HomePage } from '../home/home';
-import { ConstantsProvider } from '../../providers/constants/constants';
 // import { FirebaseProvider } from '../../providers/firebase/firebase';
 
 /**
@@ -32,7 +31,7 @@ export class OrderSummaryPage {
   notes: string;
 
   // public firebase: FirebaseProvider
-  constructor(public navCtrl: NavController, public navParams: NavParams, public auth: AuthProvider, public modalCtrl: ModalController, public cart: CartProvider, public platform: Platform, private InAppBrowser: InAppBrowser) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public auth: AuthProvider, public modalCtrl: ModalController, public cartProvider: CartProvider, public platform: Platform) {
     console.log(auth.isLoggedIn);
   }
 
@@ -43,7 +42,7 @@ export class OrderSummaryPage {
 
   createCart() {
 
-    this.cart.getCartData().then(
+    this.cartProvider.getCartData().then(
       result => {
         if (result) {
 
@@ -86,7 +85,7 @@ export class OrderSummaryPage {
 
   pay() {
 
-    this.cart.getCartData().then(cart => {
+    this.cartProvider.getCartData().then(cart => {
       if (cart !== null) {
 
         const newCart = {
@@ -140,19 +139,22 @@ export class OrderSummaryPage {
 
   handleCart(cart) {
 
-    this.cart.manageCart(cart).subscribe(
+    this.cartProvider.manageCart(cart).subscribe(
       response => {
 
         if (response.cart) {
           
-          let data = response.cart;
+          this.cartProvider.clearCartData();
 
-          this.navCtrl.push(OrderStatusPage, {
-            data: response.cart
-          }, {
-            animate: true,
-            direction: 'forward'
-          })
+          setTimeout(() => {
+            this.navCtrl.push(OrderStatusPage, {
+              data: response.cart
+            }, {
+              animate: true,
+              direction: 'forward'
+            })
+          }, 200);
+
   
           /* const options = {
             description: `Order #${data.id}`,

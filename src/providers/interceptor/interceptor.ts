@@ -1,5 +1,4 @@
 import { Injectable, Injector } from '@angular/core';
-import { finalize, tap } from 'rxjs/operators';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/mergeMap';
 import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpResponse, HttpErrorResponse } from '@angular/common/http';

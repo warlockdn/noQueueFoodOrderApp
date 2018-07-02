@@ -25,6 +25,7 @@ export class FirebaseProvider {
     let token;
 
     if (this.platform.is("android")) {
+      console.log("Fetching Token...");
       token = await this.firebaseNative.getToken();
     }
 
@@ -41,14 +42,16 @@ export class FirebaseProvider {
   private saveTokenToFirestore(token) {
     if (!token) return;
 
+    console.log("Token: ", token);
     const devicesRef = this.afs.collection('devices')
 
+    // Save only one device token per userid
     const docData = { 
       token,
       userId: this.auth.user.id,
     }
 
-    return devicesRef.doc(token).set(docData);
+    return devicesRef.doc(docData.userId).set(docData);
   }
 
   // Listen to incoming FCM messages

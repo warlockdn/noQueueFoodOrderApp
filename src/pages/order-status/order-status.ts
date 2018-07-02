@@ -3,6 +3,8 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { CartProvider } from '../../providers/cart/cart';
 import { OrderProvider } from '../../providers/order/order';
 
+import { FirebaseProvider } from '../../providers/firebase/firebase';
+
 /**
  * Generated class for the OrderStatusPage page.
  *
@@ -37,21 +39,12 @@ export class OrderStatusPage {
     ready: false
   }; */
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private cart: CartProvider, public order: OrderProvider) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private cart: CartProvider, public order: OrderProvider, public firebase: FirebaseProvider) {
 
     console.log(navParams);
     
     this.notify(this.navParams.data.data.id, "PAID", this.navParams.data.data.id);
-
-    /* setTimeout(() => {
-      this.statusCodes.accepted = true;
-      console.log('Accepted');
-    }, 2000);
-    
-    setTimeout(() => {
-      this.statusCodes.ready = true;
-      console.log('Ready');
-    }, 4000); */
+    this.firebase.listenToNotifications();
 
   }
 

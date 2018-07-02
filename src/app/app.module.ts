@@ -36,6 +36,8 @@ import { MenuAddonsPage } from '../pages/menu/menu-addons/menu-addons';
 import { MenuAddonNotificationPage } from '../pages/menu/menu-addon-notification/menu-addon-notification';
 import { OrderSummaryPage } from '../pages/order-summary/order-summary';
 import { OrderStatusPage } from '../pages/order-status/order-status';
+import { OrderHistoryPage } from '../pages/account/order-history/order-history';
+import { OrderDetailPage } from '../pages/account/order-detail/order-detail';
 
 import { AccordionListComponent } from '../components/accordion-list/accordion-list';
 
@@ -63,6 +65,8 @@ import { OrderProvider } from '../providers/order/order';
     OrderSummaryPage,
     OrderStatusPage,
     AccordionListComponent,
+    OrderHistoryPage,
+    OrderDetailPage
   ],
   imports: [
     BrowserModule,
@@ -92,6 +96,8 @@ import { OrderProvider } from '../providers/order/order';
     OrderSummaryPage,
     OrderStatusPage,
     AccordionListComponent,
+    OrderHistoryPage,
+    OrderDetailPage
   ],
   providers: [
     StatusBar,

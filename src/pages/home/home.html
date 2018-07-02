@@ -2,7 +2,13 @@
   <ion-navbar>
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
-    </button>    
+    </button>
+    <ion-buttons end>
+      <button ion-button end *ngIf="cartProvider.cartData" (click)="goToCart()">
+        <span id="hasCart"></span>
+        <ion-icon name="cart"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 

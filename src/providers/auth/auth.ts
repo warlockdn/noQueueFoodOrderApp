@@ -30,6 +30,7 @@ export class AuthProvider {
   }
 
   setUser(user) {
+    this.isLoggedIn = true;
     console.log('User LoggedIn: ', user);
     this.storage.set("user", user);
     this.storage.set("isLoggedIn", true);

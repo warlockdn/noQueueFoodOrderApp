@@ -4,6 +4,12 @@
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>Places Nearbuy</ion-title>
+    <ion-buttons end>
+        <button ion-button end *ngIf="cartProvider.cartData">
+          <span id="hasCart"></span>
+          <ion-icon name="cart"></ion-icon>
+        </button>
+      </ion-buttons>
   </ion-navbar>
 </ion-header>
 

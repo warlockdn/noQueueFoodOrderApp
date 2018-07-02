@@ -9,7 +9,7 @@
     </div>
     
     <ion-list margin-top no-lines class="menu-list" *ngIf="isLoggedIn">
-      <ion-item menuClose ion-item *ngFor="let p of loggedInMenu" (click)="openPage(p)">
+      <ion-item menuClose ion-item *ngFor="let p of loggedInMenu" (click)="openPage(p)" [ngClass]="p.disabled ? 'disabled': ''">
         {{p.title}}
         <div class="subtitle">{{ p.subtitle }}</div>
       </ion-item>

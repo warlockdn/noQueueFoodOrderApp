@@ -3,7 +3,10 @@ import { NavController } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation';
 import { AlertController } from 'ionic-angular';
 
+import { OrderSummaryPage } from '../order-summary/order-summary';
+
 import { PartnerListingPageV2 } from '../partner-listing-v2/partner-listing-v2';
+import { CartProvider } from '../../providers/cart/cart';
 
 @Component({
   selector: 'page-home',
@@ -15,6 +18,7 @@ export class HomePage {
     public navCtrl: NavController,
     private geolocation: Geolocation,
     public alertCtrl: AlertController,
+    public cartProvider: CartProvider
   ) {}
 
   listPlaces() {
@@ -53,6 +57,13 @@ export class HomePage {
       animate: true,
       direction: 'forward'
     }) */
+  }
+
+  goToCart() {
+    this.navCtrl.push(OrderSummaryPage, {}, {
+      animate: true,
+      direction: "forward"
+    })
   }
 
   showError() {

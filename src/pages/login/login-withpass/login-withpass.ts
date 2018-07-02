@@ -78,10 +78,14 @@ export class LoginWithpassPage {
         }, error => {
 
           const errToast = this.toast.create({
-            message: 'Some error ocurred. Please try again later',
+            message: error.error.message,
             duration: 5000,
-            position: 'bottom'
+            position: 'bottom',
+            showCloseButton: true,
+            closeButtonText: 'OK'
           })
+
+          errToast.present();
 
         }
       )

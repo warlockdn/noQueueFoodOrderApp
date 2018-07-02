@@ -1,12 +1,11 @@
 import { Component, ViewChild, ChangeDetectorRef } from '@angular/core';
-import { IonicPage, NavController, NavParams, Content, ModalController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Content, ModalController, AlertController } from 'ionic-angular';
 import { OrderSummaryPage } from '../order-summary/order-summary';
 
 import { MenuAddonsPage } from './menu-addons/menu-addons';
 import { MenuAddonNotificationPage } from './menu-addon-notification/menu-addon-notification';
 import { PartnerProvider, Place } from '../../providers/partner/partner';
 import { CartProvider } from '../../providers/cart/cart';
-import { JSONP_ERR_WRONG_RESPONSE_TYPE } from '@angular/common/http/src/jsonp';
 
 /**
  * Generated class for the MenuPage page.
@@ -48,22 +47,25 @@ export class MenuPage {
   partnerDetails: Place;
   
   // Is menu loaded
-  success: boolean = false;;
+  success: boolean = false;
   
   // If not loaded
   isError: boolean = false;
 
   menu: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private ref: ChangeDetectorRef, private partnerService: PartnerProvider, public cartProvider: CartProvider, public modalCtrl: ModalController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private ref: ChangeDetectorRef, private partnerService: PartnerProvider, public cartProvider: CartProvider, public modalCtrl: ModalController, private alertCtrl: AlertController) {
 
     const partner: Place = this.navParams.data["data"].data;
     this.partnerDetails = partner;
-    this.partnerDetails.characteristics["cuisine"] = this.partnerDetails.characteristics["cuisine"].join(', ')
+    if (Array.isArray(this.partnerDetails.characteristics["cuisine"])) {
+      this.partnerDetails.characteristics["cuisine"] = this.partnerDetails.characteristics["cuisine"].join(', ')
+    }
     this.loadMenu(partner);
+    this.checkTotal();
 
     // demo
-    this.cartProvider.clearCartData();
+    // this.cartProvider.clearCartData();
 
   }
 
@@ -349,6 +351,13 @@ export class MenuPage {
 
   addToCart(item, isNew) {
     
+    if (this.cartProvider.cartData) {
+      if (this.cartProvider.cartData["partnerID"] !== this.partnerDetails.partnerID) {
+        this.showPartnerErr(item);
+        return false;
+      }
+    }
+
     if (!item.hasAddons) {
 
       this.cartProvider.getCartData().then(response => {
@@ -531,6 +540,35 @@ export class MenuPage {
       animate: true,
       direction: 'forward'
     })
+  }
+
+  showPartnerErr(item) {
+    const msg = this.alertCtrl.create({
+      title: "Replace cart items?",
+      message: "Your cart items contains items from different restaurant. Do you want to discard the previous selection and add new items?",
+      buttons: [
+        {
+          text: 'NO',
+          handler: () => {
+            console.log('Not clearing items.');
+          }
+        },
+        {
+          text: 'YES',
+          handler: () => {
+            console.log('Clearing items and adding new');
+            this.cartProvider.clearCartData();
+
+            // Setting a timeout just for safe side
+            setTimeout(() => {
+              this.addToCart(item, true);
+            }, 200);
+          }
+        }
+      ]
+    })
+
+    msg.present();
   }
 
 }

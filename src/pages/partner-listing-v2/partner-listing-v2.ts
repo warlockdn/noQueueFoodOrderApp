@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { MenuPage } from '../menu/menu';
 
 import { PartnerProvider, Place } from '../../providers/partner/partner';
+import { CartProvider } from '../../providers/cart/cart';
 
 /**
  * Generated class for the PartnerListingPage page.
@@ -22,7 +23,7 @@ export class PartnerListingPageV2 {
   fakePlaces: Array<any> = new Array(3);
   notfound: boolean = false;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public partnerService: PartnerProvider) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public partnerService: PartnerProvider, public cartProvider: CartProvider) {
 
     const coordinates = this.navParams.data["data"];
     this.loadPlaces(coordinates);

@@ -16,16 +16,24 @@ export class CartProvider {
 
   total: number = 0;
   totalItems: number = 0;
+  public cartData: any;
 
   constructor(public http: HttpClient, private storage: Storage) {
     console.log('Hello CartProvider Provider');
+    this.getCartData(); 
   }
 
   getCartData() {
     return this.storage.get("cartData").then(
       (data) => {
+        if (data) {
+          this.cartData = data;
+          this.total = data.total;
+          this.totalItems = data.totalItems;
+        }
         return data;
       }, (err) => {
+        this.cartData = err;
         return err
       }
     )
@@ -34,14 +42,19 @@ export class CartProvider {
   setCartData(cart) {
     this.storage.set("cartData", cart).then(
       (data) => {
+        this.cartData = data;
         return data
       }, (err) => {
+        this.cartData = err;
         return err
       }
     )
   }
 
   clearCartData() {
+    this.cartData = null;
+    this.total = 0;
+    this.totalItems = 0;
     this.storage.remove("cartData");
   }
 
