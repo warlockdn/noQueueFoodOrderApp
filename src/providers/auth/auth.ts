@@ -17,6 +17,7 @@ export class AuthProvider {
 
   public user: any;
   public isLoggedIn: boolean = false;
+  public fromCart: boolean = false;
 
   constructor(public http: HttpClient, private storage: Storage, public events: Events) {
     console.log('Hello AuthProvider Provider');
@@ -91,10 +92,10 @@ export class AuthProvider {
   }
 
   logout() {
-    this.storage.remove("cartData");
     this.storage.remove("isLoggedIn");
     this.storage.remove("token");
     this.storage.remove("user");
+    this.isLoggedIn = false;
   }
 
 }

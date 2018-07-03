@@ -24,6 +24,9 @@ export class LoginPage {
   loginForm: FormGroup;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private fb: FormBuilder, public auth: AuthProvider) {
+    if (this.navParams.data.data) {
+      this.auth.fromCart = true;
+    }
     this.createLoginForm()
   }
 

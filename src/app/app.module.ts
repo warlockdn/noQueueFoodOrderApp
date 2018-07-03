@@ -48,6 +48,7 @@ import { PartnerProvider } from '../providers/partner/partner';
 import { CartProvider } from '../providers/cart/cart';
 import { FirebaseProvider } from '../providers/firebase/firebase';
 import { OrderProvider } from '../providers/order/order';
+import { AccountProvider } from '../providers/account/account';
 
 @NgModule({
   declarations: [
@@ -113,6 +114,7 @@ import { OrderProvider } from '../providers/order/order';
     { provide: HTTP_INTERCEPTORS, useClass: InterceptorProvider, multi: true },
     FirebaseProvider,
     OrderProvider,
+    AccountProvider,
   ]
 })
 export class AppModule {}

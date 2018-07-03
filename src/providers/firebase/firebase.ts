@@ -59,4 +59,8 @@ export class FirebaseProvider {
     return this.firebaseNative.onNotificationOpen();
   }
 
+  unregister() {
+    return this.firebaseNative.unregister();
+  }
+
 }

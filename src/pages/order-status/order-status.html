@@ -10,10 +10,10 @@
   <div class="details" text-center>
     <img src="https://res.cloudinary.com/ddiiq3bzl/image/upload/v1526242275/clientApp/1.jpg">
     <!-- <div class="placeholder"></div> -->
-    <h3>Order No: <strong>#20000000</strong></h3>
+    <h3>Order No: <strong>#{{ currentOrder.id }}</strong></h3>
   </div>
 
-  <div class="status">
+  <div class="status" *ngIf="isPlacing">
     <ion-list>
       <ion-item [ngClass]="currentOrder.stage.placed ? '' : 'faded'">
         <ion-avatar item-left>
@@ -34,6 +34,10 @@
           <h5>Order hot &amp; ready.</h5>
       </ion-item>
     </ion-list>
+  </div>
+
+  <div class="status" *ngIf="!isPlacing">
+    Oops! Your order has been unfortunately declined. Sorry for the inconvinience. We will initiate refund asap.
   </div>
 
 </ion-content>

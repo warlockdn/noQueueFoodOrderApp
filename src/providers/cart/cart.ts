@@ -59,11 +59,15 @@ export class CartProvider {
   }
 
   manageCart(cart): Observable<any> {
+
+    console.log("Submitting Order: ", JSON.stringify(cart));
+
     return this.http.post(ConstantsProvider.cart, {
       partnerID: cart.partnerID,
       customerID: cart.customerID,
       cart: cart.cart,
-      notes: cart.notes
+      notes: cart.notes,
+      partner: cart.partner
     });
   }
 

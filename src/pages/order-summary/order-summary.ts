@@ -6,6 +6,7 @@ import { InAppBrowser } from '@ionic-native/in-app-browser';
 
 import { AuthProvider } from '../../providers/auth/auth';
 import { CartProvider } from '../../providers/cart/cart';
+import { PartnerProvider } from '../../providers/partner/partner';
 import { HomePage } from '../home/home';
 // import { FirebaseProvider } from '../../providers/firebase/firebase';
 
@@ -31,7 +32,7 @@ export class OrderSummaryPage {
   notes: string;
 
   // public firebase: FirebaseProvider
-  constructor(public navCtrl: NavController, public navParams: NavParams, public auth: AuthProvider, public modalCtrl: ModalController, public cartProvider: CartProvider, public platform: Platform) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public auth: AuthProvider, public modalCtrl: ModalController, public cartProvider: CartProvider, public platform: Platform, public partner: PartnerProvider) {
     console.log(auth.isLoggedIn);
   }
 
@@ -70,7 +71,9 @@ export class OrderSummaryPage {
   }
 
   login() {
-    const loginModal = this.modalCtrl.create(LoginPage, {}, {
+    const loginModal = this.modalCtrl.create(LoginPage, {
+      data: true
+    }, {
       enableBackdropDismiss: true
     })
     loginModal.present();
@@ -83,23 +86,20 @@ export class OrderSummaryPage {
     })
   }
 
-  pay() {
+  async pay() {
 
-    this.cartProvider.getCartData().then(cart => {
-      if (cart !== null) {
+    const partner = await this.partner.getPartner();
+    const cart = await this.cartProvider.getCartData();
 
-        const newCart = {
-          customerID: this.auth.user.id,
-          cart: cart,
-          notes: this.notes
-        }
-
-        this.handleCart(newCart);
-
+    if (partner && cart) {
+      const newCart = {
+        customerID: this.auth.user.id,
+        cart: cart,
+        notes: this.notes,
+        partner: partner.name
       }
-    }).catch(err => {
-
-    })
+      this.handleCart(newCart);
+    }
 
     // this.cart.manageCart()
 
@@ -147,11 +147,17 @@ export class OrderSummaryPage {
           this.cartProvider.clearCartData();
 
           setTimeout(() => {
-            this.navCtrl.push(OrderStatusPage, {
+            this.navCtrl.setRoot(OrderStatusPage, {
               data: response.cart
             }, {
               animate: true,
               direction: 'forward'
+            }).then(() => {
+              this.navCtrl.insert(0, HomePage);
+              // this.navCtrl.setPages([
+              //   { page: HomePage }, 
+              //   {page: OrderStatusPage}
+              // ])
             })
           }, 200);
 

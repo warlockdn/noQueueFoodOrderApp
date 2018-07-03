@@ -11,6 +11,7 @@ import { OrderHistoryPage } from '../pages/account/order-history/order-history';
 
 import { AuthProvider } from '../providers/auth/auth';
 import { FirebaseProvider } from '../providers/firebase/firebase';
+import { ConstantsProvider } from '../providers/constants/constants';
 
 @Component({
   templateUrl: 'app.html'
@@ -24,7 +25,7 @@ export class ClientApp {
   // used for an example of ngFor and navigation
   loggedInMenu: Array<{title: string, subtitle: string, component: any, disabled?: boolean }> = [
     { title: 'Home', subtitle: '', component: HomePage, disabled: false },
-    { title: 'List', subtitle: 'History, Payments, etc.', component: OrderHistoryPage, disabled: false },
+    { title: 'Account', subtitle: 'History, Payments, etc.', component: OrderHistoryPage, disabled: false },
     { title: 'Coupons', subtitle: '', component: HomePage, disabled: true },
     { title: 'Points', subtitle: '', component: HomePage, disabled: true },
     { title: 'Settings', subtitle: 'Accounts, Reviews, Referrals, etc.', component: HomePage, disabled: true }
@@ -32,7 +33,7 @@ export class ClientApp {
 
   notLoggedInMenu: Array<{title: string, subtitle: string, component?: any, disabled: boolean }> = [
     { title: 'Home', subtitle: '', component: HomePage, disabled: false },
-    { title: 'List', subtitle: 'History, Payments, etc.', disabled: true },
+    { title: 'Account', subtitle: 'History, Payments, etc.', disabled: true },
     { title: 'Coupons', subtitle: '', disabled: true },
     { title: 'Points', subtitle: '', disabled: true },
     { title: 'Settings', subtitle: 'Accounts, Reviews, Referrals, etc.', disabled: true }
@@ -47,7 +48,8 @@ export class ClientApp {
     public menu: MenuController,
     public events: Events,
     public firebase: FirebaseProvider,
-    public toastCtrl: ToastController
+    public toastCtrl: ToastController,
+    public constants: ConstantsProvider
   ) {
     
     this.storage.get('tutorialSeen')
@@ -69,6 +71,8 @@ export class ClientApp {
       }
     })
 
+
+    
     this.menu.enable(true);
     this.listenToLoginEvents();
 

@@ -29,12 +29,16 @@ export class ConstantsProvider {
   public static cart = "http://192.168.31.190:3003/v1/cart/manage";
   public static notifyStatus = "http://192.168.31.190:3003/v1/cart/notify";
 
+  // Account
+  public static orderList = "http://192.168.31.190:3003/v1/account/orders";
+
   public token = null;
 
   constructor(public http: HttpClient, private storage: Storage) {
     console.log('Hello ConstantsProvider Provider');
     this.getToken().then((token) => {
       if (token) {
+        console.log(token);
         this.token = token;
       }
     })
