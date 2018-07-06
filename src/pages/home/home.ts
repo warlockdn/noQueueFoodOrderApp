@@ -1,5 +1,5 @@
 import { Component, forwardRef } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { IonicPage, NavController } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation';
 import { AlertController } from 'ionic-angular';
 
@@ -8,6 +8,7 @@ import { OrderSummaryPage } from '../order-summary/order-summary';
 import { PartnerListingPageV2 } from '../partner-listing-v2/partner-listing-v2';
 import { CartProvider } from '../../providers/cart/cart';
 
+@IonicPage()  
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
@@ -23,21 +24,21 @@ export class HomePage {
 
   listPlaces() {
 
-    this.navCtrl.push(PartnerListingPageV2, {
-      data: {
-        accuracy: 37, 
-        altitude: null, 
-        altitudeAccuracy: null,
-        heading: null,
-        latitude: 28.597528699999998,
-        longitude: 77.0991781
-      }
-    }, { 
-      direction: "forward", 
-      animate: true 
-    })
+    // this.navCtrl.push(PartnerListingPageV2, {
+    //   data: {
+    //     accuracy: 37, 
+    //     altitude: null, 
+    //     altitudeAccuracy: null,
+    //     heading: null,
+    //     latitude: 28.597528699999998,
+    //     longitude: 77.0991781
+    //   }
+    // }, { 
+    //   direction: "forward", 
+    //   animate: true 
+    // })
 
-    /* this.geolocation.getCurrentPosition().then((response) => {
+    this.geolocation.getCurrentPosition().then((response) => {
       
       console.log(`Lat: ${response.coords.latitude}, Long: ${response.coords.longitude}, Altitude: ${response.coords.altitude}`);
       
@@ -51,12 +52,12 @@ export class HomePage {
     }).catch((err) => {
       console.log('Error fetching Current position ', err);
       this.showError();
-    }) */
+    })
 
     /* this.navCtrl.push(PartnerListingPageV2, {}, { 
       animate: true,
       direction: 'forward'
-    }) */
+    }) */ 
   }
 
   goToCart() {

@@ -1,10 +1,10 @@
-import { Component, ElementRef, Input, Renderer, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, Renderer, ViewChild, OnInit } from '@angular/core';
 
 @Component({
   selector: 'accordion-list',
   templateUrl: 'accordion-list.html'
 })
-export class AccordionListComponent {
+export class AccordionListComponent implements OnInit {
   @Input() headerColor: string = '#F53D3D';
   @Input() textColor: string = '#FFF';
   @Input() contentColor: string = '#F9F9F9';
@@ -18,6 +18,8 @@ export class AccordionListComponent {
   viewHeight: number;
 
   constructor(public renderer: Renderer) { }
+
+  ngOnInit () {}
 
   ngAfterViewInit() {
     this.viewHeight = this.elementView.nativeElement.offsetHeight;
