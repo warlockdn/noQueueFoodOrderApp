@@ -48,7 +48,7 @@ export class FirebaseProvider {
     // Save only one device token per userid
     const docData = { 
       token,
-      userId: this.auth.user.id,
+      userId: (this.auth.user.id).toString(), 
     }
 
     return devicesRef.doc(docData.userId).set(docData);

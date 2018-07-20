@@ -1,11 +1,7 @@
-import { Component, forwardRef } from '@angular/core';
-import { IonicPage, NavController } from 'ionic-angular';
+import { Component } from '@angular/core';
+import { IonicPage, NavController, LoadingController, AlertController } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation';
-import { AlertController } from 'ionic-angular';
 
-import { OrderSummaryPage } from '../order-summary/order-summary';
-
-import { PartnerListingPageV2 } from '../partner-listing-v2/partner-listing-v2';
 import { CartProvider } from '../../providers/cart/cart';
 
 @IonicPage()  
@@ -15,41 +11,57 @@ import { CartProvider } from '../../providers/cart/cart';
 })
 export class HomePage {
 
+  isDisabled: boolean = false;
+
   constructor(
     public navCtrl: NavController,
     private geolocation: Geolocation,
     public alertCtrl: AlertController,
+    public loadingCtrl: LoadingController,
     public cartProvider: CartProvider
   ) {}
 
   listPlaces() {
 
-    // this.navCtrl.push(PartnerListingPageV2, {
-    //   data: {
-    //     accuracy: 37, 
-    //     altitude: null, 
-    //     altitudeAccuracy: null,
-    //     heading: null,
-    //     latitude: 28.597528699999998,
-    //     longitude: 77.0991781
-    //   }
-    // }, { 
-    //   direction: "forward", 
-    //   animate: true 
-    // })
+    /* this.navCtrl.push('PartnerListingPageV2', {
+      data: {
+        accuracy: 37, 
+        altitude: null, 
+        altitudeAccuracy: null,
+        heading: null,
+        latitude: 28.597528699999998,
+        longitude: 77.0991781
+      }
+    }, { 
+      direction: "forward", 
+      animate: true 
+    }) */
+
+    const loading = this.loadingCtrl.create({
+      content: "Locating you...",
+    });
+
+    loading.present();
+
+    this.isDisabled = true;
 
     this.geolocation.getCurrentPosition().then((response) => {
+
+      loading.dismiss();
+      this.isDisabled = false;
       
       console.log(`Lat: ${response.coords.latitude}, Long: ${response.coords.longitude}, Altitude: ${response.coords.altitude}`);
       
-      this.navCtrl.push(PartnerListingPageV2, {
+      this.navCtrl.push('PartnerListingPageV2', {
         data: response.coords
       }, { 
-        direction: "forward", 
+        direction: "forward",
         animate: true 
       })
     
     }).catch((err) => {
+      this.isDisabled = false;
+      loading.dismiss();
       console.log('Error fetching Current position ', err);
       this.showError();
     })
@@ -61,7 +73,7 @@ export class HomePage {
   }
 
   goToCart() {
-    this.navCtrl.push(OrderSummaryPage, {}, {
+    this.navCtrl.push('OrderSummaryPage', {}, {
       animate: true,
       direction: "forward"
     })

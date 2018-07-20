@@ -1,13 +1,11 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ModalController, Platform } from 'ionic-angular';
-import { OrderStatusPage } from '../order-status/order-status';
 import { LoginPage } from '../login/login';
 import { InAppBrowser } from '@ionic-native/in-app-browser';
 
 import { AuthProvider } from '../../providers/auth/auth';
 import { CartProvider } from '../../providers/cart/cart';
 import { PartnerProvider } from '../../providers/partner/partner';
-import { HomePage } from '../home/home';
 // import { FirebaseProvider } from '../../providers/firebase/firebase';
 
 /**
@@ -80,7 +78,7 @@ export class OrderSummaryPage {
   }
 
   loadStatus() {
-    this.navCtrl.push(OrderStatusPage, {}, {
+    this.navCtrl.push('OrderStatusPage', {}, {
       animate: true,
       direction: 'forward'
     })
@@ -147,13 +145,13 @@ export class OrderSummaryPage {
           this.cartProvider.clearCartData();
 
           setTimeout(() => {
-            this.navCtrl.setRoot(OrderStatusPage, {
+            this.navCtrl.setRoot('OrderStatusPage', {
               data: response.cart
             }, {
               animate: true,
               direction: 'forward'
             }).then(() => {
-              this.navCtrl.insert(0, HomePage);
+              this.navCtrl.insert(0, 'HomePage');
               // this.navCtrl.setPages([
               //   { page: HomePage }, 
               //   {page: OrderStatusPage}

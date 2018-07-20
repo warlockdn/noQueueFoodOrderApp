@@ -22,25 +22,9 @@ const firebase = {
   databaseURL: "https://resapp-1523718961807.firebaseio.com",
   projectId: "resapp-1523718961807",
   messagingSenderId: "872990739786"
-}  
+}
 
-import { WalkthroughPage } from '../pages/walkthrough/walkthrough';
-import { LoginPage } from './../pages/login/login';
-import { LoginWithpassPage } from '../pages/login/login-withpass/login-withpass';
-import { RegisterPage } from '../pages/register/register';
-import { HomePage } from '../pages/home/home';
-import { PartnerListingPage } from '../pages/partner-listing/partner-listing';
-import { PartnerListingPageV2 } from '../pages/partner-listing-v2/partner-listing-v2';
-import { MenuPage } from '../pages/menu/menu';
-import { MenuAddonsPage } from '../pages/menu/menu-addons/menu-addons';
-import { MenuAddonNotificationPage } from '../pages/menu/menu-addon-notification/menu-addon-notification';
-import { OrderSummaryPage } from '../pages/order-summary/order-summary';
-import { OrderStatusPage } from '../pages/order-status/order-status';
-import { OrderHistoryPage } from '../pages/account/order-history/order-history';
-import { OrderDetailPage } from '../pages/account/order-detail/order-detail';
-
-import { AccordionListComponent } from '../components/accordion-list/accordion-list';
-
+import { ComponentsModule } from '../components/components.module';
 import { InterceptorProvider } from '../providers/interceptor/interceptor';
 import { ConstantsProvider } from '../providers/constants/constants';
 import { AuthProvider } from '../providers/auth/auth';
@@ -52,22 +36,7 @@ import { AccountProvider } from '../providers/account/account';
 
 @NgModule({
   declarations: [
-    ClientApp,
-    LoginPage,
-    LoginWithpassPage,
-    RegisterPage,
-    HomePage,
-    WalkthroughPage,
-    PartnerListingPage,
-    PartnerListingPageV2,
-    MenuPage,
-    MenuAddonsPage,
-    MenuAddonNotificationPage,
-    OrderSummaryPage,
-    OrderStatusPage,
-    AccordionListComponent,
-    OrderHistoryPage,
-    OrderDetailPage
+    ClientApp
   ],
   imports: [
     BrowserModule,
@@ -80,25 +49,11 @@ import { AccountProvider } from '../providers/account/account';
     HttpClientModule,
     AngularFireModule.initializeApp(firebase), 
     AngularFirestoreModule,
+    ComponentsModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
-    ClientApp,
-    WalkthroughPage,
-    LoginPage,
-    LoginWithpassPage,
-    RegisterPage,
-    HomePage,
-    PartnerListingPage,
-    PartnerListingPageV2,
-    MenuPage,
-    MenuAddonsPage,
-    MenuAddonNotificationPage,
-    OrderSummaryPage,
-    OrderStatusPage,
-    AccordionListComponent,
-    OrderHistoryPage,
-    OrderDetailPage
+    ClientApp
   ],
   providers: [
     StatusBar,

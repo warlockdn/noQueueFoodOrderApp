@@ -2,8 +2,6 @@ import { Component, forwardRef } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { FormArray, FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 
-import { LoginWithpassPage } from './login-withpass/login-withpass';
-import { RegisterPage } from '../register/register';
 import { AuthProvider } from '../../providers/auth/auth';
 // import { HomePage } from '../home/home';
 
@@ -50,7 +48,7 @@ export class LoginPage {
           if (data.result) {
 
             // Navigate to Register Page - Account exists.
-            this.navCtrl.push(LoginWithpassPage, {
+            this.navCtrl.push('LoginWithpassPage', {
               phone: this.loginForm.value.phone
             }, {
               animate: true,
@@ -60,7 +58,7 @@ export class LoginPage {
           } else {
 
             // Navigate to Register Page - Account doesn't exist.
-            this.navCtrl.push(RegisterPage, {
+            this.navCtrl.push('RegisterPage', {
               phone: this.loginForm.value.phone
             }, {
               animate: true,

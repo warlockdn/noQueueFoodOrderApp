@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { MenuPage } from '../menu/menu';
 
 import { PartnerProvider, Place } from '../../providers/partner/partner';
 import { CartProvider } from '../../providers/cart/cart';
@@ -58,7 +57,7 @@ export class PartnerListingPageV2 {
     // Save Partner to Storage for Ref Purposes.
     this.partnerService.setPartner(partner);
 
-    this.navCtrl.push(MenuPage, {
+    this.navCtrl.push('MenuPage', {
       data: {
         partnerID: partner.partnerID,
         data: partner

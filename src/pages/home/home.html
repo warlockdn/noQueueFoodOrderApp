@@ -23,5 +23,5 @@
 
 </ion-content>
 <ion-footer no-border class="pt-2 pb-2 pl-3 pr-3">
-  <button ion-button block color="secondary" (click)="listPlaces()">Find Places</button>
+  <button ion-button block color="secondary" (click)="listPlaces()" [disabled]="isDisabled">Find Places</button>
 </ion-footer>

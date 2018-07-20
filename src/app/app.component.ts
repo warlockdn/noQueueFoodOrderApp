@@ -4,11 +4,6 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Storage } from '@ionic/storage';
 
-import { WalkthroughPage } from '../pages/walkthrough/walkthrough';
-import { LoginPage } from '../pages/login/login';
-import { HomePage } from '../pages/home/home';
-import { OrderHistoryPage } from '../pages/account/order-history/order-history';
-
 import { AuthProvider } from '../providers/auth/auth';
 import { FirebaseProvider } from '../providers/firebase/firebase';
 import { ConstantsProvider } from '../providers/constants/constants';
@@ -24,15 +19,15 @@ export class ClientApp {
 
   // used for an example of ngFor and navigation
   loggedInMenu: Array<{title: string, subtitle: string, component: any, disabled?: boolean }> = [
-    { title: 'Home', subtitle: '', component: HomePage, disabled: false },
-    { title: 'Account', subtitle: 'History, Payments, etc.', component: OrderHistoryPage, disabled: false },
-    { title: 'Coupons', subtitle: '', component: HomePage, disabled: true },
-    { title: 'Points', subtitle: '', component: HomePage, disabled: true },
-    { title: 'Settings', subtitle: 'Accounts, Reviews, Referrals, etc.', component: HomePage, disabled: true }
+    { title: 'Home', subtitle: '', component: 'HomePage', disabled: false },
+    { title: 'Account', subtitle: 'History, Payments, etc.', component: 'OrderHistoryPage', disabled: false },
+    { title: 'Coupons', subtitle: '', component: 'HomePage', disabled: true },
+    { title: 'Points', subtitle: '', component: 'HomePage', disabled: true },
+    { title: 'Settings', subtitle: 'Accounts, Reviews, Referrals, etc.', component: 'HomePage', disabled: true }
   ];
 
   notLoggedInMenu: Array<{title: string, subtitle: string, component?: any, disabled: boolean }> = [
-    { title: 'Home', subtitle: '', component: HomePage, disabled: false },
+    { title: 'Home', subtitle: '', component: 'HomePage', disabled: false },
     { title: 'Account', subtitle: 'History, Payments, etc.', disabled: true },
     { title: 'Coupons', subtitle: '', disabled: true },
     { title: 'Points', subtitle: '', disabled: true },
@@ -55,9 +50,9 @@ export class ClientApp {
     this.storage.get('tutorialSeen')
       .then((seen) => {
         if (seen) {
-          this.rootPage = HomePage
+          this.rootPage = 'HomePage'
         } else {
-          this.rootPage = WalkthroughPage
+          this.rootPage = 'WalkthroughPage'
         }
         this.initializeApp();
       });
@@ -110,7 +105,7 @@ export class ClientApp {
 
   goToLogin() {
     this.menu.close();
-    this.nav.push(LoginPage, {}, {
+    this.nav.push('LoginPage', {}, {
       animate: true,
       direction: "forward"
     });
@@ -122,7 +117,7 @@ export class ClientApp {
     this.auth.logout();
     setTimeout(() => {
       this.events.publish("user:logout");
-      this.nav.setRoot(HomePage, {}, {
+      this.nav.setRoot('HomePage', {}, {
         animate: true,
         direction: "switch"
       });

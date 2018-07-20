@@ -1,8 +1,7 @@
 import { Component, ViewChild, ChangeDetectorRef } from '@angular/core';
-import { IonicPage, NavController, NavParams, Content, ModalController, AlertController } from 'ionic-angular';
-import { OrderSummaryPage } from '../order-summary/order-summary';
 
-import { MenuAddonsPage } from './menu-addons/menu-addons';
+import { IonicPage, NavController, NavParams, Content, ModalController, AlertController } from 'ionic-angular';
+
 import { MenuAddonNotificationPage } from './menu-addon-notification/menu-addon-notification';
 import { PartnerProvider, Place } from '../../providers/partner/partner';
 import { CartProvider } from '../../providers/cart/cart';
@@ -257,7 +256,7 @@ export class MenuPage {
 
       if (status) { // Add More
 
-        const addonNotificationModal = this.modalCtrl.create(MenuAddonNotificationPage, {}, {
+        const addonNotificationModal = this.modalCtrl.create('MenuAddonNotificationPage', {}, {
           showBackdrop: true,
           enableBackdropDismiss: true,
           cssClass: 'addons-notification'
@@ -418,7 +417,7 @@ export class MenuPage {
       });
       
     } else {
-      const addonModal = this.modalCtrl.create(MenuAddonsPage, { 
+      const addonModal = this.modalCtrl.create('MenuAddonsPage', { 
         data: {
           item: item,
           new: true
@@ -536,7 +535,7 @@ export class MenuPage {
   }
 
   loadSummary() {
-    this.navCtrl.push(OrderSummaryPage, {}, {
+    this.navCtrl.push('OrderSummaryPage', {}, {
       animate: true,
       direction: 'forward'
     })

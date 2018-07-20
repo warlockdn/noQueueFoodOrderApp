@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 import { Storage } from '@ionic/storage';
-import { HomePage } from '../home/home';
 
 /**
  * Generated class for the WalkthroughPage page.
@@ -42,7 +41,7 @@ export class WalkthroughPage {
   loadHome() {
 
     this.storage.set('tutorialSeen', true).then((success) => {
-      this.navCtrl.setRoot(HomePage, {}, {
+      this.navCtrl.setRoot('HomePage', {}, {
         animate: true,
         direction: "forward"
       });
