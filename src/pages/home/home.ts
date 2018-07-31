@@ -27,8 +27,7 @@ export class HomePage {
       content: "Locating you...",
     });
 
-    // loading.present();
-
+    loading.present();
     this.isDisabled = true;
 
     /* this.navCtrl.push('PartnerListingPageV2', {
@@ -45,7 +44,7 @@ export class HomePage {
       animate: true 
     }) */
 
-    this.navCtrl.push('PartnerListingPageV2', {
+    /* this.navCtrl.push('PartnerListingPageV2', {
       // data: response.coords
       data: {
         accuracy: 37, 
@@ -58,9 +57,9 @@ export class HomePage {
     }, { 
       direction: "forward",
       animate: true 
-    })
+    }) */
 
-    /* this.geolocation.getCurrentPosition().then((response) => {
+    this.geolocation.getCurrentPosition().then((response) => {
 
       loading.dismiss();
       this.isDisabled = false;
@@ -87,12 +86,8 @@ export class HomePage {
       loading.dismiss();
       console.log('Error fetching Current position ', JSON.stringify(err));
       this.showError();
-    }) */
-
-    /* this.navCtrl.push(PartnerListingPageV2, {}, { 
-      animate: true,
-      direction: 'forward'
-    }) */ 
+    })
+    
   }
 
   goToCart() {
