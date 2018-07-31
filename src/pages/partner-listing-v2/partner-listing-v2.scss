@@ -113,7 +113,7 @@ page-partner-listing-v2 {
                         border-radius: 5px;
                         overflow: hidden;
                         height: 145px;
-                        background-color: #f5f5f5;
+                        background-color: rgba(245, 245, 245, 0.25);
                     }
                     .desc {
                         position: absolute;
@@ -125,8 +125,9 @@ page-partner-listing-v2 {
                             height: 50px;
                             width: 50px;
                             display: flex;
-                            background: linear-gradient(to right, #dddddd , #EEEEEE);
-                            animation: animatedBar 5s linear infinite;
+                            background: linear-gradient(90deg, #F4F4F4 0px, rgba(229, 229, 229, 0.8) 40px, #F4F4F4 80px);
+                            animation: shine-avatar 2s infinite ease-out;
+                            background-size: 600px;
                             margin-left: 10px;
                             border-radius: 8px;
                             margin-bottom: 2px;
@@ -136,15 +137,17 @@ page-partner-listing-v2 {
                             font-size: 2rem;
                             margin-bottom: 0.4rem;
                             white-space: normal;
-                            background: linear-gradient(to right, #dddddd , #EEEEEE);
-                            animation: animatedBar 5s linear infinite;
+                            background: linear-gradient(90deg, #F4F4F4 0px, rgba(229, 229, 229, 0.8) 40px, #F4F4F4 80px);
+                            animation: shine-avatar 2s infinite ease-out;
+                            background-size: 600px;
                             height: 24px;
                             border-radius: 2px;
                             color: transparent;
                         }
                         .cuisines {
-                            background: linear-gradient(to right, #dddddd , #EEEEEE);
-                            animation: animatedBar 4.5s linear infinite;
+                            background: linear-gradient(90deg, #F4F4F4 0px, rgba(229, 229, 229, 0.8) 40px, #F4F4F4 80px);
+                            animation: shine-avatar 2s infinite ease-out;
+                            background-size: 600px;
                             height: 18px;
                             color: transparent;
                         }

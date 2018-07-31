@@ -1,4 +1,13 @@
 page-menu-addon-notification {
+    .toolbar-ios {
+        padding-top: 12px !important;
+        min-height: 44px !important;
+        ion-title {
+            padding: 0 35px 1px !important;
+            height: 55px !important;
+            min-height: 55px !important;
+        }
+    }
     button.button-md, button.button-ios {
         height: 4rem;
     }

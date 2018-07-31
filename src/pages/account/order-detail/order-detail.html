@@ -7,12 +7,93 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>order-detail</ion-title>
+    <ion-title>Order #{{ order.id }}</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
+
+  <div class="row" *ngIf="order.notes">
+    <ion-col>
+      <div class="title">Notes</div>
+      <div class="body">{{ order.notes }}</div>
+    </ion-col>
+  </div>
+  <div class="row">
+    <ion-col>
+      <div class="title">Ordered On</div>
+      <div class="body">{{ order.createdOn | date:"MMMM d, y, h:mm a" }}</div>
+    </ion-col>
+  </div>
+  <div class="row">
+    <ion-col>
+      <div class="title">Order No.</div>
+      <div class="body">#{{ order.id }}</div>
+    </ion-col>
+  </div>
+
+  <div class="summary">
+    <!-- <h3>Order Summary</h3> -->
+    <ion-list class="item-list">
+      <ion-item *ngFor="let item of order.cart">
+        <ion-grid>
+          <ion-row class="align-items-center">
+            <ion-col col-6 class="d-flex">
+              <div class="type" [ngClass]="item.isNonVeg ? 'nonveg' : ''"></div>
+              <div class="name">
+                {{ item.name }}
+              </div>
+            </ion-col>
+            <ion-col col-3>
+              <div class="counter d-flex align-items-center m-auto" style="border: 0;">
+                <!-- <div class="flex-fill left">
+                  <button ion-button clear>-</button>
+                </div> -->
+                <div class="flex-fill center">{{ item.quantity }}</div>
+                <!-- <div class="flex-fill right">
+                  <button ion-button clear>+</button>
+                </div> -->
+              </div>
+            </ion-col>
+            <ion-col col-3>
+              <div class="price">
+                &#x20B9; {{ item.price / item.quantity }}
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-item>
+    </ion-list>
+
+    <ion-list class="item-list bill">
+      <ion-item>
+        <ion-grid>
+          <ion-row>
+            <ion-col col-6>Subtotal</ion-col>
+            <ion-col col-6 text-right>&#x20B9; {{ order.total / 100 }}</ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-item>
+      <ion-item>
+        <ion-grid>
+          <ion-row>
+            <ion-col col-6>Tax</ion-col>
+            <ion-col col-6 text-right>&#x20B9; {{ order.tax / 100 }}</ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-item>
+      <ion-item>
+        <ion-grid>
+          <ion-row class="total">
+            <ion-col col-6>Total</ion-col>
+            <ion-col col-6 text-right>&#x20B9; {{ (order.total + order.tax) / 100 }}</ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-item>
+    </ion-list>
+
+  </div>
 
 </ion-content>

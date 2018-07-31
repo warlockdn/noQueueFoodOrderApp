@@ -15,6 +15,18 @@
 
 <ion-content>
 
+  <ion-grid (click)="loadPartner()">
+    <ion-row align-items-center>
+      <ion-col col-3 align-self-center>
+        <img src="http://placehold.it/50x50" class="img-rounded display-block">
+      </ion-col>
+      <ion-col col-9 class="info">
+        {{ partnerName }} <br/>
+        <span>{{ partnerCity }}</span>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
   <div class="summary">
     <!-- <h3>Order Summary</h3> -->
     <ion-list class="item-list">
@@ -57,11 +69,11 @@
           </ion-row>
         </ion-grid>
       </ion-item>
-      <ion-item>
+      <ion-item *ngIf="tax > 0">
         <ion-grid>
           <ion-row>
-            <ion-col col-6>Tax</ion-col>
-            <ion-col col-6 text-right>&#x20B9; {{ tax }}</ion-col>
+            <ion-col col-6>Tax <ion-icon name="information-circle" (click)="showTax()"></ion-icon></ion-col>
+            <ion-col col-6 text-right>&#x20B9; {{ tax / 100 }}</ion-col>
           </ion-row>
         </ion-grid>
       </ion-item>

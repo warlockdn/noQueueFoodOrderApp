@@ -86,7 +86,7 @@
     <plugin name="cordova-plugin-nativestorage" spec="^2.3.1" />
     <plugin name="cordova-sqlite-storage" spec="^2.3.2" />
     <plugin name="cordova-plugin-geolocation" spec="^4.0.1">
-        <variable name="GEOLOCATION_USAGE_DESCRIPTION" value="To locate you" />
+        <variable name="GEOLOCATION_USAGE_DESCRIPTION" value="To locate places near you" />
     </plugin>
     <plugin name="com.razorpay.cordova" spec="https://github.com/razorpay/razorpay-cordova.git" />
     <plugin name="cordova-plugin-inappbrowser" spec="^3.0.0" />

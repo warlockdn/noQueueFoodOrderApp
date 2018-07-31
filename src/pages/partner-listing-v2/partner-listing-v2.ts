@@ -37,17 +37,17 @@ export class PartnerListingPageV2 {
   loadPlaces(coordinates) {
     this.partnerService.listPlaces(coordinates).subscribe(
       (data) => {
-
+        
         this.partners = data.places;
         this.fakePlaces = null;
         this.notfound = false;
-
+        
       }, (err) => {
         
         this.partners = null;
         this.fakePlaces = null;
         this.notfound = true;
-
+        
       }
     )
   }

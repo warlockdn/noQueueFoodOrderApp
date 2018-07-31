@@ -1,5 +1,64 @@
 page-menu-addons {
 
+    // IOS
+    .toolbar-ios {
+        padding-top: 12px !important;
+        min-height: 44px !important;
+        ion-title {
+            padding: 0 35px 1px !important;
+            height: 55px !important;
+            min-height: 55px !important;
+        }
+    }
+
+    .list-ios {
+        margin-bottom: 16px;
+    }
+
+    .label-ios {
+        text-transform: initial;
+        // color: #757575;
+    }
+
+    .item-ios {
+        font-size: 1.4rem;
+        &.item-radio-checked {
+            font-weight: 700;
+        }
+    }
+    
+    .list.list-ios {
+        ion-list-header {
+            .item-inner {
+                .label-ios {
+                    color: #757575;
+                    letter-spacing: 0;
+                }
+            }
+        }
+    }
+    
+    .item.item-ios {
+        .checkbox-ios {
+            margin: 3px 10px 5px 0;
+        }
+        .item-inner {
+            min-height: 4rem;
+            ion-label {
+                margin: 0;
+                font-size: 1.4rem;
+                color: inherit;
+                span.price {
+                    color: #656565;
+                    font-size: 1.3rem;
+                    margin-left: 5px;
+                }
+            }
+        }
+    }
+
+    // End IOS
+
     .list-header-md {
         margin-bottom: 0;
     }

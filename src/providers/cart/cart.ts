@@ -71,6 +71,16 @@ export class CartProvider {
     });
   }
 
+  capturePayment(orderID, paymentID, amount): Observable<any> {
+
+    return this.http.post(ConstantsProvider.capturePayment, {
+      orderID: orderID,
+      paymentID: paymentID,
+      amount: amount
+    })
+
+  }
+
   notifyStatus(orderID, status): Observable<any> {
     return this.http.post(ConstantsProvider.notifyStatus, {
       orderID: orderID,

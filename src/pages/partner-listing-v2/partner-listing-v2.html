@@ -40,7 +40,7 @@
                   <strong>&#x20B9; {{ partner.avgpp || 300 }}</strong> per person
                 </div>
                 <div class="avg">
-                  {{ partner.avgtime || 15 }} mins
+                  {{ partner.distance }} kms, {{ partner.avgtime || 15 }} mins
                 </div>
               </ion-col>
             </ion-row>
@@ -75,7 +75,7 @@
 
   <!-- If !Partners -->
   <div text-center *ngIf="notfound" class="notfound">
-    <img src="http://placehold.it/250x250" />
+    <img src="../../assets/imgs/xx.png" />
     <h3>Oops!</h3>
     <p>
       No places nearby. We are working on it.

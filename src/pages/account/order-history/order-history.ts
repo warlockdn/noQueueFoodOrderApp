@@ -44,4 +44,17 @@ export class OrderHistoryPage {
     )
   }
 
+  openOrderDetails(order) {
+
+    console.log(`Loading Order detail: `, order);
+
+    this.navCtrl.push('OrderDetailPage', {
+      data: order
+    }, {
+      direction: "forward",
+      animate: true
+    })
+
+  }
+
 }

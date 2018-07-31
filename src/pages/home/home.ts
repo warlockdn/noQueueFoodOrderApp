@@ -23,6 +23,14 @@ export class HomePage {
 
   listPlaces() {
 
+    const loading = this.loadingCtrl.create({
+      content: "Locating you...",
+    });
+
+    // loading.present();
+
+    this.isDisabled = true;
+
     /* this.navCtrl.push('PartnerListingPageV2', {
       data: {
         accuracy: 37, 
@@ -37,15 +45,22 @@ export class HomePage {
       animate: true 
     }) */
 
-    const loading = this.loadingCtrl.create({
-      content: "Locating you...",
-    });
+    this.navCtrl.push('PartnerListingPageV2', {
+      // data: response.coords
+      data: {
+        accuracy: 37, 
+        altitude: null, 
+        altitudeAccuracy: null,
+        heading: null,
+        latitude: 28.5975541,
+        longitude: 77.0991781
+      }
+    }, { 
+      direction: "forward",
+      animate: true 
+    })
 
-    loading.present();
-
-    this.isDisabled = true;
-
-    this.geolocation.getCurrentPosition().then((response) => {
+    /* this.geolocation.getCurrentPosition().then((response) => {
 
       loading.dismiss();
       this.isDisabled = false;
@@ -53,7 +68,15 @@ export class HomePage {
       console.log(`Lat: ${response.coords.latitude}, Long: ${response.coords.longitude}, Altitude: ${response.coords.altitude}`);
       
       this.navCtrl.push('PartnerListingPageV2', {
-        data: response.coords
+        // data: response.coords
+        data: {
+          accuracy: 37, 
+          altitude: null, 
+          altitudeAccuracy: null,
+          heading: null,
+          latitude: 28.597528699999998,
+          longitude: 77.0991781
+        }
       }, { 
         direction: "forward",
         animate: true 
@@ -62,9 +85,9 @@ export class HomePage {
     }).catch((err) => {
       this.isDisabled = false;
       loading.dismiss();
-      console.log('Error fetching Current position ', err);
+      console.log('Error fetching Current position ', JSON.stringify(err));
       this.showError();
-    })
+    }) */
 
     /* this.navCtrl.push(PartnerListingPageV2, {}, { 
       animate: true,

@@ -469,12 +469,43 @@ text-bold {
   animation-fill-mode: both;
 }
 
+// Skeleton Loading Animation
+
+@keyframes shine-lines {
+    0% {
+        background-position: -100px;
+    }
+    40%, 100% {
+        background-position: 140px;
+    }
+}
+
+@keyframes shine-avatar {
+    0% {
+        background-position: -32px;
+    }
+    40%, 100% {
+        background-position: 208px;
+    }
+}
+
 
 // Ionic Overrides
 
 .header-md::after {
     background-image: none;
     border-top: 1px solid #ddd;
+}
+
+.list-ios {
+    .item-block:first-child, .item-block:last-child {
+        border-top: 0;
+        border-bottom: 0;
+    }
+}
+
+.label-ios[floating] {
+    color: #999;
 }
 
 // Transparent Header
@@ -554,6 +585,14 @@ button.button-md, button.button-ios {
 }
 
 .item-list {
+    
+    &.list-ios {
+        .item-block:first-child, .item-block:last-child {
+            border-top: 0;
+            border-bottom: 0;
+        }
+    }
+
     margin-bottom: 5px;
     ion-item {
         .item-inner {
@@ -569,15 +608,20 @@ button.button-md, button.button-ios {
         .name {
             font-weight: 600;
             display: flex;
+            text-transform: initial;
+            letter-spacing: 0;
         }
         .price {
             font-size: 1.2rem;
             margin-left: 25px;
+            letter-spacing: 0;
         }
         .desc {
             font-size: 1rem;
             margin-left: 25px;
             color: #797979;
+            text-transform: initial;
+            letter-spacing: 0.1px;
         }
         .counter {
             width: 65px;
@@ -644,7 +688,7 @@ ion-modal.addons {
     background-color: rgba(0,0,0,.5)!important;
     -webkit-transition: opacity .25s ease-in-out;
     transition: opacity .25s ease-in-out;
-    padding: 20vh 8vw;
+    padding: 15vh 5vw;
 }
 
 ion-modal.addons-notification {
@@ -662,7 +706,8 @@ ion-modal.addons-notification {
 }
 
 ion-footer {
-    button.button-md {
+
+    button.button-md, button.button-ios {
         height: 5rem;
         margin-top: 0;
         margin-left: auto;
@@ -688,5 +733,9 @@ ion-footer {
         &.general {
             margin-bottom: 20px;
         }
+    }
+
+    button.button-ios {
+        box-shadow: none !important;
     }
 }

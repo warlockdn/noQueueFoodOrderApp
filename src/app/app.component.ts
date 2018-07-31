@@ -60,7 +60,7 @@ export class ClientApp {
     this.auth.loggedInStatus().then((status) => {
       if (status) {
         this.isLoggedIn = true
-        this.firebase.getToken();
+        // this.firebase.getToken();
       } else {
         this.isLoggedIn = false;
       }

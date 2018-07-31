@@ -1,5 +1,5 @@
 import { Component, forwardRef } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, AlertController } from 'ionic-angular';
 import { FormArray, FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 
 import { AuthProvider } from '../../providers/auth/auth';
@@ -21,7 +21,7 @@ export class LoginPage {
 
   loginForm: FormGroup;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private fb: FormBuilder, public auth: AuthProvider) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private fb: FormBuilder, public auth: AuthProvider, public loading: LoadingController, public alertCtrl: AlertController) {
     if (this.navParams.data.data) {
       this.auth.fromCart = true;
     }
@@ -42,10 +42,18 @@ export class LoginPage {
 
     if (this.loginForm.valid) {
 
+      const loading = this.loading.create({
+        content: "Finding user"
+      });
+
+      loading.present();
+
       this.auth.checkUser(this.loginForm.value.phone).subscribe(
         (data) => {
           
           if (data.result) {
+
+            loading.dismiss();
 
             // Navigate to Register Page - Account exists.
             this.navCtrl.push('LoginWithpassPage', {
@@ -56,6 +64,8 @@ export class LoginPage {
             });
 
           } else {
+
+            loading.dismiss();
 
             // Navigate to Register Page - Account doesn't exist.
             this.navCtrl.push('RegisterPage', {
@@ -69,6 +79,14 @@ export class LoginPage {
 
         }, (err) => {
           
+          const alert = this.alertCtrl.create({
+            title: "Error!",
+            message: "There seems to be a problem. Please try again later.",
+            buttons: ["OK"]
+          });
+
+          alert.present();
+
         }
       )
 

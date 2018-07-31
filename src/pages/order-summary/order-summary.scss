@@ -1,5 +1,14 @@
 page-order-summary {
 
+    .info {
+        font-size: 1.6rem;
+        font-weight: 600;
+        span {
+            color: #3a3a3a;
+            font-size: 1.2rem;
+        }
+    }
+
     .detail {
         padding: 15px 10px;
         ion-avatar {
@@ -83,6 +92,12 @@ page-order-summary {
     }
 
     .notes {
+        .list-ios {
+            .item-block:first-child, .item-block:last-child {
+                border-top: 0;
+                border-bottom: 0;
+            }
+        }
         padding: 0 18px 15px;
         ion-list {
             ion-item.item {

@@ -42,7 +42,9 @@ import { AccountProvider } from '../providers/account/account';
     BrowserModule,
     IonicModule.forRoot(ClientApp, {
       scrollPadding: false,
-      scrollAssist: false
+      scrollAssist: false,
+      backButtonText: '',
+      backButtonIcon: 'ios-arrow-back-outline'
     }),
     IonicStorageModule.forRoot(),
     ReactiveFormsModule,

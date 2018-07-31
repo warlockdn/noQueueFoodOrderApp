@@ -1,5 +1,15 @@
 page-login-withpass {
 
+    .item-ios {
+        padding-left: 0;
+    }
+
+    .list-ios {
+        .item-block:last-child .item-inner {
+            border-bottom: 0.55px solid #efeff0;
+        }
+    }
+
     ion-header[transparent] .bar-button {
         color: #000 !important;
     }

@@ -1,6 +1,6 @@
 import { Component, ViewChild, ChangeDetectorRef } from '@angular/core';
 
-import { IonicPage, NavController, NavParams, Content, ModalController, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Content, ModalController, AlertController, Platform } from 'ionic-angular';
 
 import { MenuAddonNotificationPage } from './menu-addon-notification/menu-addon-notification';
 import { PartnerProvider, Place } from '../../providers/partner/partner';
@@ -39,6 +39,8 @@ export class MenuPage {
 
   @ViewChild(Content)
   content:Content;
+
+  isLoading: boolean = true;
   
   showCart: Boolean = false;
   isTransparent = true;
@@ -53,15 +55,15 @@ export class MenuPage {
 
   menu: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private ref: ChangeDetectorRef, private partnerService: PartnerProvider, public cartProvider: CartProvider, public modalCtrl: ModalController, private alertCtrl: AlertController) {
+  constructor(public navCtrl: NavController, public platform: Platform, public navParams: NavParams, private ref: ChangeDetectorRef, private partnerService: PartnerProvider, public cartProvider: CartProvider, public modalCtrl: ModalController, private alertCtrl: AlertController) {
 
     const partner: Place = this.navParams.data["data"].data;
     this.partnerDetails = partner;
     if (Array.isArray(this.partnerDetails.characteristics["cuisine"])) {
       this.partnerDetails.characteristics["cuisine"] = this.partnerDetails.characteristics["cuisine"].join(', ')
     }
+    
     this.loadMenu(partner);
-    this.checkTotal();
 
     // demo
     // this.cartProvider.clearCartData();
@@ -83,6 +85,15 @@ export class MenuPage {
     })
   }
 
+  openLink(coordinates, name) {
+    if (this.platform.is('android')) {
+      window.open('geo://' + coordinates[1] + ',' + coordinates[0] + '?q=' + coordinates[1] + ',' + coordinates[0] + '(' + name + ')', '_system')
+    };
+    if (this.platform.is('ios')) {
+      window.open("maps://?q=" + coordinates[1] + ',' + coordinates[0], '_system');
+    }
+  }
+
   loadMenu(partner: Place) {
     this.partnerService.getMenu(partner.partnerID).subscribe(
       (data) => {
@@ -98,6 +109,18 @@ export class MenuPage {
     try {
 
       let menu = JSON.parse(JSON.stringify(data.collection));
+      let cartItems = this.cartProvider.cartData || null;
+
+      console.log(cartItems);
+
+      // If the loaded partnerID and in Cart partnerID does not match no need to match data.
+      let toCheckBool = false;
+
+      if (cartItems) {
+        if (cartItems.partnerID === this.partnerDetails.partnerID) {
+          toCheckBool = true;
+        }
+      }
 
       menu.forEach(collection => {
 
@@ -108,6 +131,22 @@ export class MenuPage {
             
             let items = [];
             collection.items.forEach(item => {
+              
+              if (toCheckBool) { 
+                // checking if the item already is selected
+                if (cartItems.cart[item.id]) {
+                  
+                  let count = 0;
+                  cartItems.cart[item.id].forEach(cartItem => {
+                    count += cartItem.quantity;
+                  });
+                  
+                  data["items"][item.id].quantity = count;
+                  data["items"][item.id].selected = true;
+
+                }
+              }
+
               items.push(data["items"][item.id])
             });
 
@@ -121,6 +160,14 @@ export class MenuPage {
 
           let items = [];
           collection["items"].forEach(item => {
+            
+            if (toCheckBool) { // checking if the item already is selected
+              if (cartItems.cart[item.id]) {
+                data["items"][item.id].quantity = cartItems.cart[item.id][0].quantity;
+                data["items"][item.id].selected = true;
+              }
+            }
+
             items.push(data["items"][item.id])
           });
           collection.items = items;
@@ -133,6 +180,10 @@ export class MenuPage {
 
       this.menu = menu;
       this.success = true;
+
+      this.isLoading = false;
+      this.checkTotal();
+      
 
     } catch(err) {
 

@@ -12,21 +12,40 @@
   <!-- *ngIf="orders.length > 0" -->
 
   <ion-list>
-    <button ion-item *ngFor="let order of orders">
+    <button ion-item *ngFor="let order of orders" (click)="openOrderDetails(order)">
       
       <div class="grid">
-        <div class="row">
-          <ion-col col-3 align-self-center>
-            <div class="orderid">#{{ order.id }}</div>
+        <div class="row" align-items-center>
+          <ion-col col-2>
+            <img src="http://placehold.it/50x50" alt="" srcset="">
           </ion-col>
-          <ion-col col-6>
+          <ion-col col-10>
             <div class="order">
               <div class="partner">{{ order.partnerName }}</div>
-              <div class="price">&#x20B9; {{ order.total / 100 }}</div>
+              <div class="price">Total: &#8377;{{ order.total / 100 }}</div>
+            </div>
+            <span class="in-progress" *ngIf="order.status === 'PAID'"></span>
+          </ion-col>
+        </div>
+        <hr>
+        <div class="row">
+          <ion-col>
+            <div class="title">Items</div>
+            <div class="body">
+              <span *ngFor="let item of order.cart">{{ item.quantity }} x  {{ item.name }}, </span>
             </div>
           </ion-col>
-          <ion-col col-3 *ngIf="order.status === 'PAID'" align-self-center>
-            <span class="live">In Progress</span>
+        </div>
+        <div class="row">
+          <ion-col>
+            <div class="title">Ordered On</div>
+            <div class="body">{{ order.createdOn | date:"MMMM d, y, h:mm a" }}</div>
+          </ion-col>
+        </div>
+        <div class="row">
+          <ion-col>
+            <div class="title">Order No.</div>
+            <div class="body">#{{ order.id }}</div>
           </ion-col>
         </div>
       </div>
