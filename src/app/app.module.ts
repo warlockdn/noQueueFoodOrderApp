@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
+import { IonicApp, IonicModule } from 'ionic-angular';
 
 import { ClientApp } from './app.component';
 
@@ -11,6 +11,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { IonicStorageModule } from '@ionic/storage';
 import { Geolocation } from '@ionic-native/geolocation';
 import { InAppBrowser } from '@ionic-native/in-app-browser';
+import { Deeplinks } from '@ionic-native/deeplinks';
+import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 
 import { Firebase } from '@ionic-native/firebase';
 import { AngularFireModule } from 'angularfire2';
@@ -33,6 +35,8 @@ import { CartProvider } from '../providers/cart/cart';
 import { FirebaseProvider } from '../providers/firebase/firebase';
 import { OrderProvider } from '../providers/order/order';
 import { AccountProvider } from '../providers/account/account';
+
+import { SentryIonicErrorHandler } from './sentry';
 
 @NgModule({
   declarations: [
@@ -65,13 +69,15 @@ import { AccountProvider } from '../providers/account/account';
     ConstantsProvider,
     AuthProvider,
     Firebase,
-    { provide: ErrorHandler, useClass: IonicErrorHandler },
+    Deeplinks,
+    { provide: ErrorHandler, useClass: SentryIonicErrorHandler },
     PartnerProvider,
     CartProvider,
     { provide: HTTP_INTERCEPTORS, useClass: InterceptorProvider, multi: true },
     FirebaseProvider,
     OrderProvider,
     AccountProvider,
+    BarcodeScanner
   ]
 })
 export class AppModule {}

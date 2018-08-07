@@ -14,6 +14,7 @@ import 'rxjs/add/operator/map';
 export class OrderProvider {
 
   public onGoingOrder: boolean = false;
+  public status: any;
 
   constructor(public http: HttpClient, public angularfire: AngularFirestore, public storage: Storage) {
     console.log('Hello OrderProvider Provider');
@@ -32,9 +33,9 @@ export class OrderProvider {
   }
 
   orderStatus(refID) {
-    const status = this.angularfire.collection("orders").doc(refID).valueChanges();
+    this.status = this.angularfire.collection("orders").doc(refID).valueChanges();
     
-    status.subscribe(
+    this.status.subscribe(
       doc => {
         if (doc["stage"]["ready"]) {
           this.onGoingOrder = false;
@@ -43,7 +44,11 @@ export class OrderProvider {
       }
     )
     
-    return status;
+    return this.status;
+  }
+
+  unSubOrderStatus() {
+    this.status.unsubsribe();
   }
 
   getOrder(orderID) {

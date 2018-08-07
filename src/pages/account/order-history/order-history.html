@@ -11,7 +11,7 @@
 
   <!-- *ngIf="orders.length > 0" -->
 
-  <ion-list>
+  <ion-list *ngIf="!empty">
     <button ion-item *ngFor="let order of orders" (click)="openOrderDetails(order)">
       
       <div class="grid">
@@ -24,7 +24,7 @@
               <div class="partner">{{ order.partnerName }}</div>
               <div class="price">Total: &#8377;{{ order.total / 100 }}</div>
             </div>
-            <span class="in-progress" *ngIf="order.status === 'PAID'"></span>
+            <span class="in-progress" *ngIf="order.status === 'PAID' || order.status === 'ACCEPTED'"></span>
           </ion-col>
         </div>
         <hr>

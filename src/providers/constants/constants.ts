@@ -23,6 +23,7 @@ export class ConstantsProvider {
   public static authByOTP = "http://192.168.31.190:3003/v1/auth/loginByOtp";  // "https://cs.spazefood.xyz/v1/auth/loginByOtp"; // 
 
   // Places
+  public static getSinglePartner = "http://192.168.31.190:3003/v1/places/";  // "https://cs.spazefood.xyz/v1/places/"; // 
   public static getPlaces = "http://192.168.31.190:3003/v1/places/listPlaces";  // "https://cs.spazefood.xyz/v1/places/listPlaces"; // 
   public static getMenu = "http://192.168.31.190:3003/v1/places/menu/";  // "https://cs.spazefood.xyz/v1/places/menu/"; // 
 

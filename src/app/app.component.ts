@@ -3,6 +3,7 @@ import { Nav, Platform, Menu, Events, MenuController, ToastController } from 'io
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Storage } from '@ionic/storage';
+import { Deeplinks } from '@ionic-native/deeplinks';
 
 import { AuthProvider } from '../providers/auth/auth';
 import { FirebaseProvider } from '../providers/firebase/firebase';
@@ -44,7 +45,8 @@ export class ClientApp {
     public events: Events,
     public firebase: FirebaseProvider,
     public toastCtrl: ToastController,
-    public constants: ConstantsProvider
+    public constants: ConstantsProvider,
+    public deeplinks: Deeplinks
   ) {
     
     this.storage.get('tutorialSeen')
@@ -64,6 +66,21 @@ export class ClientApp {
       } else {
         this.isLoggedIn = false;
       }
+
+      /* this.deeplinks.routeWithNavController(this.nav, {
+        '/order-detail/:productId': 'OrderDetailPage'
+      }).subscribe(match => {
+        // match.$route - the route we matched, which is the matched entry from the arguments to route()
+        // match.$args - the args passed in the link
+        // match.$link - the full link data
+        console.log('Successfully matched route', match);
+      }, nomatch => {
+        // nomatch.$link - the full link data
+        console.error('Got a deeplink that didn\'t match', nomatch);
+      }); */
+
+      
+
     })
 
 

@@ -7,18 +7,18 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>Order #{{ order.id }}</ion-title>
+    <ion-title *ngIf="order">Order #{{ order.id }}</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
-<ion-content padding>
+<ion-content padding *ngIf="order">
 
-  <div class="row" *ngIf="order.notes">
+  <div class="row">
     <ion-col>
-      <div class="title">Notes</div>
-      <div class="body">{{ order.notes }}</div>
+      <div class="title">From</div>
+      <div class="body name">{{ order.partnerName }}</div>
     </ion-col>
   </div>
   <div class="row">
@@ -33,9 +33,15 @@
       <div class="body">#{{ order.id }}</div>
     </ion-col>
   </div>
+  <div class="row" *ngIf="order.notes">
+    <ion-col>
+      <div class="title">Notes</div>
+      <div class="body">{{ order.notes }}</div>
+    </ion-col>
+  </div>
 
   <div class="summary">
-    <!-- <h3>Order Summary</h3> -->
+    <h3>Order Summary</h3>
     <ion-list class="item-list">
       <ion-item *ngFor="let item of order.cart">
         <ion-grid>
@@ -97,3 +103,7 @@
   </div>
 
 </ion-content>
+
+<ion-footer no-border class="pt-2 pb-2 pl-3 pr-3" *ngIf="firebase.order && order">
+  <button ion-button block color="secondary">{{ firebase.latestStatus }}</button>
+</ion-footer>

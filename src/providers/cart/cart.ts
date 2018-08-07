@@ -17,6 +17,7 @@ export class CartProvider {
   total: number = 0;
   totalItems: number = 0;
   public cartData: any;
+  public finalCartData: any;
 
   constructor(public http: HttpClient, private storage: Storage) {
     console.log('Hello CartProvider Provider');
@@ -51,11 +52,24 @@ export class CartProvider {
     )
   }
 
+  async getFinalCartData() {
+    return this.storage.get("finalCartData")
+  }
+
+  setFinalCartData(cart) {
+    this.storage.set("finalCartData", cart);
+  }
+
+  removeFinalCartData() {
+    this.storage.remove("finalCartData");
+  }
+
   clearCartData() {
     this.cartData = null;
     this.total = 0;
     this.totalItems = 0;
     this.storage.remove("cartData");
+    this.storage.remove("finalCartData");
   }
 
   manageCart(cart): Observable<any> {
@@ -71,12 +85,13 @@ export class CartProvider {
     });
   }
 
-  capturePayment(orderID, paymentID, amount): Observable<any> {
+  capturePayment(orderID, paymentID, amount, partnerID): Observable<any> {
 
     return this.http.post(ConstantsProvider.capturePayment, {
       orderID: orderID,
       paymentID: paymentID,
-      amount: amount
+      amount: amount,
+      partnerID: partnerID
     })
 
   }

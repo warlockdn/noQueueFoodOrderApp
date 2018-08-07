@@ -2,9 +2,9 @@ import { Component, ViewChild, ChangeDetectorRef } from '@angular/core';
 
 import { IonicPage, NavController, NavParams, Content, ModalController, AlertController, Platform } from 'ionic-angular';
 
-import { MenuAddonNotificationPage } from './menu-addon-notification/menu-addon-notification';
 import { PartnerProvider, Place } from '../../providers/partner/partner';
 import { CartProvider } from '../../providers/cart/cart';
+import { Observable } from 'rxjs';
 
 /**
  * Generated class for the MenuPage page.
@@ -57,13 +57,22 @@ export class MenuPage {
 
   constructor(public navCtrl: NavController, public platform: Platform, public navParams: NavParams, private ref: ChangeDetectorRef, private partnerService: PartnerProvider, public cartProvider: CartProvider, public modalCtrl: ModalController, private alertCtrl: AlertController) {
 
-    const partner: Place = this.navParams.data["data"].data;
-    this.partnerDetails = partner;
-    if (Array.isArray(this.partnerDetails.characteristics["cuisine"])) {
-      this.partnerDetails.characteristics["cuisine"] = this.partnerDetails.characteristics["cuisine"].join(', ')
+    const params = this.navParams.data["data"];
+
+    // Checking if the partner is being loaded through Barcode
+    if (params.isDirect) {
+      this.loadPartner(params.partner.id);
+    } else {
+
+      const partner: Place = params.data;
+      this.partnerDetails = partner;
+      if (Array.isArray(this.partnerDetails.characteristics["cuisine"])) {
+        this.partnerDetails.characteristics["cuisine"] = this.partnerDetails.characteristics["cuisine"].join(', ')
+      }
+      
+      this.loadMenu(partner);
+
     }
-    
-    this.loadMenu(partner);
 
     // demo
     // this.cartProvider.clearCartData();
@@ -104,6 +113,22 @@ export class MenuPage {
     )
   }
 
+  loadPartner(partnerID) {
+    this.partnerService.getSinglePartner(partnerID).subscribe(
+      (data) => {
+        
+        this.createMenuList(data.partner.menu);
+        this.partnerDetails = data.partner.detail;
+        this.partnerService.setPartner(data.partner.detail);
+
+        if (Array.isArray(this.partnerDetails.characteristics["cuisine"])) {
+          this.partnerDetails.characteristics["cuisine"] = this.partnerDetails.characteristics["cuisine"].join(', ')
+        }
+
+      }
+    )
+  }
+
   createMenuList(data) {
     
     try {
@@ -111,7 +136,7 @@ export class MenuPage {
       let menu = JSON.parse(JSON.stringify(data.collection));
       let cartItems = this.cartProvider.cartData || null;
 
-      console.log(cartItems);
+      console.log(JSON.stringify(cartItems));
 
       // If the loaded partnerID and in Cart partnerID does not match no need to match data.
       let toCheckBool = false;
@@ -176,8 +201,6 @@ export class MenuPage {
         }
       });
 
-      console.log(menu);
-
       this.menu = menu;
       this.success = true;
 
@@ -234,6 +257,14 @@ export class MenuPage {
   }
 
   updateCounter(item, status: Boolean) {
+
+    /*
+     since implemented a check in order summary
+     if a order was generated earlier and successfully order_id was generated from Payment Gateway
+     then that order id would become invalid as the user has added a new item to the cart and the old cart
+     will now be abandoned. cool ;)
+    */
+    this.removeFinalCart()
 
     if (!item.hasAddons) {
       this.cartProvider.getCartData().then(response => {
@@ -401,6 +432,14 @@ export class MenuPage {
 
   addToCart(item, isNew) {
     
+    /*
+     since implemented a check in order summary
+     if a order was generated earlier and successfully order_id was generated from Payment Gateway
+     then that order id would become invalid as the user has added a new item to the cart and the old cart
+     will now be abandoned. cool ;)
+    */
+    this.removeFinalCart()
+
     if (this.cartProvider.cartData) {
       if (this.cartProvider.cartData["partnerID"] !== this.partnerDetails.partnerID) {
         this.showPartnerErr(item);
@@ -619,6 +658,10 @@ export class MenuPage {
     })
 
     msg.present();
+  }
+
+  removeFinalCart() {
+    this.cartProvider.removeFinalCartData();
   }
 
 }

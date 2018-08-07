@@ -12,21 +12,21 @@ import { Observable } from 'rxjs/Observable';
 */
 
 export interface Place {
-  basic: {
-    address: string,
-    city: string,
-    pincode: string,
-    state: string
+  basic?: {
+    address?: string,
+    city?: string,
+    pincode?: string,
+    state?: string
   },
-  characteristics: Object,
-  imageid: string,
-  location: {
-    coordinates: Array<Number>,
-    type: string
+  characteristics?: Object,
+  imageid?: string,
+  location?: {
+    coordinates?: Array<Number>,
+    type?: string
   },
-  name: string,
-  partnerID: number,
-  phone: number
+  name?: string,
+  partnerID?: number,
+  phone?: number
 }
 
 @Injectable()
@@ -46,6 +46,10 @@ export class PartnerProvider {
         altitude: coordinates.altitude
       }
     });
+  }
+
+  getSinglePartner(partnerID): Observable<any> {
+    return this.http.get(ConstantsProvider.getSinglePartner + '/' + partnerID);
   }
 
   getMenu(partnerID): Observable<any> {

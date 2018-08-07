@@ -34,19 +34,26 @@ export class OrderStatusPage {
       ready: false,
     }
   };
-
+ 
   constructor(public navCtrl: NavController, public navParams: NavParams, private cart: CartProvider, public order: OrderProvider, public firebase: FirebaseProvider) {
 
     console.log(navParams);
-    
-    this.notify(this.navParams.data.data.id, "PAID", this.navParams.data.data.id);
-    this.currentOrder.id = this.navParams.data.data.id;
-    this.firebase.listenToNotifications();
+    if (this.navParams.data.data.order) {
+      this.currentOrder = this.firebase.order;
+    } else {
+      this.notify(this.navParams.data.data.id, "PAID", this.navParams.data.data.id);
+      this.currentOrder.id = this.navParams.data.data.id;
+      this.firebase.listenToNotifications();
+    }
 
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad OrderStatusPage');
+  }
+
+  ionViewDidLeave() {
+    this.order.unSubOrderStatus();
   }
 
   orderStatus(refID, id) {

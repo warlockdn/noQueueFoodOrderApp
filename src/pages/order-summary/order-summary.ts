@@ -36,8 +36,8 @@ export class OrderSummaryPage {
 
   // public firebase: FirebaseProvider
   constructor(public navCtrl: NavController, public navParams: NavParams, public auth: AuthProvider, public modalCtrl: ModalController, public cartProvider: CartProvider, public platform: Platform, public partner: PartnerProvider, public alertCtrl: AlertController, public loadingCtrl: LoadingController) {
-    console.log(auth.isLoggedIn);
-    this.loadPartnerInfo()
+    this.finalData = null;
+    this.loadPartnerInfo();
   }
   
   ionViewDidLoad() {
@@ -161,82 +161,149 @@ export class OrderSummaryPage {
 
   }
 
-  handleCart(cart) {
+  async handleCart(cart) {
 
-    this.cartProvider.manageCart(cart).subscribe(
-      response => {
+    let finalData = await this.cartProvider.getFinalCartData();
 
-        if (response.cart) {
-          
-          let data = response.cart;
-          this.finalData = data;
+    if (!finalData) {
 
-          if (this.platform.is("android") || this.platform.is("ios")) {
+      let loading = this.loadingCtrl.create({
+        content: "Please wait, creating order"
+      })
 
-            const options = {
-              description: `Order #${data.id}`,
-              // image: '',
-              currency: 'INR',
-              order_id: response.cart.orderID,
-              key: ConstantsProvider.razorPayKey,
-              amount: data.total,
-              name: 'foodSpaze',
-              prefill: {
-                email: this.auth.user.email,
-                contact: this.auth.user.phone,
-                name: this.auth.user.name
-              },
-              theme: {
-                color: '#F37254'
-              },
-              modal: {
-                ondismiss: function() {
-                  console.log('Dismissed at: ', new Date());
+      loading.present();
+
+      this.cartProvider.manageCart(cart).subscribe(
+        response => {
+  
+          if (response.cart) {
+
+            loading.dismiss();
+            
+            let data = response.cart;
+            data.orderID = response.orderID;
+
+            // setting final data
+            finalData = data;
+            this.cartProvider.setFinalCartData(data);
+  
+            if (this.platform.is("android") || this.platform.is("ios") || this.platform.is("core")) {
+  
+              const options = {
+                description: `Order #${data.id}`,
+                // image: '',
+                currency: 'INR',
+                order_id: response.orderID,
+                key: ConstantsProvider.razorPayKey,
+                amount: data.total,
+                name: 'foodSpaze',
+                prefill: {
+                  email: this.auth.user.email,
+                  contact: this.auth.user.phone,
+                  name: this.auth.user.name
+                },
+                theme: {
+                  color: '#F37254'
                 }
               }
-            }
-
-            alert(JSON.stringify(options));
-
-            let successCallback = (payment_id) => {
-              console.log(payment_id);
-              this.capturePayment(payment_id, options.amount, this.finalData);
-            };
-    
-            let cancelCallback = (error) => {
-              alert(JSON.stringify(error));
-              alert(error.description + ' (Error ' + error.code + ')');
-            };
-    
-            this.platform.ready().then(() => {
-              RazorpayCheckout.open(options, successCallback, cancelCallback);
-            })
-            
-          } else {
-
-            setTimeout(() => {
-              this.navCtrl.setRoot('OrderStatusPage', {
-                data: response.cart
-              }, {
-                animate: true,
-                direction: 'forward'
-              }).then(() => {
-                this.navCtrl.insert(0, 'HomePage');
+  
+              alert(JSON.stringify(options));
+  
+              let successCallback = (payment_id) => {
+                console.log(payment_id);
+                this.capturePayment(payment_id, options.amount, finalData);
+              };
+      
+              let cancelCallback = (error) => {
+                alert(JSON.stringify(error));
+                alert(error.description + ' (Error ' + error.code + ')');
+              };
+      
+              this.platform.ready().then(() => {
+                RazorpayCheckout.open(options, successCallback, cancelCallback);
               })
-            }, 200);
-
+              
+            } else {
+  
+              setTimeout(() => {
+                this.navCtrl.setRoot('OrderStatusPage', {
+                  data: response.cart
+                }, {
+                  animate: true,
+                  direction: 'forward'
+                }).then(() => {
+                  this.navCtrl.insert(0, 'HomePage');
+                })
+              }, 200);
+  
+            }
+    
           }
   
+      }, err => {
 
+        loading.dismiss();
+
+        let errAlert = this.alertCtrl.create({
+          title: "Error!",
+          subTitle: "There seems to be a error while creating your order. Please delete your cart and try again",
+          buttons: [
+            {
+              text: "Cancel",
+              handler: () => {
+                console.log("Clearing cart")
+              }
+            }, {
+                text: "Delete Cart",
+                handler: () => {
+                  console.log("Clearing cart")
+                }
+            }
+          ]
+        })
+  
+      })
+
+    } else {
+
+      const data = finalData;
+      const options = {
+        description: `Order #${data.id}`,
+        // image: '',
+        currency: 'INR',
+        order_id: data.orderID,
+        key: ConstantsProvider.razorPayKey,
+        amount: data.total,
+        name: 'foodSpaze',
+        prefill: {
+          email: this.auth.user.email,
+          contact: this.auth.user.phone,
+          name: this.auth.user.name
+        },
+        theme: {
+          color: '#F37254'
         }
+      }
 
+      alert(JSON.stringify(options));
 
-    }, err => {
+      let successCallback = (payment_id) => {
+        console.log(payment_id);
+        this.capturePayment(payment_id, options.amount, finalData);
+      };
 
-      console.log(err);
+      let cancelCallback = (error) => {
+        alert(JSON.stringify(error));
+        alert(error.description + ' (Error ' + error.code + ')');
+      };
+
+      this.platform.ready().then(() => {
+        RazorpayCheckout.open(options, successCallback, cancelCallback);
+      })
 
     }
-  )}
+
+  }
 
   capturePayment(paymentID, amount, cart) {
 
@@ -246,7 +313,7 @@ export class OrderSummaryPage {
 
     captureLoading.present();
 
-    this.cartProvider.capturePayment(cart.id, paymentID, amount).subscribe(
+    this.cartProvider.capturePayment(cart.id, paymentID, amount, cart.partnerID).subscribe(
       response => {
 
         captureLoading.dismiss();
@@ -265,7 +332,7 @@ export class OrderSummaryPage {
 
       }, err => {
 
-        captureLoading.present();
+        captureLoading.dismiss();
 
         const failedAlert = this.alertCtrl.create({
           title: 'Error!',

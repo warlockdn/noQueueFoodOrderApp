@@ -58,6 +58,14 @@ page-order-detail {
         }
     }
 
+    .summary {
+        margin-top: 2rem;
+        h3 {
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+    }
+
     img {
         display: block;
     }
@@ -73,6 +81,10 @@ page-order-detail {
         font-weight: 600;
     }
     .body {
+        &.name {
+            font-size: 2rem;
+            font-weight: 700;
+        }
         font-size: 1.4rem;
         white-space: normal;
     }

@@ -3,9 +3,9 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>{{ partnerDetails.name }}</ion-title>
+    <ion-title>{{ partnerDetails?.name }}</ion-title>
     <ion-buttons end>
-      <button ion-button end (click)="openLink(partnerDetails.location.coordinates, partnerDetails.name)" style="font-size: 2rem;">
+      <button ion-button end (click)="openLink(partnerDetails?.location.coordinates, partnerDetails?.name)" style="font-size: 2rem;">
         <ion-icon name="ios-navigate"></ion-icon>
       </button>
       <!-- <button ion-button end>
@@ -24,19 +24,19 @@
         <ion-row>
           <ion-col>
             <div class="logo align-items-center">
-              <img src="{{ partnerDetails.poster || 'https://www.seeklogo.net/wp-content/uploads/2016/11/taco-bell-logo-preview.png' }}" class="m-auto">
+              <img src="{{ partnerDetails?.poster || 'https://www.seeklogo.net/wp-content/uploads/2016/11/taco-bell-logo-preview.png' }}" class="m-auto">
             </div>
           </ion-col>
         </ion-row>
         <ion-row>
           <ion-col col-8>
             <div class="cuisines">
-              {{ partnerDetails.characteristics.cuisine }}
+              {{ partnerDetails?.characteristics.cuisine }}
             </div>
           </ion-col>
           <ion-col class="align-self-end" col-4>
             <div class="avgtime" text-right>
-              {{ partnerDetails.avgtime || 15 }} mins
+              {{ partnerDetails?.avgtime || 15 }} mins
             </div>
           </ion-col>
         </ion-row>

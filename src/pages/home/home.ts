@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, LoadingController, AlertController } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation';
+import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 
 import { CartProvider } from '../../providers/cart/cart';
+import { PartnerProvider } from '../../providers/partner/partner';
 
 @IonicPage()  
 @Component({
@@ -18,7 +20,9 @@ export class HomePage {
     private geolocation: Geolocation,
     public alertCtrl: AlertController,
     public loadingCtrl: LoadingController,
-    public cartProvider: CartProvider
+    public cartProvider: CartProvider,
+    public barCode: BarcodeScanner,
+    public partnerService: PartnerProvider
   ) {}
 
   listPlaces() {
@@ -27,10 +31,7 @@ export class HomePage {
       content: "Locating you...",
     });
 
-    loading.present();
-    this.isDisabled = true;
-
-    /* this.navCtrl.push('PartnerListingPageV2', {
+    this.navCtrl.push('PartnerListingPageV2', {
       data: {
         accuracy: 37, 
         altitude: null, 
@@ -42,23 +43,13 @@ export class HomePage {
     }, { 
       direction: "forward", 
       animate: true 
-    }) */
+    })
 
-    /* this.navCtrl.push('PartnerListingPageV2', {
-      // data: response.coords
-      data: {
-        accuracy: 37, 
-        altitude: null, 
-        altitudeAccuracy: null,
-        heading: null,
-        latitude: 28.5975541,
-        longitude: 77.0991781
-      }
-    }, { 
-      direction: "forward",
-      animate: true 
-    }) */
+    /* 
 
+    loading.present();
+    this.isDisabled = true;
+    
     this.geolocation.getCurrentPosition().then((response) => {
 
       loading.dismiss();
@@ -86,8 +77,68 @@ export class HomePage {
       loading.dismiss();
       console.log('Error fetching Current position ', JSON.stringify(err));
       this.showError();
-    })
+    }) */
     
+  }
+
+  // Lets the customer use the barcode instantly and open menu
+  openbarcode() {
+
+    this.barCode.scan({
+      disableSuccessBeep: true,
+      resultDisplayDuration: 0,
+      showTorchButton: true 
+    }).then(barcodeData => {
+
+      const loading = this.loadingCtrl.create({
+        content: "Loading..."
+      })
+
+      loading.present();
+      
+      // cancelled, text, format
+      const partnerData = this.parseBarCodeDetail(barcodeData);
+      console.log(JSON.stringify(partnerData));
+
+      this.partnerService.removePartner();
+
+      loading.dismiss();
+
+      this.navCtrl.push('MenuPage', {
+        data: {
+          isDirect: true,
+          partner: partnerData
+        }
+      }, {
+        animate: true,
+        direction: 'forward',
+      });
+
+    }).catch(err => {
+      
+      const alertBarCode = this.alertCtrl.create({
+        title: "Error!",
+        message: "There was a error reading barcode data. Please try again later."
+      })
+
+    })
+  }
+
+  parseBarCodeDetail(barCode) {
+
+    const code = barCode;
+    let partner = {};
+
+    // Check if the code has any comma (Comma means there is a table number attached.)
+    if ((code.text).includes(',')) {
+      partner["id"] = atob(code.text.split(",")[0]);
+      partner["table"] = atob(code.text.split(",")[1]);
+    } else {
+      partner["id"] = atob(code.text);
+    }
+
+    return partner;
+
   }
 
   goToCart() {

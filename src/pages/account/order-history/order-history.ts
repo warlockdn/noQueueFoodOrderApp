@@ -40,6 +40,7 @@ export class OrderHistoryPage {
         }
       }, err => {
         console.log(err);
+        this.empty = true;
       }
     )
   }

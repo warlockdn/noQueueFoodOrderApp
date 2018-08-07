@@ -5,6 +5,7 @@ import { Platform } from 'ionic-angular';
 import { AngularFirestore } from 'angularfire2/firestore';
 
 import { AuthProvider } from '../auth/auth';
+import { Observable, Unsubscribable } from 'rxjs';
 
 /*
   Generated class for the FirebaseProvider provider.
@@ -14,6 +15,10 @@ import { AuthProvider } from '../auth/auth';
 */
 @Injectable()
 export class FirebaseProvider {
+
+  subscribe: any;
+  order: any;
+  latestStatus: any;
 
   constructor(public http: HttpClient, public afs: AngularFirestore, public firebaseNative: Firebase, private platform: Platform, public auth: AuthProvider) {
     console.log('Hello FirebaseProvider Provider');
@@ -61,6 +66,43 @@ export class FirebaseProvider {
 
   unregister() {
     return this.firebaseNative.unregister();
+  }
+
+  getOrder(orderID) {
+    
+    this.subscribe = this.afs.collection("orders", ref => ref.where("id", "==", orderID).limit(1)).valueChanges().subscribe(data => {
+      this.order = data[0];
+      console.log(this.order);
+
+      if (this.order.stage) {
+        let stage = this.order.stage;
+        
+        if (stage.placed) {
+          this.latestStatus = "Order Placed"
+        }
+
+        if (stage.accepted) {
+          this.latestStatus = "Order in Kitchen"
+        }
+
+        if (stage.ready) {
+          this.latestStatus = "Order Ready"
+        }
+
+        if (stage.declined) {
+          this.latestStatus = "Order Declined"
+        }
+
+      }
+
+    })
+
+  }
+
+  unSubOrder() {
+
+    this.subscribe.unsubscribe();
+
   }
 
 }

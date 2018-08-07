@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angular';
+import { FirebaseProvider } from '../../../providers/firebase/firebase';
 
 /**
  * Generated class for the OrderDetailPage page.
@@ -19,13 +20,25 @@ export class OrderDetailPage {
   cartItems;
   subTotal;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public firebase: FirebaseProvider, public modalCtrl: ModalController) {
     this.order = this.navParams.data["data"];
+    this.firebase.order = null;
     // this.createCart();
+    if (this.order.status === "PAID" || this.order.status === "ACCEPTED") {
+      this.firebase.getOrder(this.order.id)
+    }
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad OrderDetailPage');
+  }
+
+  ionViewDidLeave() {
+
+    if (this.firebase.order) {
+      this.firebase.unSubOrder();
+    }
+
   }
 
   createCart() {
@@ -34,8 +47,6 @@ export class OrderDetailPage {
     let cartItems = [];
 
     cart.forEach(items => {
-
-      debugger;
       this.order.cart[items].forEach(item => {
         cartItems.push(item);
       });
