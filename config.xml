@@ -92,8 +92,6 @@
     <plugin name="cordova-plugin-inappbrowser" spec="^3.0.0" />
     <allow-navigation href="http://192.168.31.190:8101" />
     <plugin name="cordova-plugin-firebase" spec="^1.0.5" />
-    <engine name="android" spec="^7.1.0" />
-    <engine name="browser" spec="5.0.3" />
     <plugin name="ionic-plugin-deeplinks" spec="^1.0.17">
         <variable name="URL_SCHEME" value="myapp" />
         <variable name="DEEPLINK_SCHEME" value="https" />
@@ -115,4 +113,6 @@
     <plugin name="phonegap-plugin-barcodescanner" spec="^8.0.0">
         <variable name="ANDROID_SUPPORT_V4_VERSION" value="27.+" />
     </plugin>
+    <engine name="android" spec="^7.1.0" />
+    <engine name="browser" spec="~5.0.3" />
 </widget>

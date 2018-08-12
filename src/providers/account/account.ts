@@ -20,8 +20,7 @@ export class AccountProvider {
     this.http.get(ConstantsProvider.fetchAccount).subscribe(
       data => {
         if (data["status"] === 200) {
-          this.constants.isCheckedIn = true;
-          this.constants.checkInDetail = data["details"];
+          this.constants.setCheckInDetail(data["details"]);
         }
       }
     )

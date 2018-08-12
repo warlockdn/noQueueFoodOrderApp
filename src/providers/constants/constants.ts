@@ -9,6 +9,14 @@ import { Storage } from '@ionic/storage';
   See https://angular.io/guide/dependency-injection for more info on providers
   and Angular DI.
 */
+
+export interface CheckInDetail {
+  name: String,
+  checkInTime: Date,
+  partnerID: Number,
+  room: String
+}
+
 @Injectable()
 export class ConstantsProvider {
 
@@ -55,7 +63,7 @@ export class ConstantsProvider {
 
   public token = null;
   public isCheckedIn: boolean = false;
-  public checkInDetail: any;
+  public checkInDetail: CheckInDetail;
 
   constructor(public http: HttpClient, private storage: Storage) {
     console.log('Hello ConstantsProvider Provider');
@@ -79,6 +87,26 @@ export class ConstantsProvider {
     console.log('Setting Token ', token);
     this.storage.set("token", token);
     this.token = token;
+  }
+
+  getCheckInDetail() {
+    return this.storage.get("checkInData").then((data) => {
+      return data;
+    }).catch(err => {
+      return err;
+    })
+  }
+
+  setCheckInDetail(data) {
+    this.storage.set("checkInData", data);
+    this.isCheckedIn = true;
+    this.checkInDetail = data;
+  }
+  
+  removeCheckInDetail() {
+    this.isCheckedIn = false;
+    this.checkInDetail = null;
+    this.storage.remove("checkInData");
   }
 
 }

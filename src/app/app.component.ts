@@ -135,6 +135,7 @@ export class ClientApp {
   listenToLoginEvents() {
     this.events.subscribe('user:login', () => {
       this.isLoggedIn = true;
+      this.account.fetchFromAccount();
     });
 
     this.events.subscribe('user:logout', () => {

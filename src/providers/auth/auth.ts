@@ -5,6 +5,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
 import { ConstantsProvider } from "../constants/constants";
+import { AccountProvider } from '../account/account';
 
 /*
   Generated class for the AuthProvider provider.
@@ -19,7 +20,7 @@ export class AuthProvider {
   public isLoggedIn: boolean = false;
   public fromCart: boolean = false;
 
-  constructor(public http: HttpClient, private storage: Storage, public events: Events) {
+  constructor(public http: HttpClient, private storage: Storage, public events: Events, public accountProvider: AccountProvider) {
     console.log('Hello AuthProvider Provider');
     this.getUser();
   }
@@ -47,6 +48,7 @@ export class AuthProvider {
       if (user) { 
         this.user = user;
         this.isLoggedIn = true;
+        this.accountProvider.fetchFromAccount();
       };
       return user
     }).catch((err) => {

@@ -45,6 +45,7 @@ export class CartProvider {
     this.storage.set("cartData", cart).then(
       (data) => {
         this.cartData = data;
+        this.partnerName = data.name;
         return data
       }, (err) => {
         this.cartData = err;
@@ -82,7 +83,8 @@ export class CartProvider {
       customerID: cart.customerID,
       cart: cart.cart,
       notes: cart.notes,
-      partner: cart.partner
+      partner: cart.partner,
+      room: cart.room
     });
   }
 

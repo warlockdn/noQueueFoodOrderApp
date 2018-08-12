@@ -33,8 +33,11 @@ export class OrderSummaryPage {
   notes: string;
   finalData: any;
 
+  // For Hotel
+  roomNo: String;
+
   // public firebase: FirebaseProvider
-  constructor(public navCtrl: NavController, public navParams: NavParams, public auth: AuthProvider, public modalCtrl: ModalController, public cartProvider: CartProvider, public platform: Platform, public partner: PartnerProvider, public alertCtrl: AlertController, public loadingCtrl: LoadingController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public auth: AuthProvider, public modalCtrl: ModalController, public cartProvider: CartProvider, public platform: Platform, public partner: PartnerProvider, public alertCtrl: AlertController, public loadingCtrl: LoadingController, public constants: ConstantsProvider) {
     this.finalData = null;
     this.loadPartnerInfo();
   }
@@ -57,6 +60,15 @@ export class OrderSummaryPage {
           totalTax += partner.taxInfo[tax];
         })
         this.tax = totalTax * 100;
+      }
+
+      
+      if (this.partnerInfo.characteristics.typeid === "3") {
+        
+        if (this.partnerInfo.partnerID === this.constants.checkInDetail.partnerID) {
+          this.roomNo = this.constants.checkInDetail.room;
+        }
+
       }
 
     }).catch(err => {
@@ -172,12 +184,18 @@ export class OrderSummaryPage {
     }
 
     if (partner && cart) {
-      const newCart = {
+      let newCart = {
         customerID: this.auth.user.id,
         cart: cart,
         notes: this.notes,
-        partner: partner.name
+        partner: partner.name,
+        room: null
       }
+
+      if (this.roomNo) {
+        newCart.room = this.roomNo;
+      }
+
       this.handleCart(newCart);
     }
 
@@ -185,6 +203,7 @@ export class OrderSummaryPage {
 
   async handleCart(cart) {
 
+    // Checking if there is a cart data earlier created.
     let finalData = await this.cartProvider.getFinalCartData();
 
     if (!finalData) {
