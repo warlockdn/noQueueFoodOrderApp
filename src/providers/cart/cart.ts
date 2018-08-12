@@ -16,6 +16,7 @@ export class CartProvider {
 
   total: number = 0;
   totalItems: number = 0;
+  public partnerName: string;
   public cartData: any;
   public finalCartData: any;
 

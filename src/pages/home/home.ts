@@ -90,6 +90,12 @@ export class HomePage {
       showTorchButton: true 
     }).then(barcodeData => {
 
+      console.log("Barcode data: ", JSON.stringify(barcodeData));
+
+      if (!barcodeData.text) {
+        return;
+      }
+
       const loading = this.loadingCtrl.create({
         content: "Loading..."
       })
@@ -100,7 +106,8 @@ export class HomePage {
       const partnerData = this.parseBarCodeDetail(barcodeData);
       console.log(JSON.stringify(partnerData));
 
-      this.partnerService.removePartner();
+      // this.partnerService.removePartner();
+      // this.cartProvider.clearCartData();
 
       loading.dismiss();
 

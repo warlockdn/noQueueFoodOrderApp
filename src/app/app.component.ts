@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform, Menu, Events, MenuController, ToastController } from 'ionic-angular';
+import { Nav, Platform, Menu, Events, MenuController, ToastController, LoadingController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Storage } from '@ionic/storage';
@@ -8,17 +8,21 @@ import { Deeplinks } from '@ionic-native/deeplinks';
 import { AuthProvider } from '../providers/auth/auth';
 import { FirebaseProvider } from '../providers/firebase/firebase';
 import { ConstantsProvider } from '../providers/constants/constants';
+import { AccountProvider } from '../providers/account/account';
+import { PartnerProvider, Hotel } from '../providers/partner/partner';
+import { CartProvider } from '../providers/cart/cart';
 
 @Component({
   templateUrl: 'app.html'
 })
+
 export class ClientApp {
   @ViewChild(Nav) nav: Nav;
 
   rootPage: any;
   isLoggedIn: boolean = false;
 
-  // used for an example of ngFor and navigation
+  /* // used for an example of ngFor and navigation
   loggedInMenu: Array<{title: string, subtitle: string, component: any, disabled?: boolean }> = [
     { title: 'Home', subtitle: '', component: 'HomePage', disabled: false },
     { title: 'Account', subtitle: 'History, Payments, etc.', component: 'OrderHistoryPage', disabled: false },
@@ -33,7 +37,7 @@ export class ClientApp {
     { title: 'Coupons', subtitle: '', disabled: true },
     { title: 'Points', subtitle: '', disabled: true },
     { title: 'Settings', subtitle: 'Accounts, Reviews, Referrals, etc.', disabled: true }
-  ]
+  ] */
 
   constructor(
     public platform: Platform, 
@@ -46,7 +50,11 @@ export class ClientApp {
     public firebase: FirebaseProvider,
     public toastCtrl: ToastController,
     public constants: ConstantsProvider,
-    public deeplinks: Deeplinks
+    public account: AccountProvider,
+    public deeplinks: Deeplinks,
+    private loadingCtrl: LoadingController,
+    public partnerService: PartnerProvider,
+    public cartProvider: CartProvider
   ) {
     
     this.storage.get('tutorialSeen')
@@ -63,6 +71,7 @@ export class ClientApp {
       if (status) {
         this.isLoggedIn = true
         // this.firebase.getToken();
+        this.account.fetchFromAccount();
       } else {
         this.isLoggedIn = false;
       }
@@ -82,12 +91,36 @@ export class ClientApp {
       
 
     })
-
-
     
     this.menu.enable(true);
     this.listenToLoginEvents();
 
+  }
+
+  loadHotelMenu(partner: Hotel) {
+    
+    this.menu.close();
+
+    const loading = this.loadingCtrl.create({
+      content: "Loading..."
+    })
+
+    loading.present();
+
+    // this.partnerService.removePartner();
+    // this.cartProvider.clearCartData();
+
+    loading.dismiss();
+
+    this.nav.push('MenuPage', {
+      data: {
+        isDirect: true,
+        partner: partner
+      }
+    }, {
+      animate: true,
+      direction: 'forward',
+    });
   }
 
   initializeApp() {

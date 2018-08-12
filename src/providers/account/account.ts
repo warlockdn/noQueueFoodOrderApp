@@ -12,8 +12,19 @@ import { ConstantsProvider } from '../constants/constants';
 @Injectable()
 export class AccountProvider {
 
-  constructor(public http: HttpClient) {
+  constructor(public http: HttpClient, public constants: ConstantsProvider) {
     console.log('Hello AccountProvider Provider');
+  }
+
+  fetchFromAccount() {
+    this.http.get(ConstantsProvider.fetchAccount).subscribe(
+      data => {
+        if (data["status"] === 200) {
+          this.constants.isCheckedIn = true;
+          this.constants.checkInDetail = data["details"];
+        }
+      }
+    )
   }
 
   getOrders() {

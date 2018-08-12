@@ -51,17 +51,18 @@ export class MenuPage {
   success: boolean = false;
   
   // If not loaded
-  isError: boolean = false;
+  errorLoading: boolean = false;
 
   menu: any;
 
   constructor(public navCtrl: NavController, public platform: Platform, public navParams: NavParams, private ref: ChangeDetectorRef, private partnerService: PartnerProvider, public cartProvider: CartProvider, public modalCtrl: ModalController, private alertCtrl: AlertController) {
 
     const params = this.navParams.data["data"];
+    this.cartProvider.partnerName = null;
 
     // Checking if the partner is being loaded through Barcode
     if (params.isDirect) {
-      this.loadPartner(params.partner.id);
+      this.loadPartner(params.partner.id || params.partner.partnerID);
     } else {
 
       const partner: Place = params.data;
@@ -108,7 +109,7 @@ export class MenuPage {
       (data) => {
         this.createMenuList(data);
       }, (err) => {
-        this.isError = true
+        this.errorLoading = true
       }
     )
   }
@@ -117,9 +118,9 @@ export class MenuPage {
     this.partnerService.getSinglePartner(partnerID).subscribe(
       (data) => {
         
-        this.createMenuList(data.partner.menu);
         this.partnerDetails = data.partner.detail;
         this.partnerService.setPartner(data.partner.detail);
+        this.createMenuList(data.partner.menu);
 
         if (Array.isArray(this.partnerDetails.characteristics["cuisine"])) {
           this.partnerDetails.characteristics["cuisine"] = this.partnerDetails.characteristics["cuisine"].join(', ')
@@ -144,6 +145,7 @@ export class MenuPage {
       if (cartItems) {
         if (cartItems.partnerID === this.partnerDetails.partnerID) {
           toCheckBool = true;
+          this.cartProvider.partnerName = cartItems.name;
         }
       }
 
@@ -212,6 +214,11 @@ export class MenuPage {
 
       this.success = false;
       this.menu = null;
+      this.isLoading = false;
+
+      this.errorLoading = true;
+
+      console.log(err);
 
     }
   }
@@ -491,9 +498,10 @@ export class MenuPage {
 
           this.cartProvider.setCartData({
             partnerID: this.partnerDetails.partnerID,
+            name: this.partnerDetails.name,
             cart: newCart,
             total: this.cartProvider.total,
-            totalItems: this.cartProvider.totalItems
+            totalItems: this.cartProvider.totalItems, 
           })
 
         }
@@ -592,6 +600,7 @@ export class MenuPage {
 
               this.cartProvider.setCartData({
                 partnerID: this.partnerDetails.partnerID,
+                name: this.partnerDetails.name,
                 cart: newCart,
                 total: this.cartProvider.total,
                 totalItems: this.cartProvider.totalItems

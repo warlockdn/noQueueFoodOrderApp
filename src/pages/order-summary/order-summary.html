@@ -8,6 +8,11 @@
 
   <ion-navbar>
     <ion-title>Order Summary</ion-title>
+    <ion-buttons end>
+      <button ion-button end *ngIf="cartProvider.cartData" (click)="deleteCart()">
+        <ion-icon name="ios-trash" class="p0" style="font-size: 2.2rem;"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 
 </ion-header>

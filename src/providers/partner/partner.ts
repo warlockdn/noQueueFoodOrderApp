@@ -29,6 +29,14 @@ export interface Place {
   phone?: number
 }
 
+export interface Hotel {
+  id: Number,
+  name: String
+  checkInTime?: String,
+  partnerID: Number,
+  room: String
+}
+
 @Injectable()
 export class PartnerProvider {
 

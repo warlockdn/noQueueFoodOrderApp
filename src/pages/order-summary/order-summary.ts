@@ -5,7 +5,6 @@ import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { AuthProvider } from '../../providers/auth/auth';
 import { CartProvider } from '../../providers/cart/cart';
 import { PartnerProvider } from '../../providers/partner/partner';
-import { Observable } from 'rxjs';
 import { ConstantsProvider } from '../../providers/constants/constants';
 // import { FirebaseProvider } from '../../providers/firebase/firebase';
 
@@ -63,6 +62,29 @@ export class OrderSummaryPage {
     }).catch(err => {
       console.log(err);
     });
+  }
+
+  deleteCart() {
+    const confirmDelete = this.alertCtrl.create({
+      title: "Clear Cart",
+      subTitle: "Are you sure you want to clear cart?",
+      buttons: [
+        {
+          text: "No"
+        }, {
+          text: "Yes",
+          handler: () => {
+            this.cartProvider.clearCartData();
+            this.navCtrl.setRoot('HomePage', {}, {
+              animate: true,
+              direction: "switch"
+            });
+          }
+        }
+      ]
+    });
+    
+    confirmDelete.present();
   }
 
   showTax() {

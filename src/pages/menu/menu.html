@@ -44,7 +44,7 @@
     </div>
   </div>
 
-  <div class="loading" *ngIf="isLoading" padding-right padding-left>
+  <div class="loading" *ngIf="isLoading && !errorLoading" padding-right padding-left>
 
     <!-- Load Items -->
     <div class="fake-loading">
@@ -68,7 +68,7 @@
 
   </div>
 
-  <div class="loaded" *ngIf="!isLoading">
+  <div class="loaded" *ngIf="!isLoading && !errorLoading">
 
     <div class="menu-list" *ngIf="success && menu !== null">
       <div class="category" *ngFor="let category of menu">
@@ -190,13 +190,20 @@
 
   </div>
 
+  <div *ngIf="errorLoading">
+    Error loading menu.
+  </div>
+
 </ion-content>
 
 <ion-footer no-border>
   <button ion-button block color="secondary" [ngClass]="showCart ? 'show' : 'hide'" (click)="loadSummary()">
     <ion-grid class="p0">
       <ion-row align-items-center>
-        <ion-col class="p0" text-left col-7>{{ cartProvider.totalItems }} Items - &#x20B9; {{ cartProvider.total / 100 }}</ion-col>
+        <ion-col class="p0" text-left col-7>
+          {{ cartProvider.totalItems }} Items - &#x20B9; {{ cartProvider.total / 100 }} <br/>
+          <span class="name" *ngIf="cartProvider.partnerName">From: {{ cartProvider.partnerName }}</span>
+        </ion-col>
         <ion-col class="p0" text-right col-5 style="position: relative; top: -2px;">
           View Cart
           <ion-icon style="position: relative; top: 2px" name="ios-arrow-dropright-circle"></ion-icon>

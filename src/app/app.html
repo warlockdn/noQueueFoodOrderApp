@@ -1,33 +1,47 @@
 <ion-menu [content]="content">
   
-  <ion-content>
-    <!-- Profile Info -->
-    <div class="profile">
-      <div class="avatar"></div>
-      <h3 class="name" *ngIf="isLoggedIn">{{ auth.user.name }}</h3>
-      <h5 class="phone" *ngIf="isLoggedIn">+91 {{ auth.user.phone }}</h5>
-    </div>
-    
-    <ion-list margin-top no-lines class="menu-list" *ngIf="isLoggedIn">
-      <ion-item menuClose ion-item *ngFor="let p of loggedInMenu" (click)="openPage(p)" [ngClass]="p.disabled ? 'disabled': ''">
-        {{p.title}}
-        <div class="subtitle">{{ p.subtitle }}</div>
-      </ion-item>
-    </ion-list>
+  <ion-content no-scroll>
+    <div content-scroll>
 
-    <ion-list margin-top no-lines class="menu-list" *ngIf="!isLoggedIn">
-        <ion-item menuClose ion-item *ngFor="let p of notLoggedInMenu" (click)="openPage(p)" [ngClass]="p.disabled ? 'disabled': ''">
+      <!-- Profile Info -->
+      <div class="profile">
+        <div class="avatar"></div>
+        <h3 class="name" *ngIf="isLoggedIn">{{ auth.user.name }}</h3>
+        <h5 class="phone" *ngIf="isLoggedIn">+91 {{ auth.user.phone }}</h5>
+      </div>
+  
+      <ion-card *ngIf="constants.isCheckedIn" (click)="loadHotelMenu(constants.checkInDetail)">
+        <ion-card-header>
+          {{ constants.checkInDetail.name }}
+        </ion-card-header>
+        <ion-card-content>
+          You are checked into {{ constants.checkInDetail.name }} in room {{ constants.checkInDetail.room }}. Order now!
+        </ion-card-content>
+      </ion-card>
+      
+      <ion-list margin-top no-lines class="menu-list" *ngIf="isLoggedIn">
+        <ion-item menuClose ion-item *ngFor="let p of constants.loggedInMenu" (click)="openPage(p)" [ngClass]="p.disabled ? 'disabled': ''">
           {{p.title}}
           <div class="subtitle">{{ p.subtitle }}</div>
         </ion-item>
       </ion-list>
-
-    <ion-footer no-border>
-      <ion-toolbar>
-        <button ion-button block color="danger" *ngIf="isLoggedIn" (click)="logout()">Logout</button>
-        <button ion-button block (click)="goToLogin()" *ngIf="!isLoggedIn">Login</button>
-      </ion-toolbar>
-    </ion-footer>
+  
+      <ion-list margin-top no-lines class="menu-list" *ngIf="!isLoggedIn">
+          <ion-item menuClose ion-item *ngFor="let p of constants.notLoggedInMenu" (click)="openPage(p)" [ngClass]="p.disabled ? 'disabled': ''">
+            {{p.title}}
+            <div class="subtitle">{{ p.subtitle }}</div>
+          </ion-item>
+        </ion-list>
+  
+        
+      </div>
+      
+      <ion-footer no-border>
+        <ion-toolbar>
+          <button ion-button block color="danger" *ngIf="isLoggedIn" (click)="logout()">Logout</button>
+          <button ion-button block (click)="goToLogin()" *ngIf="!isLoggedIn">Login</button>
+        </ion-toolbar>
+      </ion-footer>
 
   </ion-content>
 
