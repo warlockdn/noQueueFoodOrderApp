@@ -37,6 +37,7 @@ export class ConstantsProvider {
     { title: 'Settings', subtitle: 'Accounts, Reviews, Referrals, etc.', disabled: true }
   ];
 
+  public static mixPanelToken = "1e1e7305ce755346eb4069d1440ad6bc";
   public static razorPayKey = "rzp_test_8ZuXe81gFihhsI";
   public static api = "http://localhost:3003/v1/";
   public static partnerlogoURL = "https://res.cloudinary.com/ddiiq3bzl/image/upload/fl_lossy,f_auto,w_400,h_400,f_auto,c_fill/logo/";
@@ -56,6 +57,7 @@ export class ConstantsProvider {
   public static cart = "http://192.168.31.190:3003/v1/cart/manage";  // "https://cs.spazefood.xyz/v1/cart/manage"; // 
   public static notifyStatus = "http://192.168.31.190:3003/v1/cart/notify";  // "https://cs.spazefood.xyz/v1/cart/notify"; // 
   public static capturePayment = "http://192.168.31.190:3003/v1/cart/capture";  // "https://cs.spazefood.xyz/v1/cart/capture"; // 
+  public static validateCoupon = "http://192.168.31.190:3003/v1/cart/validateCoupon";  // "https://cs.spazefood.xyz/v1/cart/validateCoupon"; // 
 
   // Account
   public static orderList = "http://192.168.31.190:3003/v1/account/orders";  // "https://cs.spazefood.xyz/v1/account/orders"; // 

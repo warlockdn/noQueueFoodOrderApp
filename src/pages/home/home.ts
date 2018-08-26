@@ -5,6 +5,7 @@ import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 
 import { CartProvider } from '../../providers/cart/cart';
 import { PartnerProvider } from '../../providers/partner/partner';
+import { MixpanelPeople, Mixpanel } from '@ionic-native/mixpanel';
 
 @IonicPage()  
 @Component({
@@ -22,10 +23,16 @@ export class HomePage {
     public loadingCtrl: LoadingController,
     public cartProvider: CartProvider,
     public barCode: BarcodeScanner,
-    public partnerService: PartnerProvider
-  ) {}
+    public partnerService: PartnerProvider,
+    private mixpanel: Mixpanel, 
+    private mixpanelPeople: MixpanelPeople
+  ) {
+    this.mixpanel.track("Opened Homepage");
+  }
 
   listPlaces() {
+
+    this.mixpanel.track("Finding Places");
 
     const loading = this.loadingCtrl.create({
       content: "Locating you...",
@@ -83,6 +90,8 @@ export class HomePage {
 
   // Lets the customer use the barcode instantly and open menu
   openbarcode() {
+
+    this.mixpanel.track("Open Barcode");
 
     this.barCode.scan({
       disableSuccessBeep: true,
@@ -149,6 +158,9 @@ export class HomePage {
   }
 
   goToCart() {
+
+    this.mixpanel.track("Opened Order Summary from Homepage");
+
     this.navCtrl.push('OrderSummaryPage', {}, {
       animate: true,
       direction: "forward"

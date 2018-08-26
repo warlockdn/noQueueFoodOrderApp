@@ -4,6 +4,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Storage } from '@ionic/storage';
 import { Deeplinks } from '@ionic-native/deeplinks';
+import { Mixpanel, MixpanelPeople } from '@ionic-native/mixpanel';
 
 import { AuthProvider } from '../providers/auth/auth';
 import { FirebaseProvider } from '../providers/firebase/firebase';
@@ -54,8 +55,21 @@ export class ClientApp {
     public deeplinks: Deeplinks,
     private loadingCtrl: LoadingController,
     public partnerService: PartnerProvider,
-    public cartProvider: CartProvider
+    public cartProvider: CartProvider,
+    private mixpanel: Mixpanel, 
+    private mixpanelPeople: MixpanelPeople,
   ) {
+
+    this.mixpanel.init(ConstantsProvider.mixPanelToken)
+      .then(success => {
+        console.log("Mixpanel successfully initiated");
+      })
+      .catch(err => {
+        console.log("Mixpanel initiate error");
+      });
+
+    this.mixpanel.track("App Open");
+    this.mixpanel.distinctId();
     
     this.storage.get('tutorialSeen')
       .then((seen) => {
@@ -70,7 +84,9 @@ export class ClientApp {
     this.auth.loggedInStatus().then((status) => {
       if (status) {
         this.isLoggedIn = true
-        // this.firebase.getToken();
+        if (this.platform.is("android") || this.platform.is("ios")) {
+          this.firebase.getToken();
+        }
         this.account.fetchFromAccount();
       } else {
         this.isLoggedIn = false;
@@ -140,6 +156,7 @@ export class ClientApp {
 
     this.events.subscribe('user:logout', () => {
       this.isLoggedIn = false;
+      // this.mixpanel.reset();
     });
   }
 

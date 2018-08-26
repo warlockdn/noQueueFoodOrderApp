@@ -34,17 +34,20 @@ export class OrderStatusPage {
       ready: false,
     }
   };
+
+  orderID: any;
  
   constructor(public navCtrl: NavController, public navParams: NavParams, private cart: CartProvider, public order: OrderProvider, public firebase: FirebaseProvider) {
 
-    console.log(navParams);
+    console.log(JSON.stringify(navParams));
     if (this.navParams.data.data.order) {
       this.currentOrder = this.firebase.order;
     } else {
       this.notify(this.navParams.data.data.id, "PAID", this.navParams.data.data.id);
-      this.currentOrder.id = this.navParams.data.data.id;
+      this.orderID = this.navParams.data.data.id;
       this.firebase.listenToNotifications();
     }
+
 
   }
 
@@ -60,22 +63,7 @@ export class OrderStatusPage {
 
     // Setting On Going Order
     this.order.setOnGoingOrder();
-
-    this.order.orderStatus(refID).subscribe(
-      (doc) => {
-
-        this.currentOrder = doc;
-        console.log(this.currentOrder);
-
-        if (this.currentOrder["stage"]["declined"]) {
-          this.isPlacing = false;
-        }
-
-      }, (err) => {
-        console.log(err);
-      }
-    )
-
+    this.order.orderStatus(refID)
   }
 
   notify(orderID, status, id) {

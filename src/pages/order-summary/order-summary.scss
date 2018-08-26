@@ -87,6 +87,12 @@ page-order-summary {
                     color: #000;
                 }
             }
+            ion-row.discount {
+                ion-col {
+                    font-weight: 600;
+                    color: map-get($map: $colors, $key: secondary);
+                }
+            }
         }
 
     }
@@ -115,6 +121,43 @@ page-order-summary {
                     padding: 0 8px;
                     font-size: 1.2rem;
                 }
+            }
+        }
+    }
+
+    .coupon-block {
+        padding: 0;
+        background-color: #f5f5f5;
+        .list-md, .list-ios {
+            margin-bottom: 0;
+        }
+        ion-item, .item-md, .item-ios {
+            .item-inner {
+                padding-right: 0;
+            }
+            // border-bottom: 0;
+            padding: 5px 12px 5px 40px;
+            border-bottom: 1px solid transparent;
+            // box-shadow: none !important;
+            background-color: transparent;
+            background-image: url('../../assets/assets/icons/coupon.svg');
+            background-repeat: no-repeat;
+            background-size: 30px;
+            background-position: 12px center;
+            text-transform: uppercase;
+            font-size: 1.4rem;
+            input {
+                text-transform: uppercase;
+                &::placeholder {
+                    text-transform: initial;
+                }
+            }
+            button {
+                background: transparent;
+                font-weight: 700;
+                text-transform: uppercase;
+                margin: 0;
+                // color: map-get($map: $colors, $key: primary)
             }
         }
     }

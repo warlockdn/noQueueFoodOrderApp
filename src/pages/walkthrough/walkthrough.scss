@@ -14,8 +14,7 @@ page-walkthrough {
   }
   
   .slide-image {
-    max-height: 50%;
-    max-width: 60%;
+    max-height: calc(55vh - 20px);
     margin: 18px 0;
   }
   

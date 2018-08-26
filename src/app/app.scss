@@ -528,6 +528,79 @@ text-bold {
     }
 }
 
+.placing-container {
+    
+}
+
+.pulse-loader {
+    height: 25px;
+    margin: auto;
+    position: relative;
+    width: 25px;
+}
+
+.pulse-loader:before, .pulse-loader:after {
+    -webkit-animation-name: pulse-loader;
+    animation-name: pulse-loader;
+    -webkit-animation-iteration-count: infinite;
+    animation-iteration-count: infinite;
+    -webkit-animation-duration: 2s;
+    animation-duration: 2s;
+    box-shadow: 0 0 5px #6290D1;
+    border-radius: 50%;
+    border: 3px solid #6290D1;
+    content: '';
+    display: block;
+    height: 100%;
+    left: -3px;
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
+
+.pulse-loader:after {
+    -webkit-animation-delay: 1s;
+    animation-delay: 1s;
+}
+
+@-webkit-keyframes pulse-loader {
+    0% {
+        opacity: 0;
+        -webkit-transform: scale(0);
+        transform: scale(0);
+    }
+
+    60% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+        -webkit-transform: scale(1);
+        transform: scale(1);
+    }
+}
+
+@keyframes pulse-loader {
+    0% {
+        opacity: 0;
+        -webkit-transform: scale(0);
+        transform: scale(0);
+    }
+
+    60% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+        -webkit-transform: scale(1);
+        transform: scale(1);
+    }
+}
+
+
 
 // Ionic Overrides
 

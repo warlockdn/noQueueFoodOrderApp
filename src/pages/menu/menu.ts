@@ -5,6 +5,7 @@ import { IonicPage, NavController, NavParams, Content, ModalController, AlertCon
 import { PartnerProvider, Place } from '../../providers/partner/partner';
 import { CartProvider } from '../../providers/cart/cart';
 import { Observable } from 'rxjs';
+import { Mixpanel } from '@ionic-native/mixpanel';
 
 /**
  * Generated class for the MenuPage page.
@@ -55,7 +56,7 @@ export class MenuPage {
 
   menu: any;
 
-  constructor(public navCtrl: NavController, public platform: Platform, public navParams: NavParams, private ref: ChangeDetectorRef, private partnerService: PartnerProvider, public cartProvider: CartProvider, public modalCtrl: ModalController, private alertCtrl: AlertController) {
+  constructor(public navCtrl: NavController, public platform: Platform, public navParams: NavParams, private ref: ChangeDetectorRef, private partnerService: PartnerProvider, public cartProvider: CartProvider, public modalCtrl: ModalController, private alertCtrl: AlertController, private mixpanel: Mixpanel) {
 
     const params = this.navParams.data["data"];
     this.cartProvider.partnerName = null;
@@ -634,6 +635,9 @@ export class MenuPage {
   }
 
   loadSummary() {
+
+    this.mixpanel.track("Created Cart");
+
     this.navCtrl.push('OrderSummaryPage', {}, {
       animate: true,
       direction: 'forward'

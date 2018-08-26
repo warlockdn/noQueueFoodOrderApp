@@ -14,6 +14,14 @@ import 'rxjs/add/operator/map';
 export class OrderProvider {
 
   public onGoingOrder: boolean = false;
+  public isPlacing = true;
+  public currentOrder: any = {
+    stage: {
+      placed: false,
+      accepted: false,
+      ready: false,
+    }
+  };
   public status: any;
 
   constructor(public http: HttpClient, public angularfire: AngularFirestore, public storage: Storage) {
@@ -33,10 +41,16 @@ export class OrderProvider {
   }
 
   orderStatus(refID) {
-    this.status = this.angularfire.collection("orders").doc(refID).valueChanges();
-    
-    this.status.subscribe(
+    this.status = this.angularfire.collection("orders").doc(refID).valueChanges().subscribe(
       doc => {
+
+        this.currentOrder = doc;
+        console.log(this.currentOrder);
+
+        if (this.currentOrder["stage"]["declined"]) {
+          this.isPlacing = false;
+        }
+
         if (doc["stage"]["ready"]) {
           this.onGoingOrder = false;
           this.removeOnGoingOrder();
@@ -44,11 +58,11 @@ export class OrderProvider {
       }
     )
     
-    return this.status;
+    // return this.status;
   }
 
   unSubOrderStatus() {
-    this.status.unsubsribe();
+    this.status.unsubscribe();
   }
 
   getOrder(orderID) {

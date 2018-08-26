@@ -10,7 +10,7 @@
         <h5 class="phone" *ngIf="isLoggedIn">+91 {{ auth.user.phone }}</h5>
       </div>
   
-      <ion-card *ngIf="constants.isCheckedIn" (click)="loadHotelMenu(constants.checkInDetail)">
+      <ion-card *ngIf="constants.isCheckedIn && isLoggedIn" (click)="loadHotelMenu(constants.checkInDetail)">
         <ion-card-header>
           {{ constants.checkInDetail.name }}
         </ion-card-header>

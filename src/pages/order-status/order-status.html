@@ -8,28 +8,35 @@
 <ion-content padding>
 
   <div class="details" text-center>
-    <img src="https://res.cloudinary.com/ddiiq3bzl/image/upload/v1526242275/clientApp/1.jpg">
+    <div class="placing-container" *ngIf="!order.currentOrder.stage.placed">
+      <div class="pulse-loader" style="height: 200px; width: 200px; margin: 0 auto;"></div>
+    </div>
+    <img *ngIf="order.currentOrder.stage.placed && !order.currentOrder.stage.accepted && !order.currentOrder.stage.ready" src="assets/assets/order-status-placed.jpg">
+    <img *ngIf="order.currentOrder.stage.placed && order.currentOrder.stage.accepted && !order.currentOrder.stage.ready" src="assets/assets/order-status-accepted.jpg">
+    <img *ngIf="order.currentOrder.stage.placed && order.currentOrder.stage.accepted && order.currentOrder.stage.ready" src="assets/assets/order-status-ready.jpg">
     <!-- <div class="placeholder"></div> -->
-    <h3>Order No: <strong>#{{ currentOrder.id }}</strong></h3>
+    <h3>Order No: <strong>#{{ orderID }}</strong></h3>
   </div>
 
-  <div class="status" *ngIf="isPlacing">
+  <div class="status" *ngIf="order.isPlacing">
     <ion-list>
-      <ion-item [ngClass]="currentOrder.stage.placed ? '' : 'faded'">
+      <ion-item [ngClass]="order.currentOrder.stage.placed ? '' : 'faded'">
         <ion-avatar item-left>
-          <img src="https://res.cloudinary.com/ddiiq3bzl/image/upload/v1526242275/clientApp/1.jpg">
+          <div class="pulse-loader" *ngIf="order.currentOrder.stage.placed && !order.currentOrder.stage.accepted"></div>
+          <ion-icon name="checkmark" *ngIf="order.currentOrder.stage.placed && order.currentOrder.stage.accepted"></ion-icon>
         </ion-avatar>
         Order Placed
         <h5>Order placed and restaurant notified</h5>
       </ion-item>
-      <ion-item [ngClass]="currentOrder.stage.accepted ? '' : 'faded'">
+      <ion-item [ngClass]="order.currentOrder.stage.accepted ? '' : 'faded'">
         <ion-avatar item-left>
-          <img src="../../assets/temp/1.jpg">
+          <div class="pulse-loader" *ngIf="order.currentOrder.stage.accepted && !order.currentOrder.stage.ready"></div>
+          <ion-icon name="checkmark" *ngIf="order.currentOrder.stage.accepted && order.currentOrder.stage.ready"></ion-icon>
         </ion-avatar>
         Order Accepted
         <h5>Order accepted by the restaurant. Sit tight.</h5>
       </ion-item>
-      <ion-item text-center [ngClass]="currentOrder.stage.ready ? '' : 'faded'">
+      <ion-item text-center [ngClass]="order.currentOrder.stage.ready ? '' : 'faded'">
           <span>Order Ready</span>
           <h5>Order hot &amp; ready.</h5>
       </ion-item>

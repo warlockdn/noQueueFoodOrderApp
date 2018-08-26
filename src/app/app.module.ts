@@ -13,6 +13,7 @@ import { Geolocation } from '@ionic-native/geolocation';
 import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { Deeplinks } from '@ionic-native/deeplinks';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner';
+import { Mixpanel, MixpanelPeople } from '@ionic-native/mixpanel';
 
 import { Firebase } from '@ionic-native/firebase';
 import { AngularFireModule } from 'angularfire2';
@@ -70,6 +71,8 @@ import { SentryIonicErrorHandler } from './sentry';
     AuthProvider,
     Firebase,
     Deeplinks,
+    Mixpanel,
+    MixpanelPeople,
     { provide: ErrorHandler, useClass: SentryIonicErrorHandler },
     PartnerProvider,
     CartProvider,

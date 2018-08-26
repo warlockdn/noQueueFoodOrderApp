@@ -64,7 +64,20 @@
         </ion-grid>
       </ion-item>
     </ion-list>
+  </div>
 
+  <div class="coupon-block">
+    <form (ngSubmit)="validateCoupon()" >
+      <ion-list [formGroup]="couponForm" no-lines>
+        <ion-item>
+          <ion-input formControlName="couponcode" placeholder="Have a promo code?" required></ion-input>
+          <button item-right clear>Apply</button>
+        </ion-item>
+      </ion-list>
+    </form>
+  </div>
+
+  <div class="summary">
     <ion-list class="item-list bill">
       <ion-item>
         <ion-grid>
@@ -82,11 +95,22 @@
           </ion-row>
         </ion-grid>
       </ion-item>
+      <!-- <ion-item *ngIf="coupon"> -->
+      <ion-item *ngIf="couponAmount">
+        <ion-grid>
+          <ion-row class="discount">
+            <ion-col col-6>Coupon Discount</ion-col>
+            <!-- <ion-col col-6 text-right>&#x20B9; 20{{ coupon.couponAmount / 100 }}</ion-col> -->
+            <ion-col col-6 text-right>&#x20B9; -{{ (couponAmount / 100) | number: '1.2-2' }}</ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-item>
       <ion-item>
         <ion-grid>
           <ion-row class="total">
             <ion-col col-6>Total</ion-col>
-            <ion-col col-6 text-right>&#x20B9; {{ (subTotal + total + tax) / 100 }}</ion-col>
+            <ion-col col-6 text-right *ngIf="!couponAmount">&#x20B9; {{ (subTotal + tax) / 100 }}</ion-col>
+            <ion-col col-6 text-right *ngIf="couponAmount">&#x20B9; {{ ((subTotal - couponAmount) + tax) / 100 }}</ion-col>
           </ion-row>
         </ion-grid>
       </ion-item>

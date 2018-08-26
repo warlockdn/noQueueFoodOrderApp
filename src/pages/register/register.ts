@@ -4,6 +4,7 @@ import { FormArray, FormBuilder, FormGroup, Validators, FormControl } from '@ang
 
 import { AuthProvider } from '../../providers/auth/auth';
 import { HomePage } from '../home/home';
+import { Mixpanel, MixpanelPeople } from '@ionic-native/mixpanel';
 
 /**
  * Generated class for the RegisterPage page.
@@ -27,9 +28,10 @@ export class RegisterPage {
   registerForm: FormGroup;
   phone: number;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public toast: ToastController, private ref: ChangeDetectorRef, private fb: FormBuilder, public auth: AuthProvider) {
-    this.phone = this.navParams.data.phone;    
+  constructor(public navCtrl: NavController, public navParams: NavParams, public toast: ToastController, private ref: ChangeDetectorRef, private fb: FormBuilder, public auth: AuthProvider, private mixpanel: Mixpanel, private mixpanelPeople: MixpanelPeople) {
+    this.phone = this.navParams.data.phone;
     this.createRegisterForm();
+    this.mixpanel.track("Opened Registration Page");
   }
 
   ionViewDidLoad() {
@@ -61,11 +63,21 @@ export class RegisterPage {
   }
 
   register() {
+
+    this.mixpanel.track("Entered Registration Form");
+
     if (this.registerForm.valid) {
       this.auth.registration(this.registerForm.value)
         .then((response) => {
           this.auth.user = response.customer;
           this.auth.setUser(response.customer);
+
+          this.mixpanel.identify((response.customer.id).toString()).then(() => {
+            this.mixpanelPeople.set({
+              "$email": response.customer.email,
+              "$name": response.customer.name
+            });
+          });
 
           this.navCtrl.setRoot(HomePage, {}, {
             animate: true,

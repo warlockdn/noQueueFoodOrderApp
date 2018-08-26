@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams, LoadingController, AlertController
 import { FormArray, FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 
 import { AuthProvider } from '../../providers/auth/auth';
+import { Mixpanel } from '@ionic-native/mixpanel';
 // import { HomePage } from '../home/home';
 
 /**
@@ -21,11 +22,13 @@ export class LoginPage {
 
   loginForm: FormGroup;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private fb: FormBuilder, public auth: AuthProvider, public loading: LoadingController, public alertCtrl: AlertController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private fb: FormBuilder, public auth: AuthProvider, public loading: LoadingController, public alertCtrl: AlertController, private mixpanel: Mixpanel) {
     if (this.navParams.data.data) {
       this.auth.fromCart = true;
     }
-    this.createLoginForm()
+    this.createLoginForm();
+
+    this.mixpanel.track("Opened Login Page")
   }
 
   ionViewDidLoad() {
@@ -39,6 +42,8 @@ export class LoginPage {
   }
 
   authenticate() {
+
+    this.mixpanel.track("Entered Login Form");
 
     if (this.loginForm.valid) {
 

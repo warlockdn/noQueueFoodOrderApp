@@ -1,12 +1,19 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ModalController, Platform, AlertController, LoadingController } from 'ionic-angular';
-import { InAppBrowser } from '@ionic-native/in-app-browser';
+import { FormArray, FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 
 import { AuthProvider } from '../../providers/auth/auth';
 import { CartProvider } from '../../providers/cart/cart';
 import { PartnerProvider } from '../../providers/partner/partner';
 import { ConstantsProvider } from '../../providers/constants/constants';
+import { Mixpanel } from '@ionic-native/mixpanel';
 // import { FirebaseProvider } from '../../providers/firebase/firebase';
+
+export interface Coupon {
+  code: any,
+  message: any,
+  couponAmount: number
+}
 
 /**
  * Generated class for the OrderSummaryPage page.
@@ -26,9 +33,10 @@ export class OrderSummaryPage {
   partnerName: string = '';
   partnerCity: string = '';
   isLoggedIn: boolean = false;
-  cartItems: Array < any > ;
+  cartItems: Array <any>;
   subTotal: number = 0;
   total: number = 0;
+  couponAmount: number;
   tax: number = 0;
   notes: string;
   finalData: any;
@@ -36,15 +44,90 @@ export class OrderSummaryPage {
   // For Hotel
   roomNo: String;
 
+  couponForm: FormGroup;
+
   // public firebase: FirebaseProvider
-  constructor(public navCtrl: NavController, public navParams: NavParams, public auth: AuthProvider, public modalCtrl: ModalController, public cartProvider: CartProvider, public platform: Platform, public partner: PartnerProvider, public alertCtrl: AlertController, public loadingCtrl: LoadingController, public constants: ConstantsProvider) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public auth: AuthProvider, public modalCtrl: ModalController, public cartProvider: CartProvider, public platform: Platform, public partner: PartnerProvider, public alertCtrl: AlertController, public loadingCtrl: LoadingController, public constants: ConstantsProvider, private mixpanel: Mixpanel, private fb: FormBuilder) {
     this.finalData = null;
     this.loadPartnerInfo();
+    this.createCouponForm();
+
+    this.couponAmount = null;
+    this.cartProvider.couponAmount = null;
+    this.cartProvider.couponCode = null;
   }
   
   ionViewDidLoad() {
     console.log('ionViewDidLoad OrderSummaryPage');
     this.createCart();
+  }
+
+  createCouponForm() {
+    this.couponForm = this.fb.group({
+      couponcode: new FormControl(null)
+    })
+  }
+
+  validateCoupon() {
+    if (this.couponForm.valid) {
+
+      let loader = this.loadingCtrl.create({
+        content: "Validating coupon..."
+      })
+
+      loader.present();
+
+      const couponCode = (this.couponForm.controls['couponcode'].value).toUpperCase();
+
+      this.cartProvider.validateCoupon(couponCode, this.partnerInfo.partnerID, this.cartProvider.total).subscribe(
+        response => {
+          let data = response;
+          if (data["code"] === 200) {
+            
+            loader.dismiss();
+
+            this.cartProvider.couponAmount = data["couponAmount"];
+            this.couponAmount = data["couponAmount"];
+            this.cartProvider.couponCode = couponCode;
+
+            this.alertCtrl.create({
+              title: "Coupon applied!",
+              message: "Coupon has been successfully applied to your order",
+              buttons: ["OK"]
+            }).present();
+
+          } else {
+            
+            loader.dismiss();
+            this.couponForm.controls['couponcode'].setValue('');
+
+            this.cartProvider.couponAmount = null;
+            this.couponAmount = null;
+
+            this.alertCtrl.create({
+              title: "Coupon invalid",
+              message: "Entered coupon is not valid",
+              buttons: ["OK"]
+            }).present();
+
+          }
+        }, err => {
+
+          loader.dismiss();
+          this.couponForm.controls['couponcode'].setValue('');
+
+          this.cartProvider.couponAmount = null;
+          this.couponAmount = null;
+
+          this.alertCtrl.create({
+            title: "Coupon invalid",
+            message: "Entered coupon is not valid",
+            buttons: ["OK"]
+          }).present();
+
+        }
+      )
+    }
   }
 
   async loadPartnerInfo() {
@@ -159,6 +242,9 @@ export class OrderSummaryPage {
   }
 
   login() {
+
+    this.mixpanel.track("Loggin in from Cart")
+
     const loginModal = this.modalCtrl.create('LoginPage', {
       data: true
     }, {
@@ -175,6 +261,8 @@ export class OrderSummaryPage {
   }
 
   async pay() {
+
+    this.mixpanel.track("Pressed Pay")
 
     const partner = await this.partner.getPartner();
     const cart = await this.cartProvider.getCartData();
@@ -213,6 +301,10 @@ export class OrderSummaryPage {
       })
 
       loading.present();
+
+      if (this.cartProvider.couponCode) {
+        cart.couponCode = this.cartProvider.couponCode;
+      }
 
       this.cartProvider.manageCart(cart).subscribe(
         response => {
@@ -307,46 +399,68 @@ export class OrderSummaryPage {
 
     } else {
 
-      const data = finalData;
-      const options = {
-        description: `Order #${data.id}`,
-        // image: '',
-        currency: 'INR',
-        order_id: data.orderID,
-        key: ConstantsProvider.razorPayKey,
-        amount: data.total,
-        name: 'foodSpaze',
-        prefill: {
-          email: this.auth.user.email,
-          contact: this.auth.user.phone,
-          name: this.auth.user.name
-        },
-        theme: {
-          color: '#F37254'
+      if (this.platform.is("android") || this.platform.is("ios")) {
+
+        const data = finalData;
+        const options = {
+          description: `Order #${data.id}`,
+          // image: '',
+          currency: 'INR',
+          order_id: data.orderID,
+          key: ConstantsProvider.razorPayKey,
+          amount: data.total,
+          name: 'foodSpaze',
+          prefill: {
+            email: this.auth.user.email,
+            contact: this.auth.user.phone,
+            name: this.auth.user.name
+          },
+          theme: {
+            color: '#F37254'
+          }
         }
+  
+        alert(JSON.stringify(options));
+  
+        let successCallback = (payment_id) => {
+          console.log(payment_id);
+          this.capturePayment(payment_id, options.amount, finalData);
+        };
+  
+        let cancelCallback = (error) => {
+          alert(JSON.stringify(error));
+          alert(error.description + ' (Error ' + error.code + ')');
+        };
+  
+        this.platform.ready().then(() => {
+          RazorpayCheckout.open(options, successCallback, cancelCallback);
+        })
+
+      } else {
+
+        
+        setTimeout(() => {
+          this.navCtrl.setRoot('OrderStatusPage', {
+            data: finalData
+          }, {
+            animate: true,
+            direction: 'forward'
+          }).then(() => {
+            this.navCtrl.insert(0, 'HomePage');
+            this.cartProvider.clearCartData();
+          })
+        }, 200);
+
       }
 
-      alert(JSON.stringify(options));
-
-      let successCallback = (payment_id) => {
-        console.log(payment_id);
-        this.capturePayment(payment_id, options.amount, finalData);
-      };
-
-      let cancelCallback = (error) => {
-        alert(JSON.stringify(error));
-        alert(error.description + ' (Error ' + error.code + ')');
-      };
-
-      this.platform.ready().then(() => {
-        RazorpayCheckout.open(options, successCallback, cancelCallback);
-      })
 
     }
 
   }
 
   capturePayment(paymentID, amount, cart) {
+
+    this.mixpanel.track("User paid for Order");
 
     let captureLoading = this.loadingCtrl.create({
       content: "Verifying payment. Please wait!"

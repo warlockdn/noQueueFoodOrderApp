@@ -4,6 +4,7 @@ import { FormArray, FormBuilder, FormGroup, Validators, FormControl } from '@ang
 import { HomePage } from '../../home/home';
 
 import { AuthProvider } from '../../../providers/auth/auth';
+import { Mixpanel, MixpanelPeople } from '@ionic-native/mixpanel';
 
 /**
  * Generated class for the LoginWithpassPage page.
@@ -27,7 +28,7 @@ export class LoginWithpassPage {
 
   isTransparent = true;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private fb: FormBuilder, private ref: ChangeDetectorRef, public auth: AuthProvider, public toast: ToastController, public events: Events) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private fb: FormBuilder, private ref: ChangeDetectorRef, public auth: AuthProvider, public toast: ToastController, public events: Events, private mixpanel: Mixpanel, private mixpanelPeople: MixpanelPeople) {
     this.phone = this.navParams.data.phone;
     this.createLoginForm()
   }
@@ -68,7 +69,15 @@ export class LoginWithpassPage {
       }).subscribe(
         response => {
           
-          this.auth.setUser(response.customer);
+          // Setting customer.
+          this.mixpanel.identify((response.customer.id).toString()).then(() => {
+            this.mixpanelPeople.set({
+              "$email": response.customer.email,
+              "$name": response.customer.name
+            });
+          });
+
+          this.auth.setUser(response.customer); 
 
           this.navCtrl.setRoot(HomePage, {}, {
             animate: true,

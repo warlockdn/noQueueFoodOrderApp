@@ -15,6 +15,8 @@ import { Observable } from 'rxjs/Observable';
 export class CartProvider {
 
   total: number = 0;
+  couponAmount = 0;
+  couponCode;
   totalItems: number = 0;
   public partnerName: string;
   public cartData: any;
@@ -84,8 +86,17 @@ export class CartProvider {
       cart: cart.cart,
       notes: cart.notes,
       partner: cart.partner,
-      room: cart.room
+      room: cart.room,
+      couponCode: this.couponCode || null
     });
+  }
+
+  validateCoupon(couponcode, partnerID, cartTotal) {
+    return this.http.post(ConstantsProvider.validateCoupon, {
+      couponCode: couponcode,
+      partnerID: partnerID,
+      cartTotal: cartTotal
+    })
   }
 
   capturePayment(orderID, paymentID, amount, partnerID): Observable<any> {
