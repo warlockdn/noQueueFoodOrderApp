@@ -18,17 +18,17 @@
 
 <ion-content>
 
-  <div class="hero-header" style="background-image: url('https://res.cloudinary.com/ddiiq3bzl/image/upload/v1526242275/clientApp/3.jpg')">
+  <div class="hero-header" style="background-image: url('assets/assets/doodle.png')">
     <div class="details">
       <ion-grid>
         <ion-row>
           <ion-col>
-            <div class="logo align-items-center">
-              <img src="{{ partnerDetails?.poster || 'https://www.seeklogo.net/wp-content/uploads/2016/11/taco-bell-logo-preview.png' }}" class="m-auto">
+            <div class="logo align-items-center" *ngIf="partnerDetails?.poster">
+              <img [src]="partnerDetails?.poster" class="m-auto">
             </div>
           </ion-col>
         </ion-row>
-        <ion-row>
+        <!-- <ion-row>
           <ion-col col-8>
             <div class="cuisines">
               {{ partnerDetails?.characteristics.cuisine }}
@@ -39,7 +39,7 @@
               {{ partnerDetails?.avgtime || 15 }} mins
             </div>
           </ion-col>
-        </ion-row>
+        </ion-row> -->
       </ion-grid>
     </div>
   </div>
@@ -96,11 +96,11 @@
                       </div>
                     </ion-col>
                     <ion-col no-padding col-3>
-                      <!-- <button float-right ion-button color="secondary" class="item-button" (click)="addToCart(item)" outline>
+                      <button float-right ion-button color="secondary" outline (click)="addToCart(item)" *ngIf="(!item.selected || item.selected === null) && item.inStock">
                         ADD <span *ngIf="item.hasAddons">*</span>
-                      </button> -->
-                      <button float-right ion-button color="secondary" outline (click)="addToCart(item)" *ngIf="!item.selected || item.selected === null">
-                        ADD <span *ngIf="item.hasAddons">*</span>
+                      </button>
+                      <button float-right disabled ion-button color="secondary" outline *ngIf="!item.inStock">
+                        Out of Stock
                       </button>
                       <div class="counter d-flex align-items-center" float-right *ngIf="item.selected">
                         <div class="flex-fill left">
@@ -139,11 +139,11 @@
                   </div>
                 </ion-col>
                 <ion-col no-padding col-3>
-                  <!-- <button float-right ion-button color="secondary" class="item-button" (click)="addToCart(item)" outline>
+                  <button float-right ion-button color="secondary" outline (click)="addToCart(item, true)" *ngIf="(!item.selected || item.selected === null) && item.inStock">
                     ADD <span *ngIf="item.hasAddons">*</span>
-                  </button> -->
-                  <button float-right ion-button color="secondary" outline (click)="addToCart(item, true)" *ngIf="!item.selected || item.selected === null">
-                    ADD <span *ngIf="item.hasAddons">*</span>
+                  </button>
+                  <button float-right disabled ion-button color="secondary" outline *ngIf="!item.inStock">
+                    Out of Stock
                   </button>
                   <div class="counter d-flex align-items-center" float-right *ngIf="item.selected">
                     <div class="flex-fill left">
@@ -157,30 +157,6 @@
                 </ion-col>
               </ion-row>
             </ion-grid>
-            <!-- <div class="display-inline-block">
-              <div class="name">
-                <div class="type"></div>
-                {{ item.name }}
-              </div>
-              <div class="price">
-                &#x20B9; {{ item.price }}
-              </div>
-              <div class="desc" *ngIf="item.description">
-                {{ item.description }}
-              </div>
-            </div>
-            <button float-right ion-button color="secondary" outline (click)="addToCart(item)" *ngIf="!item.selected || item.selected === null">
-              ADD <span *ngIf="item.hasAddons">*</span>
-            </button>
-            <div class="counter d-flex align-items-center" float-right *ngIf="item.selected">
-              <div class="flex-fill left">
-                  <button ion-button clear (click)="updateCounter(item, false)">-</button>
-                </div>
-              <div class="flex-fill center">{{ item.quantity }}</div>
-              <div class="flex-fill right">
-                <button ion-button clear (click)="updateCounter(item, true)">+</button>
-              </div>
-            </div> -->
           </ion-item>
         </ion-list>
       </div>

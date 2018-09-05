@@ -13,6 +13,8 @@ import { AccountProvider } from '../providers/account/account';
 import { PartnerProvider, Hotel } from '../providers/partner/partner';
 import { CartProvider } from '../providers/cart/cart';
 
+import { CodePush, InstallMode, SyncStatus } from '@ionic-native/code-push';
+
 @Component({
   templateUrl: 'app.html'
 })
@@ -58,6 +60,7 @@ export class ClientApp {
     public cartProvider: CartProvider,
     private mixpanel: Mixpanel, 
     private mixpanelPeople: MixpanelPeople,
+    private codePush: CodePush
   ) {
 
     this.mixpanel.init(ConstantsProvider.mixPanelToken)
@@ -145,6 +148,7 @@ export class ClientApp {
       // Here you can do any higher level native things you might need.
       this.statusBar.styleDefault();
       this.splashScreen.hide();
+      // this.checkCodePush();
     });
   }
 
@@ -181,16 +185,50 @@ export class ClientApp {
 
   logout() {
 
-    this.menu.close();
-    this.auth.logout();
-    setTimeout(() => {
-      this.events.publish("user:logout");
-      this.nav.setRoot('HomePage', {}, {
-        animate: true,
-        direction: "switch"
-      });
-    }, 200);
+    this.firebase.deleteToken().then(
+      response => {
+
+        this.menu.close();
+        this.auth.logout();
+        setTimeout(() => {
+          this.events.publish("user:logout");
+          this.nav.setRoot('HomePage', {}, {
+            animate: true,
+            direction: "switch"
+          });
+        }, 200);
+
+      }
+    ).catch(
+      err => {
+
+        this.menu.close();
+          this.auth.logout();
+          setTimeout(() => {
+            this.events.publish("user:logout");
+            this.nav.setRoot('HomePage', {}, {
+              animate: true,
+              direction: "switch"
+            });
+          }, 200);
+          
+      }
+
+    )
+
     
+  }
+
+  checkCodePush() {
+    this.codePush.sync({
+      installMode: InstallMode.ON_NEXT_RESUME
+    }).subscribe(
+      data => {
+        console.log("Code Push successfull ", data);
+      }, err => {
+        console.error("Error with Code Push ", err);
+      }
+    )
   }
 
 }

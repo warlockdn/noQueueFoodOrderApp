@@ -776,6 +776,15 @@ button.button-md, button.button-ios {
             margin: 0;
             padding: 0 1em;
             width: 65px;
+            &:disabled {
+                font-size: 1rem;
+                text-transform: capitalize;
+                letter-spacing: 0.2px;
+                white-space: normal;
+                color: #2b2b2b;
+                border-color: #2b2b2b;
+                pointer-events: none;
+            }
         }
     }
     .type {

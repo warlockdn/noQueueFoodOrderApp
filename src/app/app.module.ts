@@ -19,6 +19,8 @@ import { Firebase } from '@ionic-native/firebase';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
 
+import { CodePush } from '@ionic-native/code-push';
+
 const firebase = {
   apiKey: "AIzaSyA2BVvIim73UWQj5z5lFRwMIGCShSk27Ho",
   authDomain: "resapp-1523718961807.firebaseapp.com",
@@ -73,6 +75,7 @@ import { SentryIonicErrorHandler } from './sentry';
     Deeplinks,
     Mixpanel,
     MixpanelPeople,
+    CodePush,
     { provide: ErrorHandler, useClass: SentryIonicErrorHandler },
     PartnerProvider,
     CartProvider,

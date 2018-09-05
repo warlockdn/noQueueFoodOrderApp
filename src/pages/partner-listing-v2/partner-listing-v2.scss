@@ -164,10 +164,9 @@ page-partner-listing-v2 {
         flex-direction: column;
         justify-content: center;
         img {
-            border-radius: 50%;
-            width: 250px;
-            height: 250px;
-            margin: 0 auto;
+            display: block;
+            height: calc(50vh - 20px);
+            margin: 0 auto 3rem;
         }
         h3 {
             color: #404040;

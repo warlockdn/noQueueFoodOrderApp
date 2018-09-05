@@ -57,6 +57,13 @@ export class OrderStatusPage {
 
   ionViewDidLeave() {
     this.order.unSubOrderStatus();
+    this.order.currentOrder = {
+      stage: {
+        placed: false,
+        accepted: false,
+        ready: false,
+      }
+    };
   }
 
   orderStatus(refID, id) {

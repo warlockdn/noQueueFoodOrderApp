@@ -11,9 +11,9 @@
     <div class="placing-container" *ngIf="!order.currentOrder.stage.placed">
       <div class="pulse-loader" style="height: 200px; width: 200px; margin: 0 auto;"></div>
     </div>
-    <img *ngIf="order.currentOrder.stage.placed && !order.currentOrder.stage.accepted && !order.currentOrder.stage.ready" src="assets/assets/order-status-placed.jpg">
-    <img *ngIf="order.currentOrder.stage.placed && order.currentOrder.stage.accepted && !order.currentOrder.stage.ready" src="assets/assets/order-status-accepted.jpg">
-    <img *ngIf="order.currentOrder.stage.placed && order.currentOrder.stage.accepted && order.currentOrder.stage.ready" src="assets/assets/order-status-ready.jpg">
+    <img *ngIf="order.currentOrder.stage.placed && !order.currentOrder.stage.accepted && !order.currentOrder.stage.ready" src="assets/assets/order-placed.png">
+    <img *ngIf="order.currentOrder.stage.placed && order.currentOrder.stage.accepted && !order.currentOrder.stage.ready" src="assets/assets/order-acceted.png">
+    <img *ngIf="order.currentOrder.stage.placed && order.currentOrder.stage.accepted && order.currentOrder.stage.ready" src="assets/assets/order-ready.png">
     <!-- <div class="placeholder"></div> -->
     <h3>Order No: <strong>#{{ orderID }}</strong></h3>
   </div>

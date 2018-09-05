@@ -19,6 +19,13 @@ export class FirebaseProvider {
   subscribe: any;
   order: any;
   latestStatus: any;
+  public currentOrder: any = {
+    stage: {
+      placed: false,
+      accepted: false,
+      ready: false,
+    }
+  };
 
   constructor(public http: HttpClient, public afs: AngularFirestore, public firebaseNative: Firebase, private platform: Platform, public auth: AuthProvider) {
     console.log('Hello FirebaseProvider Provider');
@@ -59,6 +66,12 @@ export class FirebaseProvider {
     return devicesRef.doc(docData.userId).set(docData);
   }
 
+  deleteToken() {
+    const devices = this.afs.collection("devices");
+    const userID = (this.auth.user.id).toString();
+    return devices.doc(userID).delete();
+  }
+
   // Listen to incoming FCM messages
   listenToNotifications() {
     return this.firebaseNative.onNotificationOpen();
@@ -72,9 +85,10 @@ export class FirebaseProvider {
     
     this.subscribe = this.afs.collection("orders", ref => ref.where("id", "==", orderID).limit(1)).valueChanges().subscribe(data => {
       this.order = data[0];
+      this.currentOrder = data[0];
       console.log(this.order);
 
-      if (this.order.stage) {
+      /* if (this.order.stage) {
         let stage = this.order.stage;
         
         if (stage.placed) {
@@ -93,7 +107,7 @@ export class FirebaseProvider {
           this.latestStatus = "Order Declined"
         }
 
-      }
+      } */
 
     })
 

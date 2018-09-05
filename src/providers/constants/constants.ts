@@ -8,6 +8,12 @@ import { Storage } from '@ionic/storage';
 
   See https://angular.io/guide/dependency-injection for more info on providers
   and Angular DI.
+
+  <!-- Production -->
+  <!-- <preference name="CodePushDeploymentKey" value="LLyzO_LC6DAZn31VAFwF0sIHxj6L85652288-c0b9-405f-be8a-3d3a4145e7aa" /> -->
+  <!-- <!-- Staging -->
+  <preference name="CodePushDeploymentKey" value="upe9_Bn_4hHQSDEyWAaZT96PyABJ85652288-c0b9-405f-be8a-3d3a4145e7aa" />
+
 */
 
 export interface CheckInDetail {
@@ -43,25 +49,25 @@ export class ConstantsProvider {
   public static partnerlogoURL = "https://res.cloudinary.com/ddiiq3bzl/image/upload/fl_lossy,f_auto,w_400,h_400,f_auto,c_fill/logo/";
  
   // Auth
-  public static findCustomer = "http://192.168.31.190:3003/v1/auth/findCustomer";  // "https://cs.spazefood.xyz/v1/auth/findCustomer"; // 
-  public static register = "http://192.168.31.190:3003/v1/auth/registration";  // "https://cs.spazefood.xyz/v1/auth/registration"; // 
-  public static authByPhonePass = "http://192.168.31.190:3003/v1/auth/login";  // "https://cs.spazefood.xyz/v1/auth/login"; // 
-  public static authByOTP = "http://192.168.31.190:3003/v1/auth/loginByOtp";  // "https://cs.spazefood.xyz/v1/auth/loginByOtp"; // 
+  public static findCustomer = "http://192.168.31.190:3003/v1/auth/findCustomer";
+  public static register = "http://192.168.31.190:3003/v1/auth/registration";
+  public static authByPhonePass = "http://192.168.31.190:3003/v1/auth/login";
+  public static authByOTP = "http://192.168.31.190:3003/v1/auth/loginByOtp";
 
   // Places
-  public static getSinglePartner = "http://192.168.31.190:3003/v1/places/";  // "https://cs.spazefood.xyz/v1/places/"; // 
-  public static getPlaces = "http://192.168.31.190:3003/v1/places/listPlaces";  // "https://cs.spazefood.xyz/v1/places/listPlaces"; // 
-  public static getMenu = "http://192.168.31.190:3003/v1/places/menu/";  // "https://cs.spazefood.xyz/v1/places/menu/"; // 
+  public static getSinglePartner = "http://192.168.31.190:3003/v1/places/";
+  public static getPlaces = "http://192.168.31.190:3003/v1/places/listPlaces";
+  public static getMenu = "http://192.168.31.190:3003/v1/places/menu/";
 
   // Cart
-  public static cart = "http://192.168.31.190:3003/v1/cart/manage";  // "https://cs.spazefood.xyz/v1/cart/manage"; // 
-  public static notifyStatus = "http://192.168.31.190:3003/v1/cart/notify";  // "https://cs.spazefood.xyz/v1/cart/notify"; // 
-  public static capturePayment = "http://192.168.31.190:3003/v1/cart/capture";  // "https://cs.spazefood.xyz/v1/cart/capture"; // 
-  public static validateCoupon = "http://192.168.31.190:3003/v1/cart/validateCoupon";  // "https://cs.spazefood.xyz/v1/cart/validateCoupon"; // 
+  public static cart = "http://192.168.31.190:3003/v1/cart/manage";
+  public static notifyStatus = "http://192.168.31.190:3003/v1/cart/notify";
+  public static capturePayment = "http://192.168.31.190:3003/v1/cart/capture";
+  public static validateCoupon = "http://192.168.31.190:3003/v1/cart/validateCoupon";
 
   // Account
-  public static orderList = "http://192.168.31.190:3003/v1/account/orders";  // "https://cs.spazefood.xyz/v1/account/orders"; // 
-  public static fetchAccount = "http://192.168.31.190:3003/v1/account/fetch";  // "https://cs.spazefood.xyz/v1/account/fetch"; // 
+  public static orderList = "http://192.168.31.190:3003/v1/account/orders";
+  public static fetchAccount = "http://192.168.31.190:3003/v1/account/fetch";
 
   public token = null;
   public isCheckedIn: boolean = false;

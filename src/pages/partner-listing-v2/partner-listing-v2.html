@@ -3,7 +3,7 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>Places Nearbuy</ion-title>
+    <ion-title>Places Nearby</ion-title>
     <ion-buttons end>
         <button ion-button end *ngIf="cartProvider.cartData">
           <span id="hasCart"></span>
@@ -17,11 +17,12 @@
 
   <!-- If Partners -->
   <div *ngIf="partners">
-    <h5 text-center class="mb-1">{{ partners.length }} places nearbuy</h5>
+    <h5 text-center class="mb-1" *ngIf="partners.length > 1">{{ partners.length }} places nearby</h5>
     <ion-list class="listing" no-lines>
       <ion-item *ngFor="let partner of partners" (click)="loadMenu(partner)">
         <div class="image">
-          <img src="https://res.cloudinary.com/ddiiq3bzl/image/upload/v1526242275/clientApp/1.jpg">
+          <img *ngIf="!partner.partnerbg" src="assets/assets/doodle.png">
+          <img *ngIf="partner.partnerbg" src="https://res.cloudinary.com/ddiiq3bzl/image/upload/partnerBG/{{ partner.partnerbg }}">
         </div>
         <div class="desc">
           <div class="logo align-items-center" *ngIf="partner.logo">
@@ -75,7 +76,7 @@
 
   <!-- If !Partners -->
   <div text-center *ngIf="notfound" class="notfound">
-    <img src="../../assets/imgs/xx.png" />
+    <img src="assets/assets/not-found.png" />
     <h3>Oops!</h3>
     <p>
       No places nearby. We are working on it.

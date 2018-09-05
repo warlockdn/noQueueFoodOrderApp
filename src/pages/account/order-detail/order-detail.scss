@@ -1,5 +1,35 @@
 page-order-detail {
 
+    .firebase {
+        background: #fff;
+        // box-shadow: 0 1px 1px 0 rgba(60,64,67,.08), 0 1px 3px 1px rgba(60,64,67,.16);
+        border-radius: 3px;
+        margin-bottom: 2rem;
+        div {
+            text-align: center;
+            display: flex;
+            align-items: center;
+            img {
+                width: 25vh;
+                height: auto;
+                object-fit: contain;
+            }
+            .details {
+                display: block;
+                text-align: left;
+                margin-left: 15px;
+                h3 {
+                    font-weight: 700;
+                    font-size: 1.8rem;
+                    margin-bottom: 5px;
+                }
+                span {
+                    font-size: 1.2rem;
+                }
+            }
+        }
+    }
+
     .item-list {
         .type {
             flex: 0 0 15px;

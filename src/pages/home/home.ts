@@ -15,6 +15,7 @@ import { MixpanelPeople, Mixpanel } from '@ionic-native/mixpanel';
 export class HomePage {
 
   isDisabled: boolean = false;
+  homeImage: string = 'home-02';
 
   constructor(
     public navCtrl: NavController,
@@ -28,6 +29,11 @@ export class HomePage {
     private mixpanelPeople: MixpanelPeople
   ) {
     this.mixpanel.track("Opened Homepage");
+    this.randomHomeImage();
+  }
+
+  ionViewDidLeave() {
+    this.randomHomeImage();
   }
 
   listPlaces() {
@@ -174,6 +180,15 @@ export class HomePage {
       buttons: ['OK']
     });
     alert.present();
+  }
+
+  randomHomeImage() {
+    let homeImageArr = ['home-01', 'home-02', 'home-03'];
+    // this.homeImage = homeImageArr[Math.floor((Math.random()*homeImageArr.length))]; 
+    setInterval(() => {
+      this.homeImage = homeImageArr[Math.floor((Math.random()*homeImageArr.length))]
+    }, 5000)
+
   }
 
 }

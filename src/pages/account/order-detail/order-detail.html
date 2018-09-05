@@ -15,6 +15,37 @@
 
 <ion-content padding *ngIf="order">
 
+  <div class="firebase" *ngIf="firebase.order && order">
+    
+    <div class="placing-container" *ngIf="!firebase.currentOrder.stage.placed">
+      <div class="pulse-loader" style="height: 200px; width: 200px; margin: 0 auto;"></div>
+    </div>
+    <div *ngIf="firebase.currentOrder.stage.placed && !firebase.currentOrder.stage.accepted && !firebase.currentOrder.stage.ready">
+      <img src="assets/assets/order-placed.png">
+      <div class="details">
+        <h3>Order Placed</h3>
+        <span>Order has been successfully placed awaiting confirmation</span>
+      </div>
+    </div>
+    <div *ngIf="firebase.currentOrder.stage.placed && firebase.currentOrder.stage.accepted && !firebase.currentOrder.stage.ready">
+      <img src="assets/assets/order-acceted.png">
+      <div class="details">
+        <h3>Order in Kitchen</h3>
+        <span>Order has been accepted and is in kitchen</span>
+      </div>
+    </div>
+    <div *ngIf="firebase.currentOrder.stage.placed && firebase.currentOrder.stage.accepted && firebase.currentOrder.stage.ready" >
+      <img src="assets/assets/order-ready.png">
+      <div class="details">
+        <h3>Order Ready</h3>
+        <span>Your food awaits. Enjoy</span>
+      </div>
+    </div>
+
+
+
+  </div>
+
   <div class="row">
     <ion-col>
       <div class="title">From</div>
@@ -105,5 +136,5 @@
 </ion-content>
 
 <ion-footer no-border class="pt-2 pb-2 pl-3 pr-3" *ngIf="firebase.order && order">
-  <button ion-button block color="secondary">{{ firebase.latestStatus }}</button>
+  <!-- <button ion-button block color="secondary">{{ firebase.latestStatus }}</button> -->
 </ion-footer>
