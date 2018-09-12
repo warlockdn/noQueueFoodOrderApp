@@ -66,11 +66,19 @@ export class MenuPage {
       this.loadPartner(params.partner.id || params.partner.partnerID);
     } else {
 
-      const partner: Place = params.data;
+      const partner: Place = JSON.parse(JSON.stringify(params.data));
       this.partnerDetails = partner;
       if (Array.isArray(this.partnerDetails.characteristics["cuisine"])) {
         this.partnerDetails.characteristics["cuisine"] = this.partnerDetails.characteristics["cuisine"].join(', ')
       }
+
+      if (!this.partnerDetails.partnerbg) {
+        this.partnerDetails.partnerbg = "assets/assets/doodle.png";
+      } else {
+        this.partnerDetails.partnerbg = "https://res.cloudinary.com/ddiiq3bzl/image/upload/fl_lossy,f_auto,q_auto,w_500/" + this.partnerDetails.partnerbg
+      }
+
+      console.log(this.partnerDetails);
       
       this.loadMenu(partner);
 
@@ -125,6 +133,12 @@ export class MenuPage {
 
         if (Array.isArray(this.partnerDetails.characteristics["cuisine"])) {
           this.partnerDetails.characteristics["cuisine"] = this.partnerDetails.characteristics["cuisine"].join(', ')
+        }
+
+        if (!this.partnerDetails.partnerbg) {
+          this.partnerDetails.partnerbg = "assets/assets/doodle.png";
+        } else {
+          this.partnerDetails.partnerbg = "https://res.cloudinary.com/ddiiq3bzl/image/upload/fl_lossy,f_auto,q_auto,w_500/" + this.partnerDetails.partnerbg
         }
 
       }

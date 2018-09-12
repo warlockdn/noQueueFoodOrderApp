@@ -18,7 +18,7 @@
 
 <ion-content>
 
-  <div class="hero-header" style="background-image: url('assets/assets/doodle.png')">
+  <div class="hero-header" [style.background-image]="'url(' + partnerDetails.partnerbg + ')'">
     <div class="details">
       <ion-grid>
         <ion-row>
@@ -96,10 +96,10 @@
                       </div>
                     </ion-col>
                     <ion-col no-padding col-3>
-                      <button float-right ion-button color="secondary" outline (click)="addToCart(item)" *ngIf="(!item.selected || item.selected === null) && item.inStock">
+                      <button float-right ion-button color="secondary" outline (click)="addToCart(item)" *ngIf="(!item.selected || item.selected === null) && item.inStock" [hidden]="partnerDetails?.isOpen === false">
                         ADD <span *ngIf="item.hasAddons">*</span>
                       </button>
-                      <button float-right disabled ion-button color="secondary" outline *ngIf="!item.inStock">
+                      <button float-right disabled ion-button color="secondary" outline *ngIf="!item.inStock" [hidden]="partnerDetails?.isOpen === false">
                         Out of Stock
                       </button>
                       <div class="counter d-flex align-items-center" float-right *ngIf="item.selected">
@@ -139,10 +139,10 @@
                   </div>
                 </ion-col>
                 <ion-col no-padding col-3>
-                  <button float-right ion-button color="secondary" outline (click)="addToCart(item, true)" *ngIf="(!item.selected || item.selected === null) && item.inStock">
+                  <button float-right ion-button color="secondary" outline (click)="addToCart(item, true)" *ngIf="(!item.selected || item.selected === null) && item.inStock" [hidden]="partnerDetails?.isOpen === false">
                     ADD <span *ngIf="item.hasAddons">*</span>
                   </button>
-                  <button float-right disabled ion-button color="secondary" outline *ngIf="!item.inStock">
+                  <button float-right disabled ion-button color="secondary" outline *ngIf="!item.inStock" [hidden]="partnerDetails?.isOpen === false">
                     Out of Stock
                   </button>
                   <div class="counter d-flex align-items-center" float-right *ngIf="item.selected">

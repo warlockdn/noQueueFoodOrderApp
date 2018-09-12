@@ -45,7 +45,7 @@ export class ConstantsProvider {
 
   public static mixPanelToken = "1e1e7305ce755346eb4069d1440ad6bc";
   public static razorPayKey = "rzp_test_8ZuXe81gFihhsI";
-  public static api = "http://localhost:3003/v1/";
+  public static api = "http://192.168.31.190:3003/v1/";
   public static partnerlogoURL = "https://res.cloudinary.com/ddiiq3bzl/image/upload/fl_lossy,f_auto,w_400,h_400,f_auto,c_fill/logo/";
  
   // Auth

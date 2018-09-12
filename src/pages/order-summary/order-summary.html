@@ -40,19 +40,18 @@
           <ion-row class="align-items-center">
             <ion-col col-6 class="d-flex">
               <div class="type" [ngClass]="item.isNonVeg ? 'nonveg' : ''"></div>
-              <div class="name">
-                {{ item.name }}
-              </div>
+              <div class="name">{{ item.name }}</div>
             </ion-col>
             <ion-col col-3>
-              <div class="counter d-flex align-items-center m-auto" style="border: 0;">
-                <!-- <div class="flex-fill left">
-                  <button ion-button clear>-</button>
-                </div> -->
+              <!--  style="border: 0;" -->
+              <div class="counter d-flex align-items-center m-auto"> 
+                <div class="flex-fill left">
+                  <button ion-button clear (click)="manageItem(item, 'minus')">-</button>
+                </div>
                 <div class="flex-fill center">{{ item.quantity }}</div>
-                <!-- <div class="flex-fill right">
-                  <button ion-button clear>+</button>
-                </div> -->
+                <div class="flex-fill right">
+                  <button ion-button clear (click)="manageItem(item, 'plus')">+</button>
+                </div>
               </div>
             </ion-col>
             <ion-col col-3>

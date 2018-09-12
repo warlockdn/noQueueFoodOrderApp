@@ -62,6 +62,10 @@ export class OrderSummaryPage {
     this.createCart();
   }
 
+  manageItem(item, type) {
+    
+  }
+
   createCouponForm() {
     this.couponForm = this.fb.group({
       couponcode: new FormControl(null)

@@ -37,11 +37,11 @@ ion-menu {
     .profile {
         padding: 20px 16px;
         .avatar {
-            background: url('../assets/assets/logo.png');
+            background: url('../assets/assets/Flevva.png');
             height: 64px;
-            width: 64px;
-            background-size: 64px 64px;
-            border-radius: 50%;
+            width: 100%;
+            background-size: contain;
+            background-repeat: no-repeat;
         }
         .name {
             font-weight: 700;

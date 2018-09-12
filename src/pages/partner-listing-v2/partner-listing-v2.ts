@@ -71,4 +71,14 @@ export class PartnerListingPageV2 {
     });
   }
 
+  goToCart() {
+
+    this.mixpanel.track("Opened Order Summary from Homepage");
+
+    this.navCtrl.push('OrderSummaryPage', {}, {
+      animate: true,
+      direction: "forward"
+    })
+  }
+
 }

@@ -4,7 +4,7 @@
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>Places Nearby</ion-title>
-    <ion-buttons end>
+    <ion-buttons end (click)="goToCart()">
         <button ion-button end *ngIf="cartProvider.cartData">
           <span id="hasCart"></span>
           <ion-icon name="cart"></ion-icon>
@@ -22,7 +22,7 @@
       <ion-item *ngFor="let partner of partners" (click)="loadMenu(partner)">
         <div class="image">
           <img *ngIf="!partner.partnerbg" src="assets/assets/doodle.png">
-          <img *ngIf="partner.partnerbg" src="https://res.cloudinary.com/ddiiq3bzl/image/upload/partnerBG/{{ partner.partnerbg }}">
+          <img *ngIf="partner.partnerbg" src="https://res.cloudinary.com/ddiiq3bzl/image/upload/fl_lossy,f_auto,q_auto,w_500/{{ partner.partnerbg }}">
         </div>
         <div class="desc">
           <div class="logo align-items-center" *ngIf="partner.logo">
@@ -41,7 +41,7 @@
                   <strong>&#x20B9; {{ partner.avgpp || 300 }}</strong> per person
                 </div>
                 <div class="avg">
-                  {{ partner.distance }} kms, {{ partner.avgtime || 15 }} mins
+                  {{ partner.distance }}, {{ partner.avgtime || 15 }} mins
                 </div>
               </ion-col>
             </ion-row>

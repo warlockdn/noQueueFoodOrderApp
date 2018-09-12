@@ -20,6 +20,7 @@ export interface Place {
   },
   characteristics?: Object,
   imageid?: string,
+  partnerbg?: string,
   location?: {
     coordinates?: Array<Number>,
     type?: string

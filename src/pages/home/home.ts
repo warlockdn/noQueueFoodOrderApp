@@ -58,9 +58,9 @@ export class HomePage {
       animate: true 
     })
 
-    /* 
+    
 
-    loading.present();
+    /* loading.present();
     this.isDisabled = true;
     
     this.geolocation.getCurrentPosition().then((response) => {
@@ -138,10 +138,10 @@ export class HomePage {
 
     }).catch(err => {
       
-      const alertBarCode = this.alertCtrl.create({
+      this.alertCtrl.create({
         title: "Error!",
         message: "There was a error reading barcode data. Please try again later."
-      })
+      }).present()
 
     })
   }
