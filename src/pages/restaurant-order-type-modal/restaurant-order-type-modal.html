@@ -1,0 +1,30 @@
+<ion-header no-border>
+  <ion-toolbar>
+    <ion-title>Please choose</ion-title>
+    <ion-buttons start>
+        <button ion-button (click)="dismiss()">
+        <ion-icon name="close"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+
+  <ion-grid>
+    <ion-row>
+      <!-- <ion-col>
+        Show Items
+      </ion-col> -->
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <button ion-button block color="secondary" (click)="selectedOrderType('takeout')">Takeout</button>
+      </ion-col>
+      <ion-col>
+        <button ion-button block color="secondary" (click)="seatno()">Dine-In</button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>

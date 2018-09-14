@@ -3,7 +3,7 @@
     <name>Flevva</name>
     <description>What's your flevva?</description>
     <author email="info@launchforttech" href="http://launchforttech.com/">Warlock</author>
-    <content src="index.html" />
+    <content original-src="index.html" src="http://192.168.31.190:8100" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -121,4 +121,5 @@
     <plugin name="cordova-plugin-zip" spec="^3.1.0" />
     <engine name="browser" spec="5.0.3" />
     <engine name="android" spec="7.0.0" />
+    <engine name="ios" spec="4.5.5" />
 </widget>

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angular';
 
 import { PartnerProvider, Place } from '../../providers/partner/partner';
 import { CartProvider } from '../../providers/cart/cart';
@@ -23,7 +23,7 @@ export class PartnerListingPageV2 {
   fakePlaces: Array<any> = new Array(3);
   notfound: boolean = false;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public partnerService: PartnerProvider, public cartProvider: CartProvider, private mixpanel: Mixpanel) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public partnerService: PartnerProvider, public cartProvider: CartProvider, private mixpanel: Mixpanel, public modalCtrl: ModalController) {
 
     const coordinates = this.navParams.data["data"];
     this.loadPlaces(coordinates);
@@ -69,6 +69,7 @@ export class PartnerListingPageV2 {
       animate: true,
       direction: 'forward',
     });
+    
   }
 
   goToCart() {

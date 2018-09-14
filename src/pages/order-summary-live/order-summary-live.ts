@@ -16,7 +16,7 @@ export interface Coupon {
 }
 
 /**
- * Generated class for the OrderSummaryPage page.
+ * Generated class for the OrderSummaryLivePage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
@@ -24,10 +24,10 @@ export interface Coupon {
 
 @IonicPage()
 @Component({
-  selector: 'page-order-summary',
-  templateUrl: 'order-summary.html',
+  selector: 'page-order-summary-live',
+  templateUrl: 'order-summary-live.html',
 })
-export class OrderSummaryPage {
+export class OrderSummaryLivePage {
 
   partnerInfo: any;
   partnerName: string = '';
@@ -45,6 +45,7 @@ export class OrderSummaryPage {
   roomNo: String;
 
   couponForm: FormGroup;
+  orderType: { type: any; table?: any };
 
   // public firebase: FirebaseProvider
   constructor(public navCtrl: NavController, public navParams: NavParams, public auth: AuthProvider, public modalCtrl: ModalController, public cartProvider: CartProvider, public platform: Platform, public partner: PartnerProvider, public alertCtrl: AlertController, public loadingCtrl: LoadingController, public constants: ConstantsProvider, private mixpanel: Mixpanel, private fb: FormBuilder) {
@@ -305,6 +306,34 @@ export class OrderSummaryPage {
     })
   }
 
+  selectOrderType() {
+
+    let orderTypeModal = this.modalCtrl.create('RestaurantOrderTypeModalPage', {}, {
+      showBackdrop: false,
+      enableBackdropDismiss: false,
+      cssClass: 'order-type'
+    })
+
+    orderTypeModal.present();
+
+    orderTypeModal.onDidDismiss(data => {
+
+      if (data !== undefined) {
+        this.orderType = {
+          type: data.type
+        }
+
+        if (data.table) {
+          this.orderType.table = data.table;
+        }
+
+        this.pay()
+      }
+
+    })
+
+  }
+
   async pay() {
 
     this.mixpanel.track("Pressed Pay")
@@ -322,7 +351,18 @@ export class OrderSummaryPage {
         cart: cart,
         notes: this.notes,
         partner: partner.name,
-        room: null
+        room: null,
+        type: null,
+        table: null
+      }
+
+      if (this.orderType) {
+        if (this.orderType.type) {
+          newCart.type = (this.orderType.type).toUpperCase();
+        }
+        if (this.orderType.table) {
+          newCart.table = (this.orderType.table).toUpperCase()
+        }
       }
 
       if (this.roomNo) {
@@ -391,8 +431,7 @@ export class OrderSummaryPage {
               };
       
               let cancelCallback = (error) => {
-                /* alert(JSON.stringify(error));
-                alert(error.description + ' (Error ' + error.code + ')'); */
+                
               };
       
               this.platform.ready().then(() => {

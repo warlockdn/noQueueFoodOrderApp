@@ -21,6 +21,9 @@ page-partner-listing-v2 {
             border-bottom: 0;
             padding-left: 0;
             margin-bottom: 5px;
+            &.closed {
+                opacity: 0.7;
+            }
             .item-inner {
                 padding-right: 0 !important;
                 border-bottom: 0 ;
@@ -31,6 +34,9 @@ page-partner-listing-v2 {
                         position: relative;
                         border-radius: 5px;
                         overflow: hidden;
+                        &.closed {
+                            opacity: 0.6;
+                        }
                         &::before {
                             content: " ";
                             opacity: 1;
@@ -72,6 +78,26 @@ page-partner-listing-v2 {
                                 object-fit: contain;
                             }
                         }
+
+                        .takeaway {
+                            background-color: #667eea;
+                        }
+
+                        .type, .takeaway {
+                            font-size: 1.2rem;
+                            border-radius: 3px;
+                            display: inline-block;
+                            padding: 1px 4px;
+                            font-weight: 700;
+                            margin-bottom: 0.5rem;
+                            &.restaurant {
+                                background-color: #667eea;
+                            }
+                            &.qsr {
+                                background-color: #f77062;
+                            }
+                        }
+                        
                         h2 {
                             font-weight: 700;
                             font-size: 2rem;

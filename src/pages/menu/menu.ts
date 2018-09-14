@@ -652,10 +652,27 @@ export class MenuPage {
 
     this.mixpanel.track("Created Cart");
 
-    this.navCtrl.push('OrderSummaryPage', {}, {
-      animate: true,
-      direction: 'forward'
+    // Based on the type of Partner (Restaurant or QSR) open order summary
+    this.partnerService.getPartner().then(data => {
+
+      if (data.characteristics.typeid === "2" && data.characteristics.type === "Restaurant") {
+        
+        this.navCtrl.push('OrderSummaryLivePage', {}, {
+          animate: true,
+          direction: 'forward'
+        })
+
+      } else {
+        this.navCtrl.push('OrderSummaryPage', {}, {
+          animate: true,
+          direction: 'forward'
+        })
+      }
+
+    }).catch(err => {
+
     })
+
   }
 
   showPartnerErr(item) {

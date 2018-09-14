@@ -19,8 +19,8 @@
   <div *ngIf="partners">
     <h5 text-center class="mb-1" *ngIf="partners.length > 1">{{ partners.length }} places nearby</h5>
     <ion-list class="listing" no-lines>
-      <ion-item *ngFor="let partner of partners" (click)="loadMenu(partner)">
-        <div class="image">
+      <ion-item *ngFor="let partner of partners" (click)="loadMenu(partner)" [ngClass]="{'closed': !partner.isOpen }">
+        <div class="image" [ngClass]="{'closed': !partner.isOpen }">
           <img *ngIf="!partner.partnerbg" src="assets/assets/doodle.png">
           <img *ngIf="partner.partnerbg" src="https://res.cloudinary.com/ddiiq3bzl/image/upload/fl_lossy,f_auto,q_auto,w_500/{{ partner.partnerbg }}">
         </div>
@@ -30,7 +30,14 @@
           </div>
           <ion-grid>
             <ion-row>
-              <ion-col col col-7>
+              <ion-col class="align-self-end" col col-7>
+                <div class="type" [ngClass]="{
+                  'restaurant': partner.characteristics.typeid === '2',
+                  'qsr': partner.characteristics.typeid === '1'
+                }">{{ partner.characteristics.type }}</div>
+                <div class="takeaway" *ngIf="partner.characteristics.takeout"> 
+                  Takeout
+                </div>
                 <h2 text-bold>{{ partner.name }}</h2>
                 <div class="cuisines">
                   {{ partner.characteristics.cuisine }}

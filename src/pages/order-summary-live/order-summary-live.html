@@ -45,9 +45,6 @@
             <ion-col col-3>
               <!--  style="border: 0;" -->
               <div class="counter d-flex align-items-center m-auto"> 
-                <div class="flex-fill left">
-                  <button ion-button clear (click)="manageItem(item, false)">-</button>
-                </div>
                 <div class="flex-fill center">{{ item.quantity }}</div>
                 <div class="flex-fill right">
                   <button ion-button clear (click)="manageItem(item, true)">+</button>
@@ -65,7 +62,7 @@
     </ion-list>
   </div>
 
-  <div class="coupon-block">
+  <!-- <div class="coupon-block">
     <form (ngSubmit)="validateCoupon()" >
       <ion-list [formGroup]="couponForm" no-lines>
         <ion-item>
@@ -74,7 +71,7 @@
         </ion-item>
       </ion-list>
     </form>
-  </div>
+  </div> -->
 
   <div class="summary">
     <ion-list class="item-list bill">
@@ -138,7 +135,19 @@
       Login
     </button>
   </div>
-  <button ion-button block color="secondary" class="general" (click)="pay()" *ngIf="auth.isLoggedIn">
+
+  <!-- Restaurant has takeout -->
+  <button ion-button block color="secondary" class="general" (click)="selectOrderType()" *ngIf="auth.isLoggedIn && partnerInfo?.characteristics.takeout && !isOrderLive">
     Place Order
   </button>
+
+  <!-- Restaurant doesn't have takeout -->
+  <button ion-button block color="secondary" class="general" (click)="selectOrderType()" *ngIf="auth.isLoggedIn && !partnerInfo?.characteristics.takeout && !isOrderLive">
+    Place Order
+  </button>
+
+  <button ion-button block color="danger" class="general" (click)="selectOrderType()" *ngIf="auth.isLoggedIn && isOrderLive">
+    Pay Now
+  </button>
+
 </ion-footer>

@@ -50,7 +50,7 @@ export class HomePage {
         altitude: null, 
         altitudeAccuracy: null,
         heading: null,
-        latitude: 28.597528699999998,
+        latitude: 28.59752869,
         longitude: 77.0991781
       }
     }, { 
@@ -167,9 +167,24 @@ export class HomePage {
 
     this.mixpanel.track("Opened Order Summary from Homepage");
 
-    this.navCtrl.push('OrderSummaryPage', {}, {
-      animate: true,
-      direction: "forward"
+    this.partnerService.getPartner().then(data => {
+
+      if (data.characteristics.typeid === "2" && data.characteristics.type === "Restaurant") {
+        
+        this.navCtrl.push('OrderSummaryLivePage', {}, {
+          animate: true,
+          direction: 'forward'
+        })
+
+      } else {
+        this.navCtrl.push('OrderSummaryPage', {}, {
+          animate: true,
+          direction: 'forward'
+        })
+      }
+
+    }).catch(err => {
+
     })
   }
 

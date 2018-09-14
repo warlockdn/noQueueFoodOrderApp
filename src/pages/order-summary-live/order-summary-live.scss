@@ -1,0 +1,195 @@
+page-order-summary-live {
+
+    .info {
+        font-size: 1.6rem;
+        font-weight: 600;
+        span {
+            color: #3a3a3a;
+            font-size: 1.2rem;
+        }
+    }
+
+    .detail {
+        padding: 15px 10px;
+        ion-avatar {
+            border-radius: 50%;
+            height: 50px;
+            width: 50px;
+            margin-right: 10px;
+        }
+        .name {
+            font-weight: 700;
+            font-size: 16px;
+        }
+    }
+
+    .summary {
+        padding: 15px 18px 5px;
+        h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #505050;
+        }
+
+        .item-list {
+            .type {
+                flex: 0 0 15px;
+            }
+            ion-item {
+                margin-bottom: 0.5rem;
+                .item-inner {
+                    padding-bottom: 0.5rem;
+                }
+                ion-grid {
+                    padding: 0;
+                    ion-col {
+                        white-space: normal;
+                        padding: 0;
+                        .type {
+                            position: relative;
+                            top: 2px;
+                        }
+                        .name {
+                            font-size: 1.4rem;
+                        }
+                        .counter {
+                            height: 26px;
+                            width: 50px;
+                            .center {
+                                line-height: 1.8;
+                            }
+                            .left, .right {
+                                button {
+                                    font-weight: 700;
+                                    font-size: 1.9rem;
+                                    padding: 0;
+                                    width: 100%;
+                                    height: 25px;
+                                    margin: 0;
+                                }
+                            }
+                        }
+                        .price {
+                            font-size: 1.4rem;
+                            font-weight: 600;
+                            margin-left: 0;
+                            text-align: right;
+                        }
+                    }
+                }
+            }
+        }
+
+        .bill {
+            ion-item {
+                margin-bottom: 0;
+                min-height: 4rem;
+                .item-inner {
+                    padding-bottom: 0;
+                }
+            }
+            ion-col {
+                color: #505050;
+            }
+            ion-row.total {
+                font-size: 1.6rem;
+                font-weight: 700;
+                ion-col {
+                    color: #000;
+                }
+            }
+            ion-row.discount {
+                ion-col {
+                    font-weight: 600;
+                    color: map-get($map: $colors, $key: secondary);
+                }
+            }
+        }
+
+    }
+
+    .notes {
+        .list-ios {
+            .item-block:first-child, .item-block:last-child {
+                border-top: 0;
+                border-bottom: 0;
+            }
+        }
+        padding: 0 18px 15px;
+        ion-list {
+            ion-item.item {
+                padding-left: 0;
+                border-bottom: 0 !important;
+                .item-inner {
+                    padding-right: 0 !important;
+                }
+                ion-label.label {
+                    font-weight: 700;
+                    margin-bottom: 1rem;
+                }
+                ion-textarea {
+                    border: 1px solid #dedede;
+                    padding: 0 8px;
+                    font-size: 1.2rem;
+                }
+            }
+        }
+    }
+
+    .coupon-block {
+        padding: 0;
+        background-color: #f5f5f5;
+        .list-md, .list-ios {
+            margin-bottom: 0;
+        }
+        ion-item, .item-md, .item-ios {
+            .item-inner {
+                padding-right: 0;
+            }
+            // border-bottom: 0;
+            padding: 5px 12px 5px 40px;
+            border-bottom: 1px solid transparent;
+            // box-shadow: none !important;
+            background-color: transparent;
+            background-image: url('../assets/assets/coupon.svg');
+            background-repeat: no-repeat;
+            background-size: 30px;
+            background-position: 12px center;
+            text-transform: uppercase;
+            font-size: 1.4rem;
+            input {
+                text-transform: uppercase;
+                &::placeholder {
+                    text-transform: initial;
+                }
+            }
+            button {
+                background: transparent;
+                font-weight: 700;
+                text-transform: uppercase;
+                margin: 0;
+                // color: map-get($map: $colors, $key: primary)
+            }
+        }
+    }
+
+    .login {
+        width: 90%;
+        margin: auto;
+        h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1.2rem;
+            font-weight: 700;
+        }
+        h5 {
+            font-size: 1rem;
+            margin-top: 1.2rem;
+            color: #3a3a3a;
+            font-weight: 600;
+        }
+        button.button-md {
+            width: 100%;
+        }
+    }
+
+}
