@@ -30,10 +30,20 @@ export class HomePage {
   ) {
     this.mixpanel.track("Opened Homepage");
     this.randomHomeImage();
+    this.cartProvider.getLiveCart();
   }
 
   ionViewDidLeave() {
     this.randomHomeImage();
+  }
+
+  goToLiveOrder() {
+    this.navCtrl.push('OrderStatusLivePage', {}, {
+      animate: true,
+      direction: "forward"
+    }).then(() => {
+      this.navCtrl.insert(0, 'HomePage');
+    });
   }
 
   listPlaces() {

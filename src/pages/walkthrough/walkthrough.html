@@ -14,21 +14,22 @@
 <ion-content>
 
   <ion-slides pager>
-    <ion-slide *ngFor="let slide of slides">
+    <ion-slide>
       <ion-toolbar>
         <ion-buttons end (click)="loadHome()">
           <button ion-button color="primary">Skip</button>
         </ion-buttons>
       </ion-toolbar>
-      <img src="assets/assets/onboard-01.png" class="slide-image" />
-      <h2 class="slide-title" [innerHTML]="slide.title"></h2>
-      <p [innerHTML]="slide.description"></p>
+      <img src="assets/assets/onboard-02.png" class="slide-image" />
+      <h2 class="slide-title">No Queue</h2>
+      <p>Get into express service lane, order from Flevva without waiting in a queue</p>
     </ion-slide>
-    <ion-slide>
+    <ion-slide *ngFor="let slide of slides">
       <ion-toolbar>
       </ion-toolbar>
-      <img src="assets/assets/onboard-02.png" class="slide-image" />
-      <h2 class="slide-title">Ready to Play?</h2>
+      <img src="assets/assets/onboard-01.png" class="slide-image" />
+      <h2 class="slide-title">Favorite Places</h2>
+      <p>Order food from your favorite places quick and easy.</p>
       <button ion-button large clear icon-end color="primary" (click)="loadHome()">
         Continue
         <ion-icon name="arrow-forward"></ion-icon>

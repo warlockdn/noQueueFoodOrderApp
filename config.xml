@@ -3,7 +3,7 @@
     <name>Flevva</name>
     <description>What's your flevva?</description>
     <author email="info@launchforttech" href="http://launchforttech.com/">Warlock</author>
-    <content original-src="index.html" src="http://192.168.31.190:8100" />
+    <content src="index.html" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />

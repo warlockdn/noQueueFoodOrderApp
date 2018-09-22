@@ -374,7 +374,7 @@ export class OrderSummaryPage {
                 order_id: response.orderID,
                 key: ConstantsProvider.razorPayKey,
                 amount: data.total,
-                name: 'foodSpaze',
+                name: 'Flevva',
                 prefill: {
                   email: this.auth.user.email,
                   contact: this.auth.user.phone,

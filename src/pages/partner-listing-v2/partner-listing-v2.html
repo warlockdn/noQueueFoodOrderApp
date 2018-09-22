@@ -22,7 +22,7 @@
       <ion-item *ngFor="let partner of partners" (click)="loadMenu(partner)" [ngClass]="{'closed': !partner.isOpen }">
         <div class="image" [ngClass]="{'closed': !partner.isOpen }">
           <img *ngIf="!partner.partnerbg" src="assets/assets/doodle.png">
-          <img *ngIf="partner.partnerbg" src="https://res.cloudinary.com/ddiiq3bzl/image/upload/fl_lossy,f_auto,q_auto,w_500/{{ partner.partnerbg }}">
+          <img *ngIf="partner.partnerbg" src="https://res.cloudinary.com/ddiiq3bzl/image/upload/fl_lossy,f_auto,q_auto,w_600/{{ partner.partnerbg }}">
         </div>
         <div class="desc">
           <div class="logo align-items-center" *ngIf="partner.logo">

@@ -23,6 +23,18 @@ page-menu {
             width: 100%;
             height: 100%;
         }
+        &.closed::before {
+            background: rgba(0, 0, 0, 0.75);
+        }
+        &.closed::after {
+            content: "Closed for Ordering";
+            position: absolute;
+            top: 45%;
+            width: 100%;
+            text-align: center;
+            font-size: 2.5rem;
+            color: #fff;
+        }
         img {
             object-fit: cover;
         }

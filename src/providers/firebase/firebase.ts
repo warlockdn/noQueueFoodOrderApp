@@ -87,36 +87,12 @@ export class FirebaseProvider {
       this.order = data[0];
       this.currentOrder = data[0];
       console.log(this.order);
-
-      /* if (this.order.stage) {
-        let stage = this.order.stage;
-        
-        if (stage.placed) {
-          this.latestStatus = "Order Placed"
-        }
-
-        if (stage.accepted) {
-          this.latestStatus = "Order in Kitchen"
-        }
-
-        if (stage.ready) {
-          this.latestStatus = "Order Ready"
-        }
-
-        if (stage.declined) {
-          this.latestStatus = "Order Declined"
-        }
-
-      } */
-
     })
 
   }
 
   unSubOrder() {
-
     this.subscribe.unsubscribe();
-
   }
 
 }

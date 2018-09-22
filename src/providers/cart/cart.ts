@@ -2,6 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
 
+import {} from '@ionic-native'
+
 import { ConstantsProvider } from '../constants/constants';
 import { Observable } from 'rxjs/Observable';
 
@@ -21,10 +23,12 @@ export class CartProvider {
   public partnerName: string;
   public cartData: any;
   public finalCartData: any;
+  public isLiveOrder: boolean = false;
 
   constructor(public http: HttpClient, private storage: Storage) {
     console.log('Hello CartProvider Provider');
-    this.getCartData(); 
+    // this.clearCartData();
+    this.getCartData();
   }
 
   getCartData() {
@@ -74,6 +78,66 @@ export class CartProvider {
     this.totalItems = 0;
     this.storage.remove("cartData");
     this.storage.remove("finalCartData");
+    this.storage.remove("firebaseRefID");
+    this.storage.remove("liveOrder");
+    this.storage.remove("table");
+    this.storage.remove("liveOrderID");
+  }
+
+  setOrderID(orderID) {
+    this.storage.set("liveOrderID", orderID);
+  }
+
+  getOrderID() {
+    return this.storage.get("liveOrderID");
+  }
+
+  getLiveCart() {
+    this.storage.get("liveOrder").then(
+      (data) => {
+        if (data) {
+          this.isLiveOrder = true;
+        } else {
+          this.isLiveOrder = false;
+        }
+      }
+    )
+  }
+
+  enableLiveCart() {
+    this.storage.set("liveOrder", true).then(
+      () => {
+        this.isLiveOrder = true;
+      }
+    );
+  }
+
+  disableLiveCart() {
+    this.storage.remove("liveOrder").then(
+      () => {
+        this.isLiveOrder = false;
+      }
+    )
+  }
+
+  setTableNo(tableNo) {
+    this.storage.set("table", tableNo);
+  }
+
+  getTableNo() {
+    return this.storage.get("table");
+  }
+
+  removeTableNo() {
+    this.storage.remove("table");
+  }
+
+  setFirebaseRefID(refid) {
+    this.storage.set("firebaseRefID", refid)
+  }
+
+  getFirebaseRefID() {
+    return this.storage.get("firebaseRefID");
   }
 
   manageCart(cart): Observable<any> {
@@ -86,8 +150,25 @@ export class CartProvider {
       cart: cart.cart,
       notes: cart.notes,
       partner: cart.partner,
-      room: cart.room,
-      couponCode: this.couponCode || null
+      room: cart.room || null,
+      table: cart.table || null,
+      couponCode: this.couponCode || null,
+      orderType: cart.orderType || "NORMAL"
+    });
+  }
+
+  updateCart(cart): Observable<any> {
+
+    console.log("Updating Order: ", JSON.stringify(cart));
+
+    return this.http.patch(ConstantsProvider.cart, {
+      orderID: cart.orderID,
+      partnerID: cart.partnerID,
+      customerID: cart.customerID,
+      cart: cart.cart,
+      partner: cart.partner,
+      refid: cart.refid,
+      orderType: "LIVE"
     });
   }
 
@@ -96,6 +177,12 @@ export class CartProvider {
       couponCode: couponcode,
       partnerID: partnerID,
       cartTotal: cartTotal
+    })
+  }
+
+  getPaymentID(orderID) {
+    return this.http.post(ConstantsProvider.getPaymentID, {
+      orderID: orderID
     })
   }
 
@@ -110,11 +197,56 @@ export class CartProvider {
 
   }
 
+  capturePaymentAndClose(orderID, paymentID, amount, partnerID, refid): Observable<any> {
+
+    return this.http.post(ConstantsProvider.capturePaymentClose, {
+      orderID: orderID,
+      paymentID: paymentID,
+      amount: amount,
+      partnerID: partnerID,
+      refid: refid
+    })
+
+  }
+
   notifyStatus(orderID, status): Observable<any> {
     return this.http.post(ConstantsProvider.notifyStatus, {
       orderID: orderID,
       status: status
     });
+  }
+
+  /**
+   * Helper Function to Check whether the list of Cart Items 
+   * has any isNewItem or lastCount
+   */
+  checkCartList(cart) {
+
+    if (cart.length === 0) {
+      return true;
+    }
+
+    let clearCart = false;
+
+    for (let index = 0; index < cart.length; index++) {
+      const item = cart[index];
+
+      if (item.isNewItem) {
+        clearCart = true;
+        break;
+      }
+
+      if (item.lastCount) {
+        if (item.lastCount !== item.quantity) {
+          clearCart = true;
+          break;
+        }
+      }
+      
+    }
+
+    return clearCart;
+
   }
 
 }

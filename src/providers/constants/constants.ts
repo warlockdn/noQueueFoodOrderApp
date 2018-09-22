@@ -63,6 +63,9 @@ export class ConstantsProvider {
   public static cart = "http://192.168.31.190:3003/v1/cart/manage";
   public static notifyStatus = "http://192.168.31.190:3003/v1/cart/notify";
   public static capturePayment = "http://192.168.31.190:3003/v1/cart/capture";
+
+  public static getPaymentID = "http://192.168.31.190:3003/v1/cart/getPaymentID";
+  public static capturePaymentClose = "http://192.168.31.190:3003/v1/cart/captureandclose";
   public static validateCoupon = "http://192.168.31.190:3003/v1/cart/validateCoupon";
 
   // Account

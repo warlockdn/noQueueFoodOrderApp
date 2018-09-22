@@ -20,7 +20,8 @@ export class OrderProvider {
       placed: false,
       accepted: false,
       ready: false,
-    }
+    },
+    status: "PENDING"
   };
   public status: any;
 

@@ -26,8 +26,9 @@
   <!-- <button ion-button icon-only>
     <ion-icon name="barcode"></ion-icon>
   </button> -->
-  <button ion-button icon-only clear class="no-shadow" color="dark" (click)="openbarcode()">
+  <button ion-button icon-only clear class="no-shadow" color="dark" (click)="openbarcode()" *ngIf="!cartProvider.isLiveOrder">
     <ion-icon name="md-barcode"></ion-icon>
   </button>
-  <button ion-button block color="secondary" (click)="listPlaces()" [disabled]="isDisabled">Find Places</button>
+  <button ion-button block color="secondary" (click)="listPlaces()" [disabled]="isDisabled" *ngIf="!cartProvider.isLiveOrder">Find Places</button>
+  <button ion-button block color="secondary" (click)="goToLiveOrder()" [disabled]="isDisabled" *ngIf="cartProvider.isLiveOrder">Check Live Order</button>
 </ion-footer>

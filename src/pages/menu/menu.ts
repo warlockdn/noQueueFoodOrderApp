@@ -55,6 +55,7 @@ export class MenuPage {
   errorLoading: boolean = false;
 
   menu: any;
+  isSearch: boolean = false;
 
   constructor(public navCtrl: NavController, public platform: Platform, public navParams: NavParams, private ref: ChangeDetectorRef, private partnerService: PartnerProvider, public cartProvider: CartProvider, public modalCtrl: ModalController, private alertCtrl: AlertController, private mixpanel: Mixpanel) {
 
@@ -75,12 +76,15 @@ export class MenuPage {
       if (!this.partnerDetails.partnerbg) {
         this.partnerDetails.partnerbg = "assets/assets/doodle.png";
       } else {
-        this.partnerDetails.partnerbg = "https://res.cloudinary.com/ddiiq3bzl/image/upload/fl_lossy,f_auto,q_auto,w_500/" + this.partnerDetails.partnerbg
+        this.partnerDetails.partnerbg = "https://res.cloudinary.com/ddiiq3bzl/image/upload/fl_lossy,f_auto,q_auto,w_600/" + this.partnerDetails.partnerbg
       }
 
       console.log(this.partnerDetails);
       
       this.loadMenu(partner);
+
+      // For Restaurant
+      this.cartProvider.getLiveCart()
 
     }
 
@@ -103,6 +107,22 @@ export class MenuPage {
       this.ref.detectChanges();
     })
   }
+
+  searchToggle() {
+    this.isSearch = !this.isSearch;
+  }
+
+  /* searchMenu(ev) {
+
+    let val = ev.target.value;
+
+    if (val && val.trim() != '') {
+      this.items = this.items.filter((item) => {
+        return (item.toLowerCase().indexOf(val.toLowerCase()) > -1);
+      })
+    }
+
+  } */
 
   openLink(coordinates, name) {
     if (this.platform.is('android')) {
@@ -218,6 +238,8 @@ export class MenuPage {
         }
       });
 
+      console.log(menu);
+
       this.menu = menu;
       this.success = true;
 
@@ -278,7 +300,15 @@ export class MenuPage {
     this.isTransparent = status;
   }
 
+  /**
+   * 
+   * @param item Item data object
+   * @param status Adding or Subtracting Item Quantity
+   */
+
   updateCounter(item, status: Boolean) {
+
+    console.log(item);
 
     /*
      since implemented a check in order summary
@@ -286,12 +316,12 @@ export class MenuPage {
      then that order id would become invalid as the user has added a new item to the cart and the old cart
      will now be abandoned. cool ;)
     */
-    this.removeFinalCart()
+    this.removeFinalCart();
 
     if (!item.hasAddons) {
       this.cartProvider.getCartData().then(response => {
         
-        if (status) {
+        if (status) { // Is Adding Quantity
           item.selected = true;
           item.quantity += 1;
           response.cart[item.id][0].quantity += 1;
@@ -308,7 +338,27 @@ export class MenuPage {
 
           // Save to Storage
           this.cartProvider.setCartData(response);
-        } else {
+        } else { // Decreasing Item Quantity 
+
+          /* 
+          Check for Restaurant. Check the lastCount and stop processing
+          Since the Menu item has already been ordered. Cannot decrease quantity;
+          */
+          if (response.cart[item.id][0].lastCount) {
+            console.log("entering")
+            if (response.cart[item.id][0].lastCount === item.quantity) {
+              console.log("entering")
+              this.alertCtrl.create({
+                title: "Alert!",
+                message: "The menu item has already been ordered. Cannot decrease quantity.",
+                buttons: [{
+                  text: "OK",
+                  role: "cancel"
+                }]
+              }).present();
+              return false;
+            }
+          }
 
           // Update Total Price
           response.total -= item.price * 100;
@@ -324,33 +374,18 @@ export class MenuPage {
             delete response.cart[item.id];
             this.cartProvider.setCartData(response);
           } else {
+            
+            // Specific for Restaurant
+            if (response.cart[item.id][0].lastCount) {
+              item.lastCount = response.cart[item.id][0].lastCount;
+            }
+
             response.cart[item.id][0] = item;
+
             this.cartProvider.setCartData(response);
           }
 
         }
-
-        /* if (status) {
-        } else {
-          item.selected = true;
-  
-          // Update Total Price
-          response.total -= item.price * 100;
-          this.cartProvider.total = response.total;
-  
-          item.counter -= 1;
-          this.cartProvider.totalItems -= 1;
-          
-          if (item.counter === 0) {
-            item.selected = false;
-            delete response.items[item.id];
-            this.cartProvider.setCartData(response);
-          } else {
-            // Save to Storage
-            response.items[item.id] = item;
-            this.cartProvider.setCartData(response);
-          }
-        } */
   
         // Check Balance
         this.checkTotal();
@@ -393,6 +428,11 @@ export class MenuPage {
                 response.totalItems += 1;
                 this.cartProvider.totalItems += 1;
                 lastItem.quantity += 1;
+
+                // Specific for Restaurant
+                if (response.cart[item.id][lastIndex].lastCount) {
+                  item.lastCount = response.cart[item.id][0].lastCount;
+                }
                 
                 this.cartProvider.setCartData(response);
                 console.log(response.cart[item.id]);
@@ -416,8 +456,42 @@ export class MenuPage {
 
         this.cartProvider.getCartData().then(response => {
 
+          
           let lastIndex = response.cart[item.id].length - 1;
           let lastItem = response.cart[item.id][lastIndex];
+          
+          /* 
+          Check for Restaurant. Check the lastCount and stop processing
+          Since the Menu item has already been ordered. Cannot decrease quantity;
+          */
+          if (response.cart[item.id][lastIndex].lastCount) {
+
+            /* 
+              Calculate number of lastCount 
+              Since the item has its total count and 
+              the cartData total count can be divided in Arrays. 
+              So gotta count the total count
+            */
+
+            let totalLastCount = 0;
+            response.cart[item.id].forEach(item => {
+              if (item.lastCount) {
+                totalLastCount += item.lastCount;
+              }
+            });
+
+            if (totalLastCount === item.quantity) {
+              this.alertCtrl.create({
+                title: "Alert!",
+                message: "The menu item has already been ordered. Cannot decrease quantity.",
+                buttons: [{
+                  text: "OK",
+                  role: "cancel"
+                }]
+              }).present();
+              return false;
+            }
+          }
 
           // Update Total Price - Value of One Item = (lastItem / totalItem Quantity)
           response.total -= (lastItem.price  * 100) / lastItem.quantity;
@@ -436,6 +510,11 @@ export class MenuPage {
             this.cartProvider.setCartData(response);
           } else {
             
+            // Specific for Restaurant
+            if (response.cart[item.id][lastIndex].lastCount) {
+              item.lastCount = response.cart[item.id][lastIndex].lastCount;
+            }
+
             // Update Item Price (Total Item Price - Singe Price)
             this.cartProvider.setCartData(response);
 
@@ -452,7 +531,7 @@ export class MenuPage {
     
   }
 
-  addToCart(item, isNew) {
+  addToCart(item, isNewItem) {
     
     /*
      since implemented a check in order summary
@@ -495,6 +574,11 @@ export class MenuPage {
 
           // Save to Storage
           response.cart[item.id] = new Array(item);
+
+          if (this.cartProvider.isLiveOrder) {
+            response.cart[item.id][0].isNewItem = true;
+          }
+          
           this.cartProvider.setCartData(response);
 
         } else { // Adding new
@@ -579,10 +663,20 @@ export class MenuPage {
               // Save to Storage
               if (typeof response.cart[item.id] === 'undefined') {
                 
+                // Is LiveOrder and adding new.
+                if (this.cartProvider.isLiveOrder) {
+                  data.isNewItem = true;
+                }
+
                 let newItem = new Array(data);
                 response.cart[item.id] = newItem;
 
               } else {
+
+                // Is LiveOrder and adding new.
+                if (this.cartProvider.isLiveOrder) {
+                  data.isNewItem = true;
+                }
 
                 if (response.cart[item.id].length > 0) {
                   response.cart[item.id].push(data);

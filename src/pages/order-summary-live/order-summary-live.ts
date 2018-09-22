@@ -7,6 +7,7 @@ import { CartProvider } from '../../providers/cart/cart';
 import { PartnerProvider } from '../../providers/partner/partner';
 import { ConstantsProvider } from '../../providers/constants/constants';
 import { Mixpanel } from '@ionic-native/mixpanel';
+import { OrderProvider } from '../../providers/order/order';
 // import { FirebaseProvider } from '../../providers/firebase/firebase';
 
 export interface Coupon {
@@ -40,6 +41,7 @@ export class OrderSummaryLivePage {
   tax: number = 0;
   notes: string;
   finalData: any;
+  updatedOrder: boolean = false;
 
   // For Hotel
   roomNo: String;
@@ -48,7 +50,7 @@ export class OrderSummaryLivePage {
   orderType: { type: any; table?: any };
 
   // public firebase: FirebaseProvider
-  constructor(public navCtrl: NavController, public navParams: NavParams, public auth: AuthProvider, public modalCtrl: ModalController, public cartProvider: CartProvider, public platform: Platform, public partner: PartnerProvider, public alertCtrl: AlertController, public loadingCtrl: LoadingController, public constants: ConstantsProvider, private mixpanel: Mixpanel, private fb: FormBuilder) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public auth: AuthProvider, public modalCtrl: ModalController, public cartProvider: CartProvider, public platform: Platform, public partner: PartnerProvider, public alertCtrl: AlertController, public loadingCtrl: LoadingController, public constants: ConstantsProvider, private mixpanel: Mixpanel, private fb: FormBuilder, public order: OrderProvider) {
     this.finalData = null;
     this.loadPartnerInfo();
     this.createCouponForm();
@@ -56,6 +58,9 @@ export class OrderSummaryLivePage {
     this.couponAmount = null;
     this.cartProvider.couponAmount = null;
     this.cartProvider.couponCode = null;
+
+    this.cartProvider.getLiveCart()
+
   }
   
   ionViewDidLoad() {
@@ -81,9 +86,34 @@ export class OrderSummaryLivePage {
         response.totalItems += 1;
         this.cartProvider.totalItems + response.totalItems;
 
+        // Specific for Restaurant
+        if (this.cartProvider.isLiveOrder) {
+          this.updatedOrder = true;
+        }
+
         // Save to Storage
         this.cartProvider.setCartData(response);
       } else {
+
+        /* 
+          Check for Restaurant. Check the lastCount and stop processing
+          Since the Menu item has already been ordered. Cannot decrease quantity;
+          */
+         if (response.cart[item.id][0].lastCount) {
+          console.log("entering")
+          if (response.cart[item.id][0].lastCount === item.quantity) {
+            console.log("entering")
+            this.alertCtrl.create({
+              title: "Alert!",
+              message: "The menu item has already been ordered. Cannot decrease quantity.",
+              buttons: [{
+                text: "OK",
+                role: "cancel"
+              }]
+            }).present();
+            return false;
+          }
+        }
 
         // Update Total Price
         response.total -= item.price * 100;
@@ -97,10 +127,33 @@ export class OrderSummaryLivePage {
         if (item.quantity === 0) {
           delete item.selected;
           delete response.cart[item.id];
+
+          // Delete item from CartItems
+          for (let index = 0; index < this.cartItems.length; index++) {
+            if (this.cartItems[index].id === item.id) {
+              this.cartItems.splice(index, 1);
+              break;
+            }
+          }
+
           this.cartProvider.setCartData(response);
         } else {
+
+          // Specific for Restaurant
+          if (response.cart[item.id][0].lastCount) {
+            item.lastCount = response.cart[item.id][0].lastCount;
+          }
+
           response.cart[item.id][0] = item;
           this.cartProvider.setCartData(response);
+        }
+
+        const toClearCart = this.cartProvider.checkCartList(this.cartItems);
+
+        // No isNewItem || lastCount exists so not updating order.
+        if (!toClearCart) {
+          this.updatedOrder = false;
+          // this.loadPartner();
         }
 
       }
@@ -270,6 +323,14 @@ export class OrderSummaryLivePage {
           cart.forEach(items => {
 
             result.cart[items].forEach(item => {
+              if (item.lastCount) {
+                if (item.lastCount !== item.quantity) {
+                  this.updatedOrder = true;
+                }
+              }
+              if (item.isNewItem) {
+                this.updatedOrder = true;
+              }
               cartItems.push(item);
             });
 
@@ -308,35 +369,86 @@ export class OrderSummaryLivePage {
 
   selectOrderType() {
 
-    let orderTypeModal = this.modalCtrl.create('RestaurantOrderTypeModalPage', {}, {
-      showBackdrop: false,
-      enableBackdropDismiss: false,
-      cssClass: 'order-type'
-    })
+    if (this.partnerInfo.characteristics.takeout) {
 
-    orderTypeModal.present();
-
-    orderTypeModal.onDidDismiss(data => {
-
-      if (data !== undefined) {
-        this.orderType = {
-          type: data.type
+      let orderTypeModal = this.modalCtrl.create('RestaurantOrderTypeModalPage', {}, {
+        showBackdrop: false,
+        enableBackdropDismiss: false,
+        cssClass: 'order-type'
+      })
+  
+      orderTypeModal.present();
+  
+      orderTypeModal.onDidDismiss(data => {
+  
+        if (data !== undefined) {
+          this.orderType = {
+            type: data.type
+          }
+  
+          if (data.table) {
+            this.orderType.table = data.table;
+          }
+  
+          this.createOrder()
         }
+  
+      })
 
-        if (data.table) {
-          this.orderType.table = data.table;
-        }
+    } else {
 
-        this.pay()
-      }
+      this.getTableNo();
 
-    })
+    }
 
   }
 
-  async pay() {
+  getTableNo() {
 
-    this.mixpanel.track("Pressed Pay")
+    if (!this.cartProvider.isLiveOrder) {
+
+      const seatPrompt = this.alertCtrl.create({
+        title: "Enter Table No.",
+        message: "Please enter table number",
+        inputs: [{
+          name: "table",
+          placeholder: "Table No."
+        }],
+        buttons: [{
+          text: "Cancel",
+          handler: data => {
+            
+          }
+        }, {
+          text: "Proceed",
+          handler: data => {
+            console.log("Proceed");
+            if (data.table === "") {
+              return false;
+            } else {
+              this.orderType = {
+                type: "LIVE",
+                table: data.table 
+              };
+              this.createOrder();
+            }
+          }
+        }]
+      })
+  
+      seatPrompt.present();
+
+    } else {
+
+      this.updateOrder()
+
+    }
+
+  }
+
+  async createOrder() {
+
+    this.mixpanel.track("Creating Live Order")
 
     const partner = await this.partner.getPartner();
     const cart = await this.cartProvider.getCartData();
@@ -345,15 +457,25 @@ export class OrderSummaryLivePage {
       cart.tax = this.tax;
     }
 
+    let updatedCart = JSON.parse(JSON.stringify(cart));
+
+    Object.keys(updatedCart.cart).forEach(items => {
+      updatedCart.cart[items].forEach(item => {
+        item.lastCount = item.quantity;
+      });
+    });
+
+    this.cartProvider.setCartData(updatedCart);
+
     if (partner && cart) {
       let newCart = {
         customerID: this.auth.user.id,
-        cart: cart,
+        cart: updatedCart,
         notes: this.notes,
         partner: partner.name,
-        room: null,
         type: null,
-        table: null
+        table: null,
+        orderType: "LIVE"
       }
 
       if (this.orderType) {
@@ -365,101 +487,104 @@ export class OrderSummaryLivePage {
         }
       }
 
-      if (this.roomNo) {
-        newCart.room = this.roomNo;
-      }
-
-      this.handleCart(newCart);
+      this.handleCart(newCart, false);
     }
 
   }
 
-  async handleCart(cart) {
+  async updateOrder() {
 
-    // Checking if there is a cart data earlier created.
-    let finalData = await this.cartProvider.getFinalCartData();
+    this.mixpanel.track("Updating Live Order")
 
-    if (!finalData) {
+    const partner = await this.partner.getPartner();
+    const cart = await this.cartProvider.getCartData();
+    const refid = await this.cartProvider.getFirebaseRefID();
+    const orderID = await this.cartProvider.getOrderID();
 
-      let loading = this.loadingCtrl.create({
-        content: "Please wait, creating order"
-      })
-
-      loading.present();
-
-      if (this.cartProvider.couponCode) {
-        cart.couponCode = this.cartProvider.couponCode;
+    if (partner && cart) {
+      let newCart = {
+        customerID: this.auth.user.id,
+        cart: cart,
+        notes: this.notes,
+        partner: partner.name,
+        type: null,
+        table: null,
+        orderType: "LIVE",
+        refid: refid,
+        orderID: orderID
       }
 
+      if (this.orderType) {
+        if (this.orderType.type) {
+          newCart.type = (this.orderType.type).toUpperCase();
+        }
+        if (this.orderType.table) {
+          newCart.table = (this.orderType.table).toUpperCase()
+        }
+      }
+
+      this.handleCart(newCart, true);
+    }
+
+  }
+  
+  /**
+   * @param cart The whole Cart Object
+   * @param isUpdating Whether the order is being updated or is a new order
+   */
+
+  async handleCart(cart, isUpdating) {
+
+    let loading = this.loadingCtrl.create({
+      content: "Please wait, creating order"
+    })
+
+    loading.present();
+
+    /* if (this.cartProvider.couponCode) {
+      cart.couponCode = this.cartProvider.couponCode;
+    } */
+
+    if (!isUpdating) {
+      
       this.cartProvider.manageCart(cart).subscribe(
         response => {
   
           if (response.cart) {
-
+  
             loading.dismiss();
             
             let data = response.cart;
             data.orderID = response.orderID;
+  
+            this.cartProvider.setOrderID(data.id);
+            this.cartProvider.enableLiveCart();
 
-            // setting final data
-            finalData = data;
-            this.cartProvider.setFinalCartData(data);
+            let updatedCart = cart.cart;
+
+            Object.keys(updatedCart.cart).forEach(item => {
+              updatedCart.cart[item].forEach(data => {
+                data.lastCount = data.quantity;
+              });
+            });
+
+            this.cartProvider.setCartData(updatedCart);
+            this.cartProvider.setFirebaseRefID(response.refid);
   
-            if (this.platform.is("android") || this.platform.is("ios") || this.platform.is("core")) {
-  
-              const options = {
-                description: `Order #${data.id}`,
-                // image: '',
-                currency: 'INR',
-                order_id: response.orderID,
-                key: ConstantsProvider.razorPayKey,
-                amount: data.total,
-                name: 'foodSpaze',
-                prefill: {
-                  email: this.auth.user.email,
-                  contact: this.auth.user.phone,
-                  name: this.auth.user.name
-                },
-                theme: {
-                  color: '#F37254'
-                }
-              }
-  
-              let successCallback = (payment_id) => {
-                console.log(payment_id);
-                this.capturePayment(payment_id, options.amount, finalData);
-              };
-      
-              let cancelCallback = (error) => {
-                
-              };
-      
-              this.platform.ready().then(() => {
-                RazorpayCheckout.open(options, successCallback, cancelCallback);
-              })
-              
-            } else {
-  
-              setTimeout(() => {
-                this.navCtrl.setRoot('OrderStatusPage', {
-                  data: response.cart
-                }, {
-                  animate: true,
-                  direction: 'forward'
-                }).then(() => {
-                  this.navCtrl.insert(0, 'HomePage');
-                })
-              }, 200);
-  
-            }
+            this.navCtrl.push('OrderStatusLivePage', {}, {
+              animate: true,
+              direction: "forward"
+            }).then(() => {
+              this.navCtrl.insert(0, 'HomePage');
+            });
     
           }
   
-      }, err => {
-
+      }, () => {
+  
         loading.dismiss();
-
-        let errAlert = this.alertCtrl.create({
+  
+        this.alertCtrl.create({
           title: "Error!",
           subTitle: "There seems to be a error while creating your order. Please delete your cart and try again",
           buttons: [
@@ -475,69 +600,143 @@ export class OrderSummaryLivePage {
                 }
             }
           ]
-        })
+        }).present()
   
       })
+      
+    } else { // Updating Order
 
-    } else {
+      this.cartProvider.updateCart(cart).subscribe(
+        response => {
+  
+          if (response.cart) {
+  
+            loading.dismiss();
+            
+            let data = response.cart;
+            data.orderID = response.orderID;
+  
+            this.cartProvider.setOrderID(data.id);
+            this.cartProvider.enableLiveCart();
 
-      if (this.platform.is("android") || this.platform.is("ios")) {
+            let updatedCart = cart.cart;
 
-        const data = finalData;
-        const options = {
-          description: `Order #${data.id}`,
-          // image: '',
-          currency: 'INR',
-          order_id: data.orderID,
-          key: ConstantsProvider.razorPayKey,
-          amount: data.total,
-          name: 'foodSpaze',
-          prefill: {
-            email: this.auth.user.email,
-            contact: this.auth.user.phone,
-            name: this.auth.user.name
-          },
-          theme: {
-            color: '#F37254'
+            Object.keys(updatedCart.cart).forEach(item => {
+              updatedCart.cart[item].forEach(data => {
+                data.lastCount = data.quantity;
+                if (data.isNewItem) {
+                  delete data.isNewItem;
+                }
+              });
+            });
+
+            this.order.currentOrder.status = "PENDING";
+
+            this.cartProvider.setCartData(updatedCart);
+            this.cartProvider.setFirebaseRefID(response.refid);
+  
+            this.navCtrl.push('OrderStatusLivePage', {}, {
+              animate: true,
+              direction: "forward"
+            }).then(() => {
+              this.navCtrl.insert(0, 'HomePage');
+            });
+    
           }
-        }
-  
-        alert(JSON.stringify(options));
-  
-        let successCallback = (payment_id) => {
-          console.log(payment_id);
-          this.capturePayment(payment_id, options.amount, finalData);
-        };
-  
-        let cancelCallback = (error) => {
-          alert(JSON.stringify(error));
-          alert(error.description + ' (Error ' + error.code + ')');
-        };
-  
-        this.platform.ready().then(() => {
-          RazorpayCheckout.open(options, successCallback, cancelCallback);
-        })
 
-      } else {
-
-        
-        setTimeout(() => {
-          this.navCtrl.setRoot('OrderStatusPage', {
-            data: finalData
-          }, {
-            animate: true,
-            direction: 'forward'
-          }).then(() => {
-            this.navCtrl.insert(0, 'HomePage');
-            this.cartProvider.clearCartData();
-          })
-        }, 200);
-
-      }
-
-
+        });
     }
 
+
+  }
+
+  confirmOrderClose() {
+    
+    const confirmAlert = this.alertCtrl.create({
+      title: "Proceed and Pay",
+      message: "If you are done with your order. Press OK to pay or cancel or continue ordering",
+      buttons: [
+        {
+          text: "Cancel",
+          role: "cancel"
+        }, {
+          text: "Pay",
+          handler: () => {
+            this.getPaymentLink();
+          }
+        }
+      ]
+    })
+
+    confirmAlert.present();
+
+  }
+
+  async getPaymentLink() {
+
+    const loading = this.loadingCtrl.create({
+      content: "Please wait...",
+      enableBackdropDismiss: false,
+      dismissOnPageChange: true
+    })
+
+    loading.present();
+
+    const orderID = await this.cartProvider.getOrderID();
+
+    /* this.cartProvider.getPaymentLinkforLiveOrder(this.cartProvider.total, orderID, this.tax, this.partnerInfo.partnerID).subscribe(
+      response => {
+        if (response[status] === 200) {
+          loading.dismiss();
+          this.pay(orderID, response["orderID"])
+        } else {
+          loading.dismiss();
+        }
+      }
+    ) */
+
+  }
+
+  async pay(orderID, paymentID) {
+
+    if (this.platform.is("android") || this.platform.is("ios") || this.platform.is("core")) {
+
+      const options = {
+        description: `Order #${orderID}`,
+        // image: '',
+        currency: 'INR',
+        order_id: paymentID,
+        key: ConstantsProvider.razorPayKey,
+        amount: (this.cartProvider.total + this.tax),
+        name: 'Flevva',
+        prefill: {
+          email: this.auth.user.email,
+          contact: this.auth.user.phone,
+          name: this.auth.user.name
+        },
+        theme: {
+          color: '#F37254'
+        }
+      }
+
+      let successCallback = (payment_id) => {
+        console.log(payment_id);
+        this.capturePayment(payment_id, options.amount, {
+          id: orderID,
+          amount: (this.cartProvider.total + this.tax),
+          partnerID: this.partnerInfo.partnerID
+        });
+      };
+
+      let cancelCallback = (error) => {
+        
+      };
+
+      this.platform.ready().then(() => {
+        RazorpayCheckout.open(options, successCallback, cancelCallback);
+      })
+      
+    }
   }
 
   capturePayment(paymentID, amount, cart) {
@@ -557,9 +756,7 @@ export class OrderSummaryLivePage {
         this.cartProvider.clearCartData();
 
         setTimeout(() => {
-          this.navCtrl.setRoot('OrderStatusPage', {
-            data: cart
-          }, {
+          this.navCtrl.setRoot('OrderHistoryPage', {}, {
             animate: true,
             direction: 'forward'
           }).then(() => {

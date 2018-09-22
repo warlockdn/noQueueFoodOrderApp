@@ -19,8 +19,8 @@ export class WalkthroughPage {
 
   slides = [
     {
-      title: "Welcome to the Docs!",
-      description: "The <b>Ionic Component Documentation</b> showcases a number of useful components that are included out of the box with Ionic.",
+      title: "Food menu at your finger tips",
+      description: "Choose from range of food from your favorite restaurants. Order without waiting in a queue",
       image: "assets/imgs/ica-slidebox-img-3.png",
     }
   ];

@@ -1,0 +1,41 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Order Status</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+
+  <div class="details" text-center>
+    <div class="placing-container">
+      <!-- <div class="pulse-loader" style="height: 200px; width: 200px; margin: 0 auto;"></div> -->
+      <ion-icon name="md-checkmark-circle-outline" style="font-size: 20rem; color: #5bc46e"></ion-icon>
+    </div>
+  </div>
+
+  <p text-center>You have a live order with {{ partnerName }}. Use the action buttons below to manage your order</p>
+
+  <div class="status">
+    <ion-list>
+      <ion-item>Order No: <strong>#{{ orderID }}</strong></ion-item>
+      <ion-item>Place: <strong>{{ partnerName }}</strong></ion-item>
+      <ion-item>Table: <strong>20F</strong></ion-item>
+      <ion-item>Order Total: <strong>Rs. {{ (cartProvider.total + tax) / 100 }}</strong></ion-item>
+    </ion-list>
+  </div>
+
+</ion-content>
+
+<ion-footer>
+  <ion-grid>
+    <ion-row>
+      <ion-col col-6>
+        <button ion-button block color="secondary" (click)="orderMore()" style="width: 100%" [disabled]="order.currentOrder?.status === 'PENDING'">Order More</button>
+      </ion-col>
+      <ion-col col-6>
+        <button ion-button block color="danger" (click)="getPaymentLink()" style="width: 100%" [disabled]="order.currentOrder?.status === 'PENDING' ">Close & Pay</button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-footer>

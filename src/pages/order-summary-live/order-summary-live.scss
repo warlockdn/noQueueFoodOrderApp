@@ -52,9 +52,13 @@ page-order-summary-live {
                         .name {
                             font-size: 1.4rem;
                         }
+                        .subtitle {
+                            font-size: 1.2rem;
+                            color: #797979;
+                        }
                         .counter {
                             height: 26px;
-                            width: 50px;
+                            // width: 65px;
                             .center {
                                 line-height: 1.8;
                             }
