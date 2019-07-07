@@ -1,27 +1,27 @@
 {
   "project_info": {
-    "project_number": "872990739786",
-    "firebase_url": "https://resapp-1523718961807.firebaseio.com",
-    "project_id": "resapp-1523718961807",
-    "storage_bucket": "resapp-1523718961807.appspot.com"
+    "project_number": "<project_numer>",
+    "firebase_url": "<firebase_uri>",
+    "project_id": "<project_id>",
+    "storage_bucket": "<storage_bucket_id>"
   },
   "client": [
     {
       "client_info": {
         "mobilesdk_app_id": "1:872990739786:android:f2e88d614bf184e0",
         "android_client_info": {
-          "package_name": "com.spazefood.resApp"
+          "package_name": "com.<package_name>"
         }
       },
       "oauth_client": [
         {
-          "client_id": "872990739786-as2app2iaiv1t3f8ng72vb2puqs26n06.apps.googleusercontent.com",
+          "client_id": "<client_id>",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBj7ISBssX2RuWUMiU3dZ3R04DZEjOYymM"
+          "current_key": "<api_key>"
         }
       ],
       "services": {
