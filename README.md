@@ -16,4 +16,5 @@ Feel free to use it. Libraries might be a bit old now was created last year.
 
 ## User Flow
 
+![User Flow](https://user-images.githubusercontent.com/3439710/60765560-15b42700-a0ba-11e9-9f5c-feb88e11545c.png)
 
