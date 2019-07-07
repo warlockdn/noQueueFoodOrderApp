@@ -3,6 +3,8 @@ An app similar to Zomato and Swiggy which takes up your Location (Latitude & Lon
 
 Was my failed attempt at creating a app which will solve the problem of queues in QSR's. 
 
+<img src="https://user-images.githubusercontent.com/3439710/60765617-e18d3600-a0ba-11e9-96d1-2b18f80f5b91.png" width="250"> 
+
 ## Tech Stack
 
  - Angular 5
