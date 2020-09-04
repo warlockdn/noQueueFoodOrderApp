@@ -50,7 +50,7 @@
     "cordova-plugin-file-transfer": "1.6.3",
     "cordova-plugin-firebase": "1.0.5",
     "cordova-plugin-geolocation": "4.0.1",
-    "cordova-plugin-inappbrowser": "3.0.0",
+    "cordova-plugin-inappbrowser": "3.1.0",
     "cordova-plugin-ionic-keyboard": "2.1.2",
     "cordova-plugin-ionic-webview": "1.2.1",
     "cordova-plugin-mixpanel": "4.4.1",
